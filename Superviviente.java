@@ -17,6 +17,10 @@ public class Superviviente extends Entidad{
         this.estadoActual = estado.VIVO;
     }
 
+    public void addMordeduras(){
+        mordeduras++;
+    }
+
     @Override
     public void setPosicion(int x, int y) {
         throw new UnsupportedOperationException("Not supported yet.");
