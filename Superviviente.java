@@ -28,10 +28,11 @@ public class Superviviente extends Entidad{
 
     @Override
     public void activar() {
-        acciones=3;
-        if(seleccion==accion.MOVER){
+        if estadoActual == estado.VIVO{}
+            acciones=3;
+        }    if(seleccion==accion.MOVER){
 
-        }
+         }
     }
 
     
@@ -44,10 +45,8 @@ public class Superviviente extends Entidad{
     }
 
     @Override
-    public void atacar(Entidad e) {
-        if (e instanceof Zombi){
-            ;
-            }
+    public void atacar(Zombi z, Arma a) {
+            z.reaccionar(Ataque atq = new Ataque(a));
         }
     
 

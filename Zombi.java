@@ -36,4 +36,7 @@ public abstract class Zombi extends Entidad {
             }
         }
     }
+    public void reaccion(Ataque a){
+        if 
+    }
 }
