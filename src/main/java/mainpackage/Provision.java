@@ -10,7 +10,7 @@ public class Provision extends Equipo{
         switch (tipo) {
             case 1:  
                 nombre = "Comida";
-                valorEnergetico = 800;  
+                valorEnergetico = 600;  
                 caducidad = generarFecha();  
                 break;
             case 2:  
@@ -20,7 +20,7 @@ public class Provision extends Equipo{
                 break;
             case 3:  
                 nombre = "Medicinas";
-                valorEnergetico = 600;  
+                valorEnergetico = 800;  
                 caducidad = generarFecha();  
                 break;
             default:
@@ -30,7 +30,7 @@ public class Provision extends Equipo{
         }
     }
 
-    // Métodos getter para acceder a los valores
+    
     public String getNombre() {
         return nombre;
     }
@@ -43,7 +43,7 @@ public class Provision extends Equipo{
         return this.caducidad;
     }
 
-    // Método para mostrar los detalles de la provisión
+    
     public void mostrarDetalles() {
         System.out.println("Nombre: " + nombre);
         System.out.println("Valor energético: " + valorEnergetico + " kCal");
