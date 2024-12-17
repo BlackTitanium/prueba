@@ -43,11 +43,9 @@ public class Provision extends Equipo{
         return this.caducidad;
     }
 
-    
-    public void mostrarDetalles() {
-        System.out.println("Nombre: " + nombre);
-        System.out.println("Valor energético: " + valorEnergetico + " kCal");
-        System.out.println("Caducidad: " + caducidad);
+    @Override
+    public String toString() {
+       return ("Nombre: " + nombre + "Valor energético: " + valorEnergetico + " kCal" +  "Caducidad: " + caducidad) ;
     }
     private String generarFecha(){
         int dia=(int)(Math.random()*31)+1;
