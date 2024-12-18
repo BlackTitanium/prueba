@@ -7,6 +7,7 @@ public class Ataque{
     private String resultado;
     private boolean distancia;
     private int potencia;
+    private static int nCarasDado = 6;
 
     public Ataque(boolean dist, int poten){
         dados = new int[0];
@@ -20,7 +21,7 @@ public class Ataque{
         int contExitos = 0;
 
         for(int i = 0; i < nDados; i++){
-            dados[i] = random.nextInt(6)+1;
+            dados[i] = random.nextInt(nCarasDado)+1;
             if(dados[i] >= exito){
                 contExitos++;
             }
@@ -29,7 +30,7 @@ public class Ataque{
         return(contExitos);
     }
 
-    public String obtenerResultado(int nDados, int exito){
+    public String obtenerResultado(int nDados, int exito, AlmacenDeAtaques almacen){
             int nExitos = numExitos(nDados, exito);
 
             StringBuilder sb = new StringBuilder();
@@ -48,7 +49,8 @@ public class Ataque{
 
             resultado = sb.toString();
 
+            almacen.guardarAtaque(resultado);
+
             return(resultado);
     }
-
 }
