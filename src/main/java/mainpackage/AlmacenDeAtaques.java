@@ -22,7 +22,7 @@ public class AlmacenDeAtaques{
         Iterator<String> i = historialAtaques.iterator();
         while(i.hasNext()){
             String aux = i.next();
-            System.out.print(aux + "\n");
+            System.out.println(aux);
         }
     }
 }
