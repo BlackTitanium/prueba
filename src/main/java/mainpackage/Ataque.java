@@ -16,6 +16,9 @@ public class Ataque{
     }
 
     public int numExitos(int nDados, int exito){
+        if(nDados <= 0){
+            return(0);
+        }
         dados = new int[nDados];
         Random random = new Random();
         int contExitos = 0;
@@ -31,26 +34,30 @@ public class Ataque{
     }
 
     public String obtenerResultado(int nDados, int exito, AlmacenDeAtaques almacen){
-            int nExitos = numExitos(nDados, exito);
+        if(nDados <= 0 || almacen == null){
+            return(null);
+        }
 
-            StringBuilder sb = new StringBuilder();
+        int nExitos = numExitos(nDados, exito);
 
-            sb.append("Resultado del ataque:\n");
-            sb.append("Número de dados lanzados: ").append(nDados).append("\n");
-            sb.append("Éxito requerido: ").append(exito).append("\n");
-            sb.append("Resultados de los dados: ");
+        StringBuilder sb = new StringBuilder();
 
-            for(int dado : dados){
-                sb.append(dado).append(" ");
-            }
-            sb.append("\n");
+        sb.append("Resultado del ataque:\n");
+        sb.append("Número de dados lanzados: ").append(nDados).append("\n");
+        sb.append("Éxito requerido: ").append(exito).append("\n");
+        sb.append("Resultados de los dados: ");
 
-            sb.append("Exitos obtenidos: ").append(nExitos).append("\n");
+        for(int dado : dados){
+            sb.append(dado).append(" ");
+        }
+        sb.append("\n");
 
-            resultado = sb.toString();
+        sb.append("Exitos obtenidos: ").append(nExitos).append("\n");
 
-            almacen.guardarAtaque(resultado);
+        resultado = sb.toString();
 
-            return(resultado);
+        almacen.guardarAtaque(resultado);
+
+        return(resultado);
     }
 }
