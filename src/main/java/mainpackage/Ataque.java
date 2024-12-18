@@ -48,7 +48,7 @@ public class Ataque{
         sb.append("Resultados de los dados: ");
 
         for(int dado : dados){
-            sb.append(dado).append(" ");
+            sb.append(dado).append(", ");
         }
         sb.append("\n");
 
