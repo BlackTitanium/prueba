@@ -5,17 +5,16 @@ public class Ataque{
 
     private int[] dados;
     private String resultado;
-    private boolean distancia;
-    private int potencia;
+    private int nDados;
+    private int exito;
     private static int nCarasDado = 6;
 
-    public Ataque(boolean dist, int poten){
-        dados = new int[0];
-        distancia = dist;
-        potencia = poten;
+    public Ataque(Arma a){
+        nDados = a.dados;
+        exito = a.exito;
     }
 
-    public int numExitos(int nDados, int exito){
+    public int numExitos(){
         if(nDados <= 0){
             return(0);
         }
@@ -33,12 +32,8 @@ public class Ataque{
         return(contExitos);
     }
 
-    public String obtenerResultado(int nDados, int exito, AlmacenDeAtaques almacen){
-        if(nDados <= 0 || almacen == null){
-            return(null);
-        }
-
-        int nExitos = numExitos(nDados, exito);
+    public void obtenerResultado(AlmacenDeAtaques almacen){
+        int nExitos = numExitos();
 
         StringBuilder sb = new StringBuilder();
 
@@ -57,7 +52,5 @@ public class Ataque{
         resultado = sb.toString();
 
         almacen.guardarAtaque(resultado);
-
-        return(resultado);
     }
 }
