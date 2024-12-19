@@ -14,7 +14,27 @@ public class Ataque{
         exito = a.exito;
     }
 
-    public int numExitos(){
+    public void obtenerResultado(AlmacenDeAtaques almacen, int numExitos){
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("Resultado del ataque:\n");
+        sb.append("Número de dados lanzados: ").append(nDados).append("\n");
+        sb.append("Éxito requerido: ").append(exito).append("\n");
+        sb.append("Resultados de los dados: ");
+
+        for(int dado : dados){
+            sb.append(dado).append(", ");
+        }
+        sb.append("\n");
+
+        sb.append("Exitos obtenidos: ").append(numExitos).append("\n");
+
+        resultado = sb.toString();
+
+        almacen.guardarAtaque(resultado);
+    }
+
+    public int numExitos(AlmacenDeAtaques almacen){
         if(nDados <= 0){
             return(0);
         }
@@ -29,28 +49,8 @@ public class Ataque{
             }
         }
 
+        obtenerResultado(almacen, contExitos);
+        
         return(contExitos);
-    }
-
-    public void obtenerResultado(AlmacenDeAtaques almacen){
-        int nExitos = numExitos();
-
-        StringBuilder sb = new StringBuilder();
-
-        sb.append("Resultado del ataque:\n");
-        sb.append("Número de dados lanzados: ").append(nDados).append("\n");
-        sb.append("Éxito requerido: ").append(exito).append("\n");
-        sb.append("Resultados de los dados: ");
-
-        for(int dado : dados){
-            sb.append(dado).append(", ");
-        }
-        sb.append("\n");
-
-        sb.append("Exitos obtenidos: ").append(nExitos).append("\n");
-
-        resultado = sb.toString();
-
-        almacen.guardarAtaque(resultado);
     }
 }
