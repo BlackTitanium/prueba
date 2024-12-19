@@ -35,7 +35,7 @@ public class Ataque{
 
     public String obtenerResultado(int nDados, int exito, AlmacenDeAtaques almacen){
         if(nDados <= 0 || almacen == null){
-            return(null);
+            return(null); 
         }
 
         int nExitos = numExitos(nDados, exito);
