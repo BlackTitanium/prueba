@@ -49,7 +49,7 @@ public class Superviviente extends Entidad{
         return zombis[a];
     }
 
-    public Ataque atacar(Zombi z) {
+    public Ataque atacar() {
             return new Ataque(arma);
     }
     
