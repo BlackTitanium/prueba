@@ -43,16 +43,15 @@ public class Superviviente extends Entidad{
     public void elegirArma(int a){
         if(inventario[a] instanceof Arma){
             arma = inventario[a];
+        }
     }
-
     public Zombi elegirObjetivo(Zombi[] zombis, int a){
         return zombis[a];
     }
 
-    @Override
     public Ataque atacar(Zombi z) {
-            return new Ataque(arma));
-    }}
+            return new Ataque(arma);
+    }
     
 
 }
