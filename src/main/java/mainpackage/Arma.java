@@ -4,8 +4,18 @@ public class Arma extends Equipo{
     String nombre;
     int potencia, dados, alcance, exito;
 
+    public int getPotencia(){
+        return potencia;
+    }
+    public int getDados(){
+        return dados;
+    }
+    public int getAlcance(){
+        return alcance;
+    }
+
     public Arma(int a){
-        switch case(a){
+        switch (a){
 
             case 1:
                 nombre = "Espada";
