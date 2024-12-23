@@ -1,8 +1,8 @@
 package mainpackage;
 
 public class Arma extends Equipo{
-    String nombre;
-    int potencia, dados, alcance, exito;
+    private String nombre;
+    private int potencia, dados, alcance, exito;
 
     public Arma(int a){
         switch case(a){
@@ -29,7 +29,29 @@ public class Arma extends Equipo{
                 exito = 4;
                 break;
 
-
+            default:
+            System.out.println("Tipo de arma no válida");
+            break;
         }
+    }
+    public String getNombre(){
+        return nombre;
+    }
+    public int getPotencia(){
+        return potencia;
+    }
+    public int getDados(){
+        return dados;
+    }
+    public  int getAlcance(){
+        return alcance;
+    }
+    public int getExito(){
+        return exito;
+    }
+    @Override
+    public String toString(){
+        return ("Nombre: "+ nombre + ", Potencia:" + potencia + ", Dados: "
+        +dados+ ", Alcance: " +alcance+ ", Exito: "+exito+);
     }
 }
