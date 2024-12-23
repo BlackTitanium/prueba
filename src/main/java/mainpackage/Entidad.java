@@ -21,6 +21,6 @@ public abstract class Entidad {
         posicion[1] += y;
     }
 
-    public abstract void atacar();
+    public abstract Ataque atacar();
 
 }

@@ -4,6 +4,7 @@ public class Superviviente extends Entidad{
     private String nombre;
     private int contadorZombis, mordeduras, acciones = 3;
     private accion seleccion;
+    private Arma arma;
 
    
     private enum estado {VIVO, MUERTO};
@@ -22,13 +23,8 @@ public class Superviviente extends Entidad{
     }
 
     @Override
-    public void setPosicion(int x, int y) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
     public void activar() {
-        if estadoActual == estado.VIVO{}
+        if (estadoActual == estado.VIVO) {
             acciones=3;
         }    if(seleccion==accion.MOVER){
 
@@ -44,10 +40,18 @@ public class Superviviente extends Entidad{
         }
     }
 
-    @Override
-    public void atacar(Zombi z, Arma a) {
-            z.reaccionar(Ataque atq = new Ataque(a));
+    public void elegirArma(int a){
+        if(inventario[a] instanceof Arma){
+            arma = inventario[a];
         }
+    }
+    public Zombi elegirObjetivo(Zombi[] zombis, int a){
+        return zombis[a];
+    }
+
+    public Ataque atacar() {
+            return new Ataque(arma);
+    }
     
 
 }
