@@ -42,7 +42,8 @@ public class Superviviente extends Entidad{
 
     public void elegirArma(int a){
         if(inventario[a] instanceof Arma){
-            arma = inventario[a];
+            Equipo equipoSeleccionado = inventario[a];
+            arma = (Arma) equipoSeleccionado;
         }
     }
     public Zombi elegirObjetivo(Zombi[] zombis, int a){
