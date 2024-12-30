@@ -166,6 +166,6 @@ public class InterfazPrincipal extends JFrame implements ActionListener{
     }
     
     public static void main(String args[]){     
-        SwingUtilities.invokeLater(InterfazPrincipal()::new);
+        SwingUtilities.invokeLater(InterfazPrincipal::new);
     }
 }
