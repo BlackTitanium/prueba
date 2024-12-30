@@ -4,15 +4,6 @@ public class Arma extends Equipo{
     private String nombre;
     private int potencia, dados, alcance, exito;
 
-    public int getPotencia(){
-        return potencia;
-    }
-    public int getDados(){
-        return dados;
-    }
-    public int getAlcance(){
-        return alcance;
-    }
 
     public Arma(int a){
         switch (a){
@@ -62,6 +53,6 @@ public class Arma extends Equipo{
     @Override
     public String toString(){
         return ("Nombre: "+ nombre + ", Potencia:" + potencia + ", Dados: "
-        +dados+ ", Alcance: " +alcance+ ", Exito: "+exito+);
+        +dados+ ", Alcance: " +alcance+ ", Exito: "+exito);
     }
 }

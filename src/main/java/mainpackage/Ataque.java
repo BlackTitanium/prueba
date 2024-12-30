@@ -10,8 +10,8 @@ public class Ataque{
     private static int nCarasDado = 6;
 
     public Ataque(Arma a){
-        nDados = a.dados;
-        exito = a.exito;
+        nDados = a.getDados();
+        exito = a.getExito();
     }
 
     public void obtenerResultado(AlmacenDeAtaques almacen, int numExitos){
