@@ -4,11 +4,6 @@
  */
 package mainpackage.Interfaz;
 
-/**
- *
- * @author monthy765
- */
-
 import java.util.Random;
 import javax.swing.*; // Porque estamos haciendo una interfaz gráfica
 import javax.swing.event.*; // Cuando usamos CheckBox

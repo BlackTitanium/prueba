@@ -4,14 +4,17 @@
  */
 package mainpackage.Interfaz;
 
-/**
- *
- * @author monthy765
- */
+import java.awt.Color; // Porque estamos haciendo una interfaz gráfica
+import java.awt.Font; // Porque vamos a trabajar con eventos: botones, combox, ...
+import java.awt.event.ActionEvent; // Porque vamos a trabajar con colores
+import java.awt.event.ActionListener;
 
-import javax.swing.*; // Porque estamos haciendo una interfaz gráfica
-import java.awt.event.*; // Porque vamos a trabajar con eventos: botones, combox, ...
-import java.awt.*; // Porque vamos a trabajar con colores
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 public class InterfazNombreJugador extends JFrame implements ActionListener{
     private JTextField textfield1;

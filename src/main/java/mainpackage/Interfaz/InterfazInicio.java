@@ -4,16 +4,20 @@
  */
 package mainpackage.Interfaz;
 
-/**
- *
- * @author monthy765
- */
+import java.awt.Color; // Porque estamos haciendo una interfaz gráfica
+import java.awt.Dimension; // Cuando usamos CheckBox
+import java.awt.FlowLayout; // Porque vamos a trabajar con colores
+import java.awt.Font; // Porque vamos a trabajar con eventos: botones, combox, ...
+import java.awt.event.ActionEvent; // Para usar Casilla
+import java.awt.event.ActionListener;
 
-import javax.swing.*; // Porque estamos haciendo una interfaz gráfica
-import javax.swing.event.*; // Cuando usamos CheckBox
-import java.awt.*; // Porque vamos a trabajar con colores
-import java.awt.event.*; // Porque vamos a trabajar con eventos: botones, combox, ...
-import mainpackage.*; // Para usar Casilla
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 public class InterfazInicio extends JFrame implements ActionListener{
     private JComboBox nSupervivientes;

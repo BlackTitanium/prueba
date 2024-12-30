@@ -6,11 +6,6 @@ public class Partida {
     public ArrayList<Superviviente> supervivientes;
     private int turnoActual = 0;
     
-//    public Partida(ArrayList<Superviviente> supervivientes) {
-//        this.supervivientes = new ArrayList<>(supervivientes);
-//        this.turnoActual = 0; // Inicialmente empieza con el primer jugador (índice 0)
-//    }
-    
     public void addSuperviviente(Superviviente s){
         supervivientes.add(s);
     }
