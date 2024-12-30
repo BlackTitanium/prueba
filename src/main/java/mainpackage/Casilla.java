@@ -61,7 +61,7 @@ public class Casilla{
         }
     }
     
-    public void removeZombie(Zombi z){
+    public void removeZombi(Zombi z){
         if (zombis.remove(z)) {
             contadorZombis--;
         }

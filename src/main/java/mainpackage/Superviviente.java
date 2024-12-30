@@ -59,6 +59,7 @@ public class Superviviente extends Entidad{
         mordeduras++;
         if (mordeduras == 2){
             estadoActual = estado.MUERTO;
+            casillaActual.removeSuperviviente(this);
         }
     }
 
@@ -67,7 +68,6 @@ public class Superviviente extends Entidad{
         acciones--;
     }
 
-    @Override
     public void activar(int a) {
         if (estadoActual == estado.VIVO) {
             acciones=3;
