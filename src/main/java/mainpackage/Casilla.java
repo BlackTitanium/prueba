@@ -54,4 +54,18 @@ public class Casilla{
         Casilla casilla = (Casilla) obj;
         return this.x == casilla.x && this.y == casilla.y;
     }
+    
+    
+    // NUEVO POR MI
+    public void removeSuperviviente(Superviviente s) {
+        if (supervivientes.remove(s)) { // remove(s) busca y elimina el superviviente "s" en "supervivientes" y devuelve "true" si lo logra
+            contadorSupervivientes--;
+        }
+    }
+    
+    public void removeZombie(Zombi z){
+        if (zombis.remove(z)) {
+            contadorZombis--;
+        }
+    }
 }
