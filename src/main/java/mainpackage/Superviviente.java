@@ -1,9 +1,12 @@
 package mainpackage;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Superviviente extends Entidad{
     private String nombre;
     private int contadorZombis, mordeduras, acciones = 3;
-    private accion seleccion;
+    private accion seleccion; //Mover o atacar
     private Arma[] arma = new Arma[2];
 
     public int getContadorZombis() {
@@ -20,6 +23,9 @@ public class Superviviente extends Entidad{
 
     public accion getSeleccion() {
         return seleccion;
+    }
+    public void setSeleccion(accion seleccion) {
+        this.seleccion = seleccion;
     }
 
     public String getNombre() {
@@ -41,15 +47,19 @@ public class Superviviente extends Entidad{
         return inventario;
     }
 
-    public Superviviente(String nombre){
+    public Superviviente(String nombre, Casilla c){
         this.nombre = nombre;
         this.contadorZombis = 0;
         this.mordeduras = 0;
         this.estadoActual = estado.VIVO;
+        this.casillaActual = c;
     }
 
     public void addMordeduras(){
         mordeduras++;
+        if (mordeduras == 2){
+            estadoActual = estado.MUERTO;
+        }
     }
 
     public void buscar(int a){
@@ -58,12 +68,39 @@ public class Superviviente extends Entidad{
     }
 
     @Override
-    public void activar() {
+    public void activar(int a) {
         if (estadoActual == estado.VIVO) {
             acciones=3;
         }    if(seleccion==accion.MOVER){
-
-         }
+                switch (a) {
+                    case 1:
+                        mover(0, 1);
+                        break;
+                    case 2:
+                        mover(1, 1);
+                        break;
+                    case 3:
+                        mover(1, 0);
+                        break;
+                    case 4:
+                        mover(1, -1);
+                        break;
+                    case 5:
+                        mover(0, -1);
+                        break;
+                    case 6:  
+                        mover(-1, -1);
+                        break;
+                    case 7:    
+                        mover(-1, 0);
+                        break;
+                    case 8:   
+                        mover(-1, 1);
+                        break;
+                }
+            } else {
+                atacar(a);
+            }
     }
 
     
@@ -95,14 +132,29 @@ public class Superviviente extends Entidad{
         }
     }
 
-    public Zombi elegirObjetivo(Zombi[] zombis, int a){
-        return zombis[a];
+    public Casilla elegirObjetivo(Arma arma, int a){
+        Casilla temp = null;
+        int alcance = arma.getAlcance();
+        if (alcance == 0){
+            return casillaActual;
+        }
+        List<Casilla> casillasEnRango = new ArrayList<>();
+        for(int i = -alcance; i <= alcance; i++){
+            for(int j = -alcance; j <= alcance; j++){
+                if(i != 0 || j != 0){
+                    temp = tableroActual.getCasilla(posicion[0] + i, posicion[1] + j);
+                    if(temp != null){
+                        casillasEnRango.add(temp);
+                    }
+                }
+            }
+        }
+        return casillasEnRango.get(a);
     }
-
-    @Override
     
     public Ataque atacar(int a) {
-            return new Ataque(arma[a]);
+        acciones--;
+        return new Ataque(arma[a]);
     }
     
 }
