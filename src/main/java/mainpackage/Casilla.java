@@ -75,6 +75,12 @@ public class Casilla{
             }else if(contadorZombis > 0){
                 contenido = "Z";
             }
+        }else if(contadorSupervivientes > 0){
+            if(contadorZombis == 0){
+                contenido = "S";
+            }else if(contadorZombis > 0){
+                contenido = "C";
+            }
         }
         return contenido;
     }

@@ -3,6 +3,8 @@ package mainpackage;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import javax.swing.SwingUtilities;
+
 public class Partida {
     public static ArrayList<Superviviente> supervivientes;
     private static int turnoActual = 0;
@@ -45,20 +47,24 @@ public class Partida {
     }
 
     public static void main(String args[]){
-        tablero = new Tablero();
-        Casilla casillaInicio = tablero.getCasilla(0, 0);
-
-        System.out.print("Elige el número de jugadores (1, 2, 3 o 4): ");
-        int num = scanner.nextInt();
-
-        supervivientes = new ArrayList<>();
-        String nombre;
-        for(int i = 0; i<num; i++){
-            System.out.print("Dime el nombre del jugador " + (i+1) + ": ");
-            nombre = scanner.nextLine();
-            supervivientes.add(new Superviviente(nombre,casillaInicio));
-        }
-
-        
+//        tablero = new Tablero();
+//        Casilla casillaInicio = tablero.getCasilla(0, 0);
+//
+//        System.out.print("Elige el número de jugadores (1, 2, 3 o 4): ");
+//        int num = scanner.nextInt();
+//
+//        supervivientes = new ArrayList<>();
+//        String nombre;
+//        for(int i = 0; i<num; i++){
+//            System.out.print("Dime el nombre del jugador " + (i+1) + ": ");
+//            nombre = scanner.nextLine();
+//            supervivientes.add(new Superviviente(nombre,casillaInicio));
+//        }
+        // LLamamos a la InterfazPrincipal
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override public void run() {
+                new InterfazPrincipal();
+            }
+        });
     }
 }
