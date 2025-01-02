@@ -71,26 +71,13 @@ public class InterfazPrincipal extends JFrame implements ActionListener{
                 panelTablero.add(botones[i][j]);
             }
         }
-//        colocarElementosIniciales();
+        colocarElementosIniciales();
     }
     
     private void colocarElementosIniciales(){
-//        for(int i=0;i<InterfazInicio.nJugadores; i++){
-//            numJ = i+1;
-//            //new InterfazNombreJugador().setVisible(true);
-//            InterfazNombreJugador dialog = new InterfazNombreJugador();
-//            dialog.setModal(true); // Bloquea el bucle mientras InterfazNombreJugador este abierto
-//            dialog.setVisible(true);      
-//            
-//            InterfazNombreJugador dialog = new InterfazNombreJugador(this);
-//            dialog.mostrar();
-
-//            Superviviente s = new Superviviente(InterfazNombreJugador.nombre);
-//            casillas[0][0].addSuperviviente(s);
-//            partida.addSuperviviente(s);
-//            botones[0][0].setText("S" + (i+1));  // Mostrar "S" + (i+1) en el botón
-//        }
-//        partida.añadirSuperviviente(this);
+        for(int i = 0; i<panelInicio.nJugadores; i++){
+            casillas[0][0].addSuperviviente(); // HABRIA QUE CREAR LOS SUPERVIVIENTES, LO SUYO ES EN PARTIDA Y AÑADIRLOS E INDICARLO EN EL BOTON
+        }
         Random random = new Random();
         posicionesOcupadas[0][0] = true; // Marcar la [0][0] como ocupada
         for (int i = 0; i < 3; i++) {
