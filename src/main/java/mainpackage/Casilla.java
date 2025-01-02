@@ -2,12 +2,15 @@ package mainpackage;
 
 import java.util.ArrayList;
 import java.io.Serializable;
+import java.util.Random;
 
 public class Casilla implements Serializable{
 
     private int x, y, contadorZombis, contadorSupervivientes;
     public ArrayList<Zombi> zombis;
     public ArrayList<Superviviente> supervivientes;
+    private static Random random = new Random();
+    private boolean buscada = false;
 
     public Casilla(int a, int b){
         x = a; y = b;
@@ -39,8 +42,8 @@ public class Casilla implements Serializable{
         return supervivientes.get(0);
     }
 
-    public Zombi getZombi(){
-        return zombis.get(0);
+    public Zombi getZombi(int a){
+        return zombis.get(a);
     }
 
     @Override
@@ -84,5 +87,20 @@ public class Casilla implements Serializable{
             }
         }
         return contenido;
+    }
+
+    public Equipo buscar(){
+        int a = random.nextInt(2);
+        int b = random.nextInt(3);
+        if (buscada == true){
+            return null;
+        }
+        if (a == 0){
+            buscada = true;
+            return new Arma(b+1);
+        }else{
+            buscada = true;
+            return new Provision(b+1);
+        }
     }
 }

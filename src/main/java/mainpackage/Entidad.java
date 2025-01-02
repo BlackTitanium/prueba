@@ -5,8 +5,16 @@ import java.io.Serializable;
 public abstract class Entidad implements Serializable{
     protected int[] posicion = new int[2];
     protected Casilla casillaActual;
-    public enum accion {MOVER, ATACAR};
+    public enum accion {MOVER, ATACAR, BUSCAR};
     protected Tablero tableroActual;
+
+    public void setCasillaActual(Casilla c){
+        casillaActual = c;
+    }
+
+    public Casilla getCasillaActual(){
+        return casillaActual;
+    }
 
     int[] getPosicion(){
         return posicion;

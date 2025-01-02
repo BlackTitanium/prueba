@@ -14,6 +14,7 @@ public class Berserker extends Zombi{
                 aguante++;
             }
             casillaActual.addZombi(this);
+            throw new IllegalArgumentException("Alcance");
         }
     }
 }

@@ -9,6 +9,11 @@ public class Superviviente extends Entidad implements Serializable{
     private int contadorZombis, mordeduras, acciones = 3;
     private accion seleccion; //Mover o atacar
     private Arma[] arma = new Arma[2];
+    private enum estado {VIVO, MUERTO};
+    private estado estadoActual;
+    private Equipo[] inventario = new Equipo[5]; 
+    private Ataque ultimoAtaque;
+
 
     public int getContadorZombis() {
         return contadorZombis;
@@ -37,15 +42,15 @@ public class Superviviente extends Entidad implements Serializable{
         return arma;
     }
    
-    private enum estado {VIVO, MUERTO};
-    private estado estadoActual;
-    private Equipo[] inventario = new Equipo[5]; 
 
     public estado getEstadoActual() {
         return estadoActual;
     }
     public Equipo[] getInventario() {
         return inventario;
+    }
+    public void setInventario(Equipo e, int a){
+        this.inventario[a] = e;
     }
 
     public Superviviente(String nombre, Casilla c){
@@ -64,15 +69,39 @@ public class Superviviente extends Entidad implements Serializable{
         }
     }
 
+    public void lessMordeduras(){
+        if(mordeduras !=0 ){
+            mordeduras--;
+        }
+    }
+
+    public void addAcciones(){
+        acciones++;
+    }
+
+    public Ataque getUltimoAtaque() {
+        return ultimoAtaque;
+    }
+
+    public void setUltimoAtaque(Ataque a){
+        this.ultimoAtaque = a;
+    }
+
+    public void setAcciones(int a){
+        this.acciones = a;
+    }
+
     public void buscar(int a){
         inventario[a] = casillaActual.buscar();
         acciones--;
     }
 
     public void activar(int a) {
-        if (estadoActual == estado.VIVO) {
-            acciones=3;
-        }    if(seleccion==accion.MOVER){
+        if (estadoActual == estado.MUERTO) {
+            acciones = 0;
+            return;
+        }  else {
+            if(seleccion==accion.MOVER){
                 switch (a) {
                     case 1:
                         mover(0, 1);
@@ -99,9 +128,13 @@ public class Superviviente extends Entidad implements Serializable{
                         mover(-1, 1);
                         break;
                 }
-            } else {
+            } else if(seleccion==accion.ATACAR){
                 atacar(a);
+
+            } else if(seleccion==accion.BUSCAR){
+                buscar(a);
             }
+        }
     }
 
     
@@ -118,7 +151,8 @@ public class Superviviente extends Entidad implements Serializable{
             Equipo equipoSeleccionado = inventario[a];
             arma[b] = (Arma) equipoSeleccionado;
         } else {
-            throw new IllegalArgumentException("No es un arma");
+            inventario[a] = null;
+            lessMordeduras();
         }
     }
 
@@ -133,11 +167,11 @@ public class Superviviente extends Entidad implements Serializable{
         }
     }
 
-    public Casilla elegirObjetivo(Arma arma, int a){
+    public List<Casilla> elegirObjetivo(Arma arma){
         Casilla temp = null;
         int alcance = arma.getAlcance();
         if (alcance == 0){
-            return casillaActual;
+            return null;
         }
         List<Casilla> casillasEnRango = new ArrayList<>();
         for(int i = -alcance; i <= alcance; i++){
@@ -150,12 +184,12 @@ public class Superviviente extends Entidad implements Serializable{
                 }
             }
         }
-        return casillasEnRango.get(a);
+        return casillasEnRango;
     }
     
-    public Ataque atacar(int a) {
+    public void atacar(int a) {
         acciones--;
-        return new Ataque(arma[a]);
+        ultimoAtaque = new Ataque(arma[a]);
     }
     
 }
