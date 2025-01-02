@@ -12,26 +12,30 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-public class InterfazNombreJugador extends JFrame implements ActionListener{
+import javax.swing.*;
+
+public class InterfazNombreJugador /*extends JDialog implements ActionListener*/{
+    private JDialog dialogo;
     private JTextField textfield1;
     private JButton botonOk;
     public static String nombre = "";
     private int num;
     
-    public InterfazNombreJugador(){
-        setTitle("Nombre del jugador");
-        setBounds(0, 0, 300, 200);
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setResizable(false);
-        setLayout(null);
+    public InterfazNombreJugador(JFrame parent){
+//        super(parent, "Nombre del jugador", true);
+        dialogo = new JDialog(parent, "Nombre del jugador", true);
+        dialogo.setBounds(0, 0, 300, 200);
+        dialogo.setLocationRelativeTo(null);
+        dialogo.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        dialogo.setResizable(false);
+        dialogo.setLayout(null);
         
         num = InterfazPrincipal.numJ;
         JLabel label = new JLabel("Ingrese el nombre del Superviviente " + num + " : ");
         label.setBounds(40,20,220,30);
         label.setFont(new Font("Arial", 0, 12));
         label.setForeground(Color.black);
-        add(label);
+        dialogo.add(label);
         
         // El JTextField, donde se introduce el nombre
         textfield1 = new JTextField();
@@ -39,32 +43,45 @@ public class InterfazNombreJugador extends JFrame implements ActionListener{
         textfield1.setBackground(Color.white);
         textfield1.setFont(new Font("Arial", 0, 12));
         textfield1.setForeground(Color.black);
-        add(textfield1);
+        dialogo.add(textfield1);
         
         botonOk = new JButton("Ok");
         botonOk.setBounds(100,110,100,30);
         botonOk.setBackground(Color.LIGHT_GRAY);
         botonOk.setFont(new Font("Andale Mono", 1, 14));
         botonOk.setForeground(Color.BLACK);
-        add(botonOk);
-        botonOk.addActionListener(this);
-        
-        setVisible(true);
-    }
-    
-    @Override
-    public void actionPerformed(ActionEvent e){
-        if(e.getSource() == botonOk){
-            nombre = textfield1.getText().trim();
-            if(nombre.equals("")){
-                JOptionPane.showMessageDialog(null,"Debes ingresar un nombre."); // Muestra un mensaje
-            } else {
-                setVisible(false);
+        botonOk.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                if(e.getSource() == botonOk){
+                    nombre = textfield1.getText().trim();
+                    if(nombre.equals("")){
+                        JOptionPane.showMessageDialog(null,"Debes ingresar un nombre."); // Muestra un mensaje
+                    } else {
+                        //setVisible(false); // Cierra la ventana, se deja de ver
+                        dialogo.dispose(); // Cierra la ventana completamentes
+                    }
+                }
             }
-        }
+        });
+        dialogo.add(botonOk);
+        
+//        dialogo.setVisible(true);
     }
     
-    public static void main(String args[]){
-        SwingUtilities.invokeLater(InterfazNombreJugador::new);
+//    @Override
+//    public void actionPerformed(ActionEvent e){
+//        if(e.getSource() == botonOk){
+//            nombre = textfield1.getText().trim();
+//            if(nombre.equals("")){
+//                JOptionPane.showMessageDialog(this,"Debes ingresar un nombre."); // Muestra un mensaje
+//            } else {
+//                //setVisible(false); // Cierra la ventana, se deja de ver
+//                dispose(); // Cierra la ventana completamentes
+//            }
+//        }
+//    }
+    public void mostrar() {
+        dialogo.setVisible(true);
     }
 }

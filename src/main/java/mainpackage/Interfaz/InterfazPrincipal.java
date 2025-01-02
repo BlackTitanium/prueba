@@ -7,14 +7,17 @@ import java.awt.*; // Porque vamos a trabajar con colores
 import java.awt.event.*; // Porque vamos a trabajar con eventos: botones, combox, ...
 import mainpackage.*; // Para usar Casilla
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class InterfazPrincipal extends JFrame implements ActionListener{
     private static final int SIZE = 10;  // Tamaño del tablero 8x8
-    private JButton[][] botones = new JButton[SIZE][SIZE];   
-    private Casilla[][] casillas = new Casilla[SIZE][SIZE];
+    public static JButton[][] botones = new JButton[SIZE][SIZE];   
+    public static Casilla[][] casillas = new Casilla[SIZE][SIZE];
     private Point elementoSeleccionado = null;  // Guarda la posición del elemento seleccionado
     private JPanel panelTablero;
     private JPanel panelControl;
-    private JComboBox nSupervivientes;
+    
     public boolean[][] posicionesOcupadas = new boolean[SIZE][SIZE];
     
     public static int numJ = 0;
@@ -68,16 +71,22 @@ public class InterfazPrincipal extends JFrame implements ActionListener{
     }
     
     private void colocarElementosIniciales(){
-        for(int i=0;i<InterfazInicio.nJugadores; i++){
-            numJ = i+1;
-            //new InterfazNombreJugador().setVisible(true);
-            InterfazNombreJugador dialog = new InterfazNombreJugador();
-            dialog.setVisible(true);
-            Superviviente s = new Superviviente(InterfazNombreJugador.nombre);
-            casillas[0][0].addSuperviviente(s);
-            partida.addSuperviviente(s);
-            botones[0][0].setText("S" + (i+1));  // Mostrar "S" + (i+1) en el botón
-        }
+//        for(int i=0;i<InterfazInicio.nJugadores; i++){
+//            numJ = i+1;
+//            //new InterfazNombreJugador().setVisible(true);
+//            InterfazNombreJugador dialog = new InterfazNombreJugador();
+//            dialog.setModal(true); // Bloquea el bucle mientras InterfazNombreJugador este abierto
+//            dialog.setVisible(true);      
+//            
+//            InterfazNombreJugador dialog = new InterfazNombreJugador(this);
+//            dialog.mostrar();
+
+//            Superviviente s = new Superviviente(InterfazNombreJugador.nombre);
+//            casillas[0][0].addSuperviviente(s);
+//            partida.addSuperviviente(s);
+//            botones[0][0].setText("S" + (i+1));  // Mostrar "S" + (i+1) en el botón
+//        }
+        partida.añadirSuperviviente(this);
         Random random = new Random();
         posicionesOcupadas[0][0] = true; // Marcar la [0][0] como ocupada
         for (int i = 0; i < 3; i++) {

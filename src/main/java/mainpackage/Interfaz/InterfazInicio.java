@@ -17,7 +17,7 @@ import javax.swing.SwingUtilities;
 
 public class InterfazInicio extends JFrame implements ActionListener{
     private JComboBox nSupervivientes;
-    private JButton empezar;
+    private JButton botonJugar;
     public static int nJugadores = 0;
     
     public InterfazInicio(){
@@ -58,20 +58,20 @@ public class InterfazInicio extends JFrame implements ActionListener{
         nSupervivientes.addItem("3");
         nSupervivientes.addItem("4");
         
-        empezar = new JButton("Jugar");
-        empezar.setBounds(100,110,100,30);
-        empezar.setBackground(Color.LIGHT_GRAY);
-        empezar.setFont(new Font("Andale Mono", 1, 14));
-        empezar.setForeground(Color.BLACK);
-        add(empezar);
-        empezar.addActionListener(this);
+        botonJugar = new JButton("Jugar");
+        botonJugar.setBounds(100,110,100,30);
+        botonJugar.setBackground(Color.LIGHT_GRAY);
+        botonJugar.setFont(new Font("Andale Mono", 1, 14));
+        botonJugar.setForeground(Color.BLACK);
+        add(botonJugar);
+        botonJugar.addActionListener(this);
         
         setVisible(true);
     }
     
     @Override
     public void actionPerformed(ActionEvent e){
-        if(e.getSource() == empezar){
+        if(e.getSource() == botonJugar){
             String nSup = nSupervivientes.getSelectedItem().toString();
             if(nSup.equals("")){
                 JOptionPane.showMessageDialog(null,"Debes poner el número de supervivientes.");
