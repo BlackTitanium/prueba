@@ -1,11 +1,10 @@
 package mainpackage;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import javax.swing.SwingUtilities;
-
-public class Partida {
+public class Partida implements Serializable{
     public static ArrayList<Superviviente> supervivientes;
     private static int turnoActual = 0;
     private static Scanner scanner = new Scanner(System.in);
@@ -60,7 +59,7 @@ public class Partida {
 
     }
 
-    public static void main(String args[]){
+//    public static void main(String args[]){
 //        tablero = new Tablero();
 //        Casilla casillaInicio = tablero.getCasilla(0, 0);
 //
@@ -75,10 +74,10 @@ public class Partida {
 //            supervivientes.add(new Superviviente(nombre,casillaInicio));
 //        }
         // LLamamos a la InterfazPrincipal
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override public void run() {
-                new InterfazPrincipal();
-            }
-        });
-    }
+//        SwingUtilities.invokeLater(new Runnable() {
+//           @Override public void run() {
+//                new InterfazPrincipal();
+//            }
+//        });
+//    }
 }

@@ -2,8 +2,9 @@ package mainpackage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.io.Serializable;
 
-public class Superviviente extends Entidad{
+public class Superviviente extends Entidad implements Serializable{
     private String nombre;
     private int contadorZombis, mordeduras, acciones = 3;
     private accion seleccion; //Mover o atacar

@@ -1,8 +1,9 @@
 package mainpackage;
 
 import java.util.ArrayList;
+import java.io.Serializable;
 
-public class Casilla{
+public class Casilla implements Serializable{
 
     private int x, y, contadorZombis, contadorSupervivientes;
     public ArrayList<Zombi> zombis;

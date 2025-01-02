@@ -1,6 +1,8 @@
 package mainpackage;
 
-public class Zombi extends Entidad {
+import java.io.Serializable;
+
+public class Zombi extends Entidad implements Serializable{
     public enum tipoZombi {CAMINANTE, CORREDOR, ABOMINACION};
     tipoZombi tipo;
     protected int activaciones, aguante;

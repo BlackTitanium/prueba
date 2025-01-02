@@ -1,8 +1,9 @@
 package mainpackage;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class AlmacenDeAtaques{
+public class AlmacenDeAtaques implements Serializable{
     private ArrayList<String> historialAtaques;
 
     public AlmacenDeAtaques(){

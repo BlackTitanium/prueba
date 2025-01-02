@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InterfazPrincipal extends JFrame implements ActionListener{
-    private static final int SIZE = 10;  // Tamaño del tablero 8x8
+    private static final int SIZE = 10;  // Tamaño del tablero 10x10
     public static JButton[][] botones = new JButton[SIZE][SIZE];   
     public static Casilla[][] casillas = new Casilla[SIZE][SIZE];
     private Point elementoSeleccionado = null;  // Guarda la posición del elemento seleccionado
@@ -76,7 +76,7 @@ public class InterfazPrincipal extends JFrame implements ActionListener{
     
     private void colocarElementosIniciales(){
         for(int i = 0; i<panelInicio.nJugadores; i++){
-            casillas[0][0].addSuperviviente(); // HABRIA QUE CREAR LOS SUPERVIVIENTES, LO SUYO ES EN PARTIDA Y AÑADIRLOS E INDICARLO EN EL BOTON
+            // casillas[0][0].addSuperviviente(); Argumento es el nombre 
         }
         Random random = new Random();
         posicionesOcupadas[0][0] = true; // Marcar la [0][0] como ocupada

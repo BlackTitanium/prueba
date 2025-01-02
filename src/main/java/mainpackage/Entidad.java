@@ -1,6 +1,8 @@
 package mainpackage;
 
-public abstract class Entidad {
+import java.io.Serializable;
+
+public abstract class Entidad implements Serializable{
     protected int[] posicion = new int[2];
     protected Casilla casillaActual;
     public enum accion {MOVER, ATACAR};
