@@ -16,7 +16,12 @@ public class Tablero {
     }
     
     public void mostrar(){
-
+        for(int i = 0; i < 10; i++){
+            for(int j = 0; j < 10; j++){
+                System.out.print("[" + mapa[i][j].getContenido() + "]");
+            }
+            System.out.println();
+        }
     }
 
     public Casilla getCasilla(int a, int b){
