@@ -66,4 +66,16 @@ public class Casilla{
             contadorZombis--;
         }
     }
+
+    public String getContenido(){
+        String contenido = "";
+        if(contadorSupervivientes == 0){
+            if(contadorZombis == 0){
+                contenido = "*";
+            }else if(contadorZombis > 0){
+                contenido = "Z";
+            }
+        }
+        return contenido;
+    }
 }
