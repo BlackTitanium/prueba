@@ -1,12 +1,13 @@
 package mainpackage;
 
-public abstract class Zombi extends Entidad {
-    enum tipoZombi {CAMINANTE, CORREDOR, ABOMINACION};
+public class Zombi extends Entidad {
+    public enum tipoZombi {CAMINANTE, CORREDOR, ABOMINACION};
     tipoZombi tipo;
     protected int activaciones, aguante;
 
     public Zombi(Tablero t, Casilla c, tipoZombi tipoZ){
-        super(t, c);
+        tableroActual = t;
+        casillaActual = c;
         this.tipo = tipoZ;
         switch(tipo){
             case CAMINANTE:
@@ -36,7 +37,18 @@ public abstract class Zombi extends Entidad {
             }
         }
     }
-    public void reaccion(Ataque a){
-        if 
+
+    public void reaccion(Arma arma, int a){
+        for (int i=0; i<a; i++){
+            aguante--;
+            if( aguante == 0){
+                casillaActual.removeZombi(this);
+                break;
+            }
+        }
+        
+    }
+    public void atacar(Superviviente s){
+        s.addMordeduras();
     }
 }

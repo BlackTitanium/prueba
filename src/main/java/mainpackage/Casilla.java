@@ -34,11 +34,11 @@ public class Casilla{
         contadorSupervivientes++;
     }
 
-    public Entidad getSuperviviente(){
+    public Superviviente getSuperviviente(){
         return supervivientes.get(0);
     }
 
-    public Entidad getZombi(){
+    public Zombi getZombi(){
         return zombis.get(0);
     }
 
@@ -61,7 +61,7 @@ public class Casilla{
         }
     }
     
-    public void removeZombie(Zombi z){
+    public void removeZombi(Zombi z){
         if (zombis.remove(z)) {
             contadorZombis--;
         }

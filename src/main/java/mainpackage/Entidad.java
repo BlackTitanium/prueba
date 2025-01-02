@@ -14,13 +14,13 @@ public abstract class Entidad {
         posicion[1] = y;
     }
 
-    public abstract void activar();
-
     public void mover(int x, int y){
         posicion[0] += x;
         posicion[1] += y;
+        casillaActual = tableroActual.getCasilla(posicion[0], posicion[1]);
     }
 
-    public abstract Ataque atacar();
-
+    /*  atacar() y activar() no van a ser implementados en esta clase, ya que los Zombis
+        no reciben un argumento en los metodos y los Supervivientes si.
+    */
 }
