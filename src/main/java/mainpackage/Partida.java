@@ -30,12 +30,26 @@ public class Partida {
         turnoActual = (turnoActual + 1) % supervivientes.size();
     }
 
-    private void generarTablero(){
-
+    public static void introducirSupervivientes(String[] nombres){
+        for (String nombre : nombres) {
+            supervivientes.add(new Superviviente(nombre, null));
+        }
     }
     
-    private void faseSuperviviente(){
+    private void faseSuperviviente(int eleccion){
+        switch(eleccion){
+            case(1): // Moverse
 
+                break;
+            case(2): // Buscar
+                break;
+            case(3): // Atacar
+                break;
+            case(4): // Elegir arma
+                break;
+            case(5): // No hacer nada
+                break;
+        }
     }
 
     private void faseZombie(){

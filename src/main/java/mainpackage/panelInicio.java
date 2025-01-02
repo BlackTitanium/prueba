@@ -1,5 +1,6 @@
 package mainpackage;
 
+import java.awt.*;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -7,6 +8,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.*;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -15,8 +17,12 @@ import javax.swing.JPanel;
 
 public class panelInicio extends JPanel{
     private JComboBox nSupervivientes;
-    private JButton botonJugar;
+    private JButton botonJugar, botonListo;
+    private JTextArea textAreaNombreSupervivientes;
+    private JScrollPane scrollpane;
+//    public static JPanel panelNombreSuperviviente;
     public static int nJugadores = 0;
+    public static String[] nombres;
     
     // TAMAÑO 400 * 600 (Ancho, Alto)
     public panelInicio(){
@@ -31,7 +37,7 @@ public class panelInicio extends JPanel{
         // Panel para agrupar JLabel y JComboBox
         JPanel panelCombo = new JPanel();
         panelCombo.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 0)); // FlowLayoaut para una distribución horizontal FlowLayout(alineación, espacioHorizontal, espacioVertical)
-        panelCombo.setPreferredSize(new Dimension(100, 30));
+        panelCombo.setPreferredSize(new Dimension(200, 30));
         panelCombo.setBounds(100,70,200,30);
         
         JLabel nSupervivientesLabel = new JLabel("Número de Supervivientes: ");
@@ -56,9 +62,47 @@ public class panelInicio extends JPanel{
         botonJugar = new JButton("Jugar");
         botonJugar.setBounds(150,110,100,30);
         botonJugar.setBackground(Color.LIGHT_GRAY);
-        botonJugar.setFont(new Font("Andale Mono", 1, 14));
+        botonJugar.setFont(new Font("Arial", 1, 14));
         botonJugar.setForeground(Color.BLACK);
         add(botonJugar);
+        
+        // Panel para la zona donde los nombres
+        JPanel panelNombreSuperviviente = new JPanel();
+        panelNombreSuperviviente.setLayout(null);
+        panelNombreSuperviviente.setPreferredSize(new Dimension(400, 300));
+        panelNombreSuperviviente.setBounds(0,170,400,300);
+        panelNombreSuperviviente.setVisible(false);
+        
+        JLabel pedirNombres = new JLabel("Introduce el nombre de los supervivientes: ");
+        pedirNombres.setFont(new Font("Arial", 0, 12));
+        pedirNombres.setBounds(75,20,250,12);
+        panelNombreSuperviviente.add(pedirNombres);
+        
+        JLabel pedirNombresInfo1 = new JLabel("(Introduce el primer nombre y pulsa intro, luego el segundo y así...");
+        pedirNombresInfo1.setFont(new Font("Arial", 0, 10));
+        pedirNombresInfo1.setBounds(75,35,300,20);
+        panelNombreSuperviviente.add(pedirNombresInfo1);
+        
+        JLabel pedirNombresInfo2 = new JLabel("Un nombre por jugador)");
+        pedirNombresInfo2.setFont(new Font("Arial", 0, 10));
+        pedirNombresInfo2.setBounds(75,47,300,20);
+        panelNombreSuperviviente.add(pedirNombresInfo2);
+        
+        textAreaNombreSupervivientes = new JTextArea();
+        textAreaNombreSupervivientes.setFont(new Font("Arial", 0, 12));
+        scrollpane = new JScrollPane(textAreaNombreSupervivientes);
+        scrollpane.setBounds(75, 80, 250, 100);
+        panelNombreSuperviviente.add(scrollpane);
+        
+        botonListo = new JButton("Listo");
+        botonListo.setBounds(150,200,100,30);
+        botonListo.setBackground(Color.LIGHT_GRAY);
+        botonListo.setFont(new Font("Arial", 1, 14));
+        botonListo.setForeground(Color.BLACK);
+        panelNombreSuperviviente.add(botonListo);
+        
+        add(panelNombreSuperviviente);
+        
         botonJugar.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
@@ -68,6 +112,22 @@ public class panelInicio extends JPanel{
                         JOptionPane.showMessageDialog(null,"Debes poner el número de supervivientes.");
                     } else {
                         nJugadores = Integer.parseInt(nSup); // Convertir a entero el número de jugadores
+//                        InterfazPrincipal.cardLayout.show(InterfazPrincipal.panelDerechoPrincipal, "Panel Control");
+                        panelNombreSuperviviente.setVisible(true);
+                    }
+                }
+            }
+        });
+        
+        botonListo.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                if(e.getSource() == botonListo){
+                    String texto = textAreaNombreSupervivientes.getText();
+                    nombres = texto.split("\\r?\\n");
+                    if (nombres.length != nJugadores) {
+                        JOptionPane.showMessageDialog(null, "Por favor, introduce exactamente " + nJugadores + " nombres.");
+                    } else {
                         InterfazPrincipal.cardLayout.show(InterfazPrincipal.panelDerechoPrincipal, "Panel Control");
                     }
                 }

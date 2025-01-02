@@ -22,6 +22,8 @@ public class InterfazPrincipal extends JFrame implements ActionListener{
     public boolean[][] posicionesOcupadas = new boolean[SIZE][SIZE];
     
     public static int numJ = 0;
+    
+    private Partida partida;
             
     public InterfazPrincipal(){
         setTitle("Juego");
@@ -69,7 +71,7 @@ public class InterfazPrincipal extends JFrame implements ActionListener{
                 panelTablero.add(botones[i][j]);
             }
         }
-        colocarElementosIniciales();
+//        colocarElementosIniciales();
     }
     
     private void colocarElementosIniciales(){
@@ -88,7 +90,7 @@ public class InterfazPrincipal extends JFrame implements ActionListener{
 //            partida.addSuperviviente(s);
 //            botones[0][0].setText("S" + (i+1));  // Mostrar "S" + (i+1) en el botón
 //        }
-        Partida.añadirSuperviviente(this);
+//        partida.añadirSuperviviente(this);
         Random random = new Random();
         posicionesOcupadas[0][0] = true; // Marcar la [0][0] como ocupada
         for (int i = 0; i < 3; i++) {
@@ -131,7 +133,7 @@ public class InterfazPrincipal extends JFrame implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e) {
             JButton boton = botones[x][y];
-            if (elementoSeleccionado == null && boton.getText().equals("S" + Partida.getTurnoActual())) {
+            if (elementoSeleccionado == null && boton.getText().equals("S" + partida.getTurnoActual())) {
                 // Selecciona un elemento para mover
                 elementoSeleccionado = new Point(x, y);
                 boton.setBackground(Color.DARK_GRAY);  // Resaltar elemento
@@ -162,6 +164,10 @@ public class InterfazPrincipal extends JFrame implements ActionListener{
     }
     
     public static void main(String args[]){     
-        SwingUtilities.invokeLater(InterfazPrincipal::new);
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override public void run() {
+                new InterfazPrincipal();
+            }
+        });
     }
 }
