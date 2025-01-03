@@ -15,7 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-public class panelInicio extends JPanel{
+public class PanelInicio extends JPanel{
     private JComboBox nSupervivientes;
     private JButton botonJugar, botonListo;
     private JTextArea textAreaNombreSupervivientes;
@@ -24,9 +24,9 @@ public class panelInicio extends JPanel{
     public static int nJugadores = 0;
     public static String[] nombres;
     
-    // TAMAÑO 400 * 600 (Ancho, Alto)
-    public panelInicio(){
-        setSize(400,600);
+    // TAMAÑO 400 * 745 (Ancho, Alto)
+    public PanelInicio(){
+        setSize(400,745);
         setLayout(null);
         
         JLabel titulo = new JLabel("Juego");
@@ -128,7 +128,9 @@ public class panelInicio extends JPanel{
                     if (nombres.length != nJugadores) {
                         JOptionPane.showMessageDialog(null, "Por favor, introduce exactamente " + nJugadores + " nombres.");
                     } else {
-                        InterfazPrincipal.cardLayout.show(InterfazPrincipal.panelDerechoPrincipal, "Panel Control");
+                        Partida.colocarElementosIniciales();
+                        panelNombreSuperviviente.setVisible(false);
+//                        InterfazPrincipal.cardLayout.show(InterfazPrincipal.panelDerechoPrincipal, "PanelMenuJugador");
                     }
                 }
             }

@@ -10,7 +10,7 @@ import mainpackage.*; // Para usar Casilla
 import java.util.ArrayList;
 import java.util.List;
 
-public class InterfazPrincipal extends JFrame implements ActionListener{
+public class InterfazPrincipal extends JFrame{
     private static final int SIZE = 10;  // Tamaño del tablero 10x10
     public static JButton[][] botones = new JButton[SIZE][SIZE];   
     public static Casilla[][] casillas = new Casilla[SIZE][SIZE];
@@ -19,15 +19,13 @@ public class InterfazPrincipal extends JFrame implements ActionListener{
     public static CardLayout cardLayout;
     public static JPanel panelDerechoPrincipal;
     
-    public boolean[][] posicionesOcupadas = new boolean[SIZE][SIZE];
+    public static boolean[][] posicionesOcupadas = new boolean[SIZE][SIZE];
     
     public static int numJ = 0;
-    
-    private Partida partida;
-            
+                
     public InterfazPrincipal(){
         setTitle("Juego");
-        setBounds(0, 0, 1000, 600);
+        setBounds(0, 0, 1145, 745);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
@@ -38,19 +36,18 @@ public class InterfazPrincipal extends JFrame implements ActionListener{
         panelTablero.setLayout(new GridLayout(SIZE, SIZE));
         // GridLayout(,) organiza los componentes en una cuadrícula rectangular con un número fijo de filas y columnas,
         // donde todos los componentes tienen el mismo tamaño
-        panelTablero.setPreferredSize(new Dimension(600, 600));  // Tamaño fijo para el tablero
+        panelTablero.setPreferredSize(new Dimension(745, 745));  // Tamaño fijo para el tablero
         inicializarTablero();
         
+        // Manejador de Paneles
         cardLayout = new CardLayout();
-        panelDerechoPrincipal = new JPanel(cardLayout);
-        
         // Panel de derecho principal (a la derecha)
-        panelDerechoPrincipal = new JPanel();
-        panelDerechoPrincipal.setLayout(null); // Usar setBounds(,,) para los componentes
-        panelDerechoPrincipal.setPreferredSize(new Dimension(400, 600));
+        panelDerechoPrincipal = new JPanel(cardLayout);
+        panelDerechoPrincipal.setPreferredSize(new Dimension(400, 745));
         
         // Añadimos voy las clases panel al panel de derecho principal
-        panelDerechoPrincipal.add(new panelInicio(),"panelInicio");
+        panelDerechoPrincipal.add(new PanelInicio(),"PanelInicio");
+        panelDerechoPrincipal.add(new PanelMenuJugador(),"PanelMenuJugador");
         
         // Añadir paneles al JFrame
         add(panelTablero, BorderLayout.CENTER);  // Tablero en el centro (ocupa la izquierda)
@@ -67,46 +64,22 @@ public class InterfazPrincipal extends JFrame implements ActionListener{
                 botones[i][j] = new JButton();
                 botones[i][j].setFocusPainted(false);
                 botones[i][j].setBackground(Color.LIGHT_GRAY);
+                botones[i][j].setFont(new Font("Arial",0,10));
+                botones[i][j].setText("<html></html>");
                 botones[i][j].addActionListener(new MoverElemento(i, j));
                 panelTablero.add(botones[i][j]);
             }
         }
-        colocarElementosIniciales();
     }
     
-    private void colocarElementosIniciales(){
-        for(int i = 0; i<panelInicio.nJugadores; i++){
-            // casillas[0][0].addSuperviviente(); Argumento es el nombre 
+    public static void reiniciarTablero() {
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                botones[i][j].setText("");
+                botones[i][j].setBackground(Color.LIGHT_GRAY);
+                casillas[i][j].reiniciarCasilla();
+            }
         }
-        Random random = new Random();
-        posicionesOcupadas[0][0] = true; // Marcar la [0][0] como ocupada
-        for (int i = 0; i < 3; i++) {
-            int x, y;
-            do { 
-                x = random.nextInt(SIZE); 
-                y = random.nextInt(SIZE); 
-            } while (posicionesOcupadas[x][y]);
-            
-            posicionesOcupadas[x][y] = true; // Marcar la nueva casilla como ocupada
-            
-//            Zombi z = new Zombi();  // Crear un zombi
-//            casillas[x][y].addZombi(z);  // Añadir zombi a la casilla
-            botones[x][y].setText("Z");  // Mostrar "Z" en el botón
-        }
-    }
-    
-    // Añadir zombie
-    public void addZombie(){
-        Random random = new Random();
-        int x, y;
-        do { 
-            x = random.nextInt(SIZE); 
-            y = random.nextInt(SIZE); 
-        } while (posicionesOcupadas[x][y]);
-        
-//        Zombi z = new Zombi();  // Crear un zombi
-//        casillas[x][y].addZombi(z);  // Añadir zombi a la casilla
-        botones[x][y].setText("Z");  // Mostrar "Z" en el botón
     }
     
     // Acción al hacer clic en una celda
@@ -120,34 +93,49 @@ public class InterfazPrincipal extends JFrame implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e) {
             JButton boton = botones[x][y];
-            if (elementoSeleccionado == null && boton.getText().equals("S" + partida.getTurnoActual())) {
+            if (elementoSeleccionado == null && boton.getText().equals(Partida.getSupervivienteActual().getNombre())) {
                 // Selecciona un elemento para mover
                 elementoSeleccionado = new Point(x, y);
                 boton.setBackground(Color.DARK_GRAY);  // Resaltar elemento
             } else if (elementoSeleccionado != null) {
                 // Verificar si el movimiento es a una casilla adyacente 
-                 if (Math.abs(elementoSeleccionado.x - x) <= 1 && Math.abs(elementoSeleccionado.y - y) <= 1) { 
-                    int zombisEnCasillaOrigen = casillas[elementoSeleccionado.x][elementoSeleccionado.y].getContadorZombis();
-                    int accionesExtras = zombisEnCasillaOrigen; // Una acción extra por cada zombi en la casilla de origen
-                   
-                   // Mover el superviviente a la nueva celda
-                   botones[elementoSeleccionado.x][elementoSeleccionado.y].setText("");
-                   botones[elementoSeleccionado.x][elementoSeleccionado.y].setBackground(Color.LIGHT_GRAY);
-                   botones[x][y].setText("S" + partida.getTurnoActual());
-                   casillas[elementoSeleccionado.x][elementoSeleccionado.y].removeSuperviviente(partida.getSupervivienteActual());
-                   casillas[x][y].addSuperviviente(partida.getSupervivienteActual());
-                   elementoSeleccionado = null;
-                   
-                   // Gestionar el gasto de acciones adicionales aquí... 
-                   // (Esta parte depende de cómo gestiones los turnos y acciones en tu juego)
+                 if (Math.abs(elementoSeleccionado.x - x) <= 1 && Math.abs(elementoSeleccionado.y - y) <= 1) {                    
+                    // Mover el superviviente a la nueva casilla y marcarla como ocupada
+                    casillas[elementoSeleccionado.x][elementoSeleccionado.y].removeSuperviviente(Partida.getSupervivienteActual());
+                    casillas[x][y].addSuperviviente(Partida.getSupervivienteActual());
+                    posicionesOcupadas[x][y] = true;
+                    botones[elementoSeleccionado.x][elementoSeleccionado.y].setBackground(Color.LIGHT_GRAY);
+                    // Coger el texto del nuevo boton y añadirle el superviviente
+                    StringBuilder sb = new StringBuilder();
+                    String textoBotonDestino = botones[x][y].getText();
+                    textoBotonDestino = textoBotonDestino.replace("</html>", ""); // Quitamos el cierre de HTML
+                    sb.append(textoBotonDestino);
+                    sb.append(Partida.getSupervivienteActual().getNombre());
+                    sb.append("<br>"); // Salto de linea en HTML
+                    sb.append("</html>"); // Colocamos el cierre HTML
+                    botones[x][y].setText(sb.toString());
+                    // Quitamos del boton el nombre del superviviente
+                    String textoBotonOrigen = botones[elementoSeleccionado.x][elementoSeleccionado.y].getText();
+                    textoBotonOrigen = textoBotonOrigen.replace(Partida.getSupervivienteActual().getNombre() + "<br>","");
+                    if(casillas[elementoSeleccionado.x][elementoSeleccionado.y].getContadorSupervivientes() == 0){
+                        if(casillas[elementoSeleccionado.x][elementoSeleccionado.y].getContadorZombis() == 0){
+                            // Marcamos la casilla como vacia
+                            posicionesOcupadas[elementoSeleccionado.x][elementoSeleccionado.y] = false;
+                            botones[elementoSeleccionado.x][elementoSeleccionado.y].setText("<html></html>"); // Vacio
+                        } else{
+                            botones[elementoSeleccionado.x][elementoSeleccionado.y].setText(textoBotonOrigen);
+                        }
+                    } else{
+                        botones[elementoSeleccionado.x][elementoSeleccionado.y].setText(textoBotonOrigen);
+                    }
+                    
+                    elementoSeleccionado = null;
+
+                    // Gestionar el gasto de acciones adicionales aquí... 
+                    // (Esta parte depende de cómo gestiones los turnos y acciones en tu juego)
                 }
             }
         }
-    }
-    
-    @Override
-    public void actionPerformed(ActionEvent e){
-        
     }
     
     public static void main(String args[]){     
