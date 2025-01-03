@@ -1,7 +1,9 @@
 package mainpackage;
 
+import java.io.Serializable;
 import java.util.Random;
-public class Ataque{
+
+public class Ataque implements Serializable{
 
     private int[] dados;
     private String resultado;

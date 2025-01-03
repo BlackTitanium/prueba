@@ -1,8 +1,9 @@
 package mainpackage;
 
-public class Tablero {
-    private Casilla mapa[][];
+import java.io.Serializable;
 
+public class Tablero implements Serializable{
+    private Casilla mapa[][];
     public void setMapa(Casilla c){
         mapa[c.getX()][c.getY()] = c;
     }
