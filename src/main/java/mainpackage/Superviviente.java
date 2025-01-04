@@ -100,42 +100,18 @@ public class Superviviente extends Entidad implements Serializable{
         acciones--;
     }
 
-    public void activar(int a) {
+    public void activar(int ranura, int x, int y) {
         if (estadoActual == estado.MUERTO) {
             acciones = 0;
         }  else {
             if(seleccion==accion.MOVER){
-                switch (a) {
-                    case 1:
-                        mover(0, 1);
-                        break;
-                    case 2:
-                        mover(1, 1);
-                        break;
-                    case 3:
-                        mover(1, 0);
-                        break;
-                    case 4:
-                        mover(1, -1);
-                        break;
-                    case 5:
-                        mover(0, -1);
-                        break;
-                    case 6:  
-                        mover(-1, -1);
-                        break;
-                    case 7:    
-                        mover(-1, 0);
-                        break;
-                    case 8:   
-                        mover(-1, 1);
-                        break;
-                }
-            } else if(seleccion==accion.ATACAR){
-                atacar(a);
+                mover(x,y);
 
-            } else if(seleccion==accion.BUSCAR){
-                buscar(a);
+            } else if(seleccion==accion.ATACAR){
+                atacar(ranura);
+
+            } else {
+                buscar(ranura);
             }
         }
     }

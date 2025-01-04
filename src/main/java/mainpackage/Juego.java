@@ -5,14 +5,19 @@ import java.util.Scanner;
 public class Juego implements Serializable{
     private Partida partida;
     private static Scanner scanner = new Scanner(System.in);
+    private InterfazPrincipal interfazPrincipal;
+
     public static void main(String[] args) {
+        Juego juego = new Juego();
+        juego.mostrarMenu();
+    }
+    public void mostrarMenu() {
         System.out.println("Bienvenido a APOOcalipsis Zombi");
         System.out.println("Elige una opción:\n1. Iniciar partida\n2. Cargar partida\n3. Simulaciones\n4. Salir");
         int eleccion = scanner.nextInt();
         switch(eleccion){
             case 1:
-                Juego juego = new Juego();
-                juego.iniciarPartida();
+                iniciarPartida();
                 break;
             case 2:
                 // Cargar partida
@@ -29,11 +34,7 @@ public class Juego implements Serializable{
         }
         main(new String[]{"0"});
     }
-
     public void iniciarPartida(){
-        System.out.println("Introduce el número de supervivientes (1 a 4): ");
-        int nSupervivientes = scanner.nextInt();
-        partida = new Partida(nSupervivientes);
-//        partida = new Partida();
+        interfazPrincipal = new InterfazPrincipal();
     }
 }

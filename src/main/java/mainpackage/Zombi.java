@@ -57,9 +57,9 @@ public class Zombi extends Entidad implements Serializable{
                 atacar(casillaActual.getSuperviviente());
             } else {
                 if(Math.abs(casillaActual.getX()-tableroActual.objetivoZombi(casillaActual).getX())>Math.abs(casillaActual.getY()-tableroActual.objetivoZombi(casillaActual).getY())){
-                    mover(1,0);
+                    mover(casillaActual.getX()+1,casillaActual.getY());
                 } else{
-                    mover(0,1);
+                    mover(casillaActual.getX(),casillaActual.getY()+1);
                 }
             }
         }

@@ -25,8 +25,8 @@ public abstract class Entidad implements Serializable{
     }
 
     public void mover(int x, int y){
-        posicion[0] += x;
-        posicion[1] += y;
+        posicion[0] = x;
+        posicion[1] = y;
         Casilla casillaAnterior = casillaActual;
         casillaActual = tableroActual.getCasilla(posicion[0], posicion[1]);
         casillaAnterior.removeEntidad(this);
