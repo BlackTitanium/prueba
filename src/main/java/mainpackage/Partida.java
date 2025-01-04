@@ -10,7 +10,7 @@ public class Partida implements Serializable{
     public ArrayList<Superviviente> supervivientes;
     public ArrayList<Zombi> zombis;
     private int turnoActual = 0;
-    private Scanner scanner = new Scanner(System.in);
+//    private Scanner scanner = new Scanner(System.in);
     private Tablero tablero;
     private Equipo[] inventarioActual;
     private Superviviente supervivienteActual;
@@ -205,21 +205,20 @@ public class Partida implements Serializable{
     public Partida(){
 //    public Partida(int numJugadores){
         tablero = new Tablero();
+        almacen =  new AlmacenDeAtaques();
         supervivientes = new ArrayList<Superviviente>(4);
-//        String[] nombres = new String[numJugadores];
-//        for(int i = 0; i < numJugadores; i++){
-//            System.out.println("Introduce el nombre del superviviente " + (i+1));
-//            nombres[i] = scanner.next();
-//            supervivientes.add(new Superviviente(nombres[i], tablero.getCasilla(0, 0)));
-//        }
+        String nombre = "";
+        for(int i = 0; i < 4; i++){
+            supervivientes.add(new Superviviente(nombre, tablero.getCasilla(0, 0)));
+        }
 
-        interfazPrincipal = new InterfazPrincipal(this);
+//        interfazPrincipal = new InterfazPrincipal(this);
         // LLamamos a la InterfazPrincipal (NO USAR POR AHORA)
-//        Partida estaPartida = this;
-//        SwingUtilities.invokeLater(new Runnable() {
-//           @Override public void run() {
-//                new InterfazPrincipal(estaPartida);
-//            }
-//        });
+        Partida estaPartida = this;
+        SwingUtilities.invokeLater(new Runnable() {
+           @Override public void run() {
+                new InterfazPrincipal(estaPartida);
+            }
+        });
     }
 }

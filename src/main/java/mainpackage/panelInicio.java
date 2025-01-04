@@ -15,6 +15,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import java.util.*;
+
 public class PanelInicio extends JPanel{
     private JComboBox nSupervivientes;
     private JButton botonJugar, botonListo;
@@ -130,6 +132,7 @@ public class PanelInicio extends JPanel{
                 if(e.getSource() == botonListo){
                     String texto = textAreaNombreSupervivientes.getText();
                     nombres = texto.split("\\r?\\n");
+                    System.out.println("Nombres introducidos: " + Arrays.toString(nombres)); // Depuración
                     if (nombres.length != interfazPrincipal.nJugadores) {
                         JOptionPane.showMessageDialog(null, "Por favor, introduce exactamente " + interfazPrincipal.nJugadores + " nombres.");
                     } else {

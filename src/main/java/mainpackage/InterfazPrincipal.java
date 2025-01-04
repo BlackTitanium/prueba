@@ -111,6 +111,7 @@ public class InterfazPrincipal extends JFrame{
         @Override
         public void actionPerformed(ActionEvent e) {
             JButton boton = botones[x][y];
+            
             if (elementoSeleccionado == null && boton.getText().equals(partida.getSupervivienteActual().getNombre())) {
                 // Selecciona un elemento para mover
                 elementoSeleccionado = new Point(x, y);
