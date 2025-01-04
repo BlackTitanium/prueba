@@ -29,6 +29,14 @@ public class Tablero implements Serializable{
         return mapa[a][b];
     }
 
+    public void reiniciarTablero(){
+        for (int i=0; i<10; i++){
+            for(int j=0; j<10; j++){
+                mapa[i][j].reiniciarCasilla();
+            }
+        }
+    }
+
     public Casilla objetivoZombi(Casilla c){
         Casilla objetivo = null;
         for (int j=0; j<10; j++){

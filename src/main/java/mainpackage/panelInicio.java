@@ -20,12 +20,17 @@ public class PanelInicio extends JPanel{
     private JButton botonJugar, botonListo;
     private JTextArea textAreaNombreSupervivientes;
     private JScrollPane scrollpane;
-//    public static JPanel panelNombreSuperviviente;
-    public static int nJugadores = 0;
-    public static String[] nombres;
+    
+    private String[] nombres;
+    
+    private Partida partida;
+    private InterfazPrincipal interfazPrincipal;
     
     // TAMAÑO 400 * 745 (Ancho, Alto)
-    public PanelInicio(){
+    public PanelInicio(Partida partida, InterfazPrincipal interfazPrincipal){
+        this.partida = partida;
+        this.interfazPrincipal = interfazPrincipal;
+        
         setSize(400,745);
         setLayout(null);
         
@@ -111,8 +116,7 @@ public class PanelInicio extends JPanel{
                     if(nSup.equals("")){
                         JOptionPane.showMessageDialog(null,"Debes poner el número de supervivientes.");
                     } else {
-                        nJugadores = Integer.parseInt(nSup); // Convertir a entero el número de jugadores
-//                        InterfazPrincipal.cardLayout.show(InterfazPrincipal.panelDerechoPrincipal, "Panel Control");
+                        interfazPrincipal.nJugadores = Integer.parseInt(nSup); // Convertir a entero el número de jugadores
                         panelNombreSuperviviente.setVisible(true);
                     }
                 }
@@ -125,10 +129,10 @@ public class PanelInicio extends JPanel{
                 if(e.getSource() == botonListo){
                     String texto = textAreaNombreSupervivientes.getText();
                     nombres = texto.split("\\r?\\n");
-                    if (nombres.length != nJugadores) {
-                        JOptionPane.showMessageDialog(null, "Por favor, introduce exactamente " + nJugadores + " nombres.");
+                    if (nombres.length != interfazPrincipal.nJugadores) {
+                        JOptionPane.showMessageDialog(null, "Por favor, introduce exactamente " + interfazPrincipal.nJugadores + " nombres.");
                     } else {
-                        Partida.colocarElementosIniciales();
+                        partida.colocarElementosIniciales(nombres);
                         panelNombreSuperviviente.setVisible(false);
 //                        InterfazPrincipal.cardLayout.show(InterfazPrincipal.panelDerechoPrincipal, "PanelMenuJugador");
                     }

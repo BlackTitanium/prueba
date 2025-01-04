@@ -12,18 +12,24 @@ import java.util.List;
 
 public class InterfazPrincipal extends JFrame{
     private static final int SIZE = 10;  // Tamaño del tablero 10x10
-    public static JButton[][] botones = new JButton[SIZE][SIZE];   
-    public static Casilla[][] casillas = new Casilla[SIZE][SIZE];
+    public JButton[][] botones = new JButton[SIZE][SIZE];   
+    public Casilla[][] casillas = new Casilla[SIZE][SIZE];
     private Point elementoSeleccionado = null;  // Guarda la posición del elemento seleccionado
-    private JPanel panelTablero;
-    public static CardLayout cardLayout;
-    public static JPanel panelDerechoPrincipal;
     
-    public static boolean[][] posicionesOcupadas = new boolean[SIZE][SIZE];
+    public CardLayout cardLayout;
+    public JPanel panelTablero, panelDerechoPrincipal;
     
-    public static int numJ = 0;
+    PanelMenuJugador panelMenuJugador;
+    
+    public int nJugadores = 0;
+    public boolean[][] posicionesOcupadas = new boolean[SIZE][SIZE];
+    public boolean movimientoActivado = false;
+    
+    private Partida partida;
                 
-    public InterfazPrincipal(){
+    public InterfazPrincipal(Partida partida){
+        this.partida = partida;
+        
         setTitle("Juego");
         setBounds(0, 0, 1145, 745);
         setLocationRelativeTo(null);
@@ -46,8 +52,10 @@ public class InterfazPrincipal extends JFrame{
         panelDerechoPrincipal.setPreferredSize(new Dimension(400, 745));
         
         // Añadimos voy las clases panel al panel de derecho principal
-        panelDerechoPrincipal.add(new PanelInicio(),"PanelInicio");
-        panelDerechoPrincipal.add(new PanelMenuJugador(),"PanelMenuJugador");
+        PanelInicio panelInicio = new PanelInicio(partida, this);
+        panelDerechoPrincipal.add(panelInicio,"PanelInicio");
+        panelMenuJugador = new PanelMenuJugador(partida, this);
+        panelDerechoPrincipal.add(panelMenuJugador,"PanelMenuJugador");
         
         // Añadir paneles al JFrame
         add(panelTablero, BorderLayout.CENTER);  // Tablero en el centro (ocupa la izquierda)
@@ -66,13 +74,21 @@ public class InterfazPrincipal extends JFrame{
                 botones[i][j].setBackground(Color.LIGHT_GRAY);
                 botones[i][j].setFont(new Font("Arial",0,10));
                 botones[i][j].setText("<html></html>");
-                botones[i][j].addActionListener(new MoverElemento(i, j));
+                //botones[i][j].addActionListener(new MoverElemento(i, j));
                 panelTablero.add(botones[i][j]);
             }
         }
     }
     
-    public static void reiniciarTablero() {
+    public void añadirActionListener(){
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {    
+                botones[i][j].addActionListener(new MoverElemento(i, j));
+            }
+        }
+    }
+    
+    public void reiniciarTablero() {
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
                 botones[i][j].setText("");
@@ -93,7 +109,7 @@ public class InterfazPrincipal extends JFrame{
         @Override
         public void actionPerformed(ActionEvent e) {
             JButton boton = botones[x][y];
-            if (elementoSeleccionado == null && boton.getText().equals(Partida.getSupervivienteActual().getNombre())) {
+            if (elementoSeleccionado == null && boton.getText().equals(partida.getSupervivienteActual().getNombre())) {
                 // Selecciona un elemento para mover
                 elementoSeleccionado = new Point(x, y);
                 boton.setBackground(Color.DARK_GRAY);  // Resaltar elemento
@@ -101,8 +117,8 @@ public class InterfazPrincipal extends JFrame{
                 // Verificar si el movimiento es a una casilla adyacente 
                  if (Math.abs(elementoSeleccionado.x - x) <= 1 && Math.abs(elementoSeleccionado.y - y) <= 1) {                    
                     // Mover el superviviente a la nueva casilla y marcarla como ocupada
-                    casillas[elementoSeleccionado.x][elementoSeleccionado.y].removeSuperviviente(Partida.getSupervivienteActual());
-                    casillas[x][y].addSuperviviente(Partida.getSupervivienteActual());
+                    casillas[elementoSeleccionado.x][elementoSeleccionado.y].removeSuperviviente(partida.getSupervivienteActual());
+                    casillas[x][y].addSuperviviente(partida.getSupervivienteActual());
                     posicionesOcupadas[x][y] = true;
                     botones[elementoSeleccionado.x][elementoSeleccionado.y].setBackground(Color.LIGHT_GRAY);
                     // Coger el texto del nuevo boton y añadirle el superviviente
@@ -110,13 +126,13 @@ public class InterfazPrincipal extends JFrame{
                     String textoBotonDestino = botones[x][y].getText();
                     textoBotonDestino = textoBotonDestino.replace("</html>", ""); // Quitamos el cierre de HTML
                     sb.append(textoBotonDestino);
-                    sb.append(Partida.getSupervivienteActual().getNombre());
+                    sb.append(partida.getSupervivienteActual().getNombre());
                     sb.append("<br>"); // Salto de linea en HTML
                     sb.append("</html>"); // Colocamos el cierre HTML
                     botones[x][y].setText(sb.toString());
                     // Quitamos del boton el nombre del superviviente
                     String textoBotonOrigen = botones[elementoSeleccionado.x][elementoSeleccionado.y].getText();
-                    textoBotonOrigen = textoBotonOrigen.replace(Partida.getSupervivienteActual().getNombre() + "<br>","");
+                    textoBotonOrigen = textoBotonOrigen.replace(partida.getSupervivienteActual().getNombre() + "<br>","");
                     if(casillas[elementoSeleccionado.x][elementoSeleccionado.y].getContadorSupervivientes() == 0){
                         if(casillas[elementoSeleccionado.x][elementoSeleccionado.y].getContadorZombis() == 0){
                             // Marcamos la casilla como vacia
@@ -130,19 +146,20 @@ public class InterfazPrincipal extends JFrame{
                     }
                     
                     elementoSeleccionado = null;
-
-                    // Gestionar el gasto de acciones adicionales aquí... 
-                    // (Esta parte depende de cómo gestiones los turnos y acciones en tu juego)
+                    
+                    panelMenuJugador.activacionBotones(true);
+                    movimientoActivado = false;
                 }
             }
         }
     }
     
-    public static void main(String args[]){     
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override public void run() {
-                new InterfazPrincipal();
-            }
-        });
+    public static void main(String args[]){
+//        SwingUtilities.invokeLater(new Runnable() {
+//            @Override public void run() {
+//                new InterfazPrincipal(new Partida());
+//            }
+//        });
+        new InterfazPrincipal(new Partida());
     }
 }
