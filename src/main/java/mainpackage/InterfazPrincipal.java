@@ -13,11 +13,10 @@ import java.util.List;
 public class InterfazPrincipal extends JFrame{
     private static final int SIZE = 10;  // Tamaño del tablero 10x10
     public JButton[][] botones = new JButton[SIZE][SIZE];   
-    public Casilla[][] casillas = new Casilla[SIZE][SIZE];
     private Point elementoSeleccionado = null;  // Guarda la posición del elemento seleccionado
     
     public CardLayout cardLayout;
-    public JPanel panelTablero, panelDerechoPrincipal;
+    public JPanel panelTablero, panelDerechoPrincipal, panelBotonesPermanentes;
     
     PanelMenuJugador panelMenuJugador;
     
@@ -26,9 +25,11 @@ public class InterfazPrincipal extends JFrame{
     public boolean movimientoActivado = false;
     
     private Partida partida;
+    private Tablero tablero;
                 
     public InterfazPrincipal(Partida partida){
         this.partida = partida;
+        tablero = partida.getTablero();
         
         setTitle("Juego");
         setBounds(0, 0, 1145, 745);
@@ -61,6 +62,8 @@ public class InterfazPrincipal extends JFrame{
         add(panelTablero, BorderLayout.CENTER);  // Tablero en el centro (ocupa la izquierda)
         add(panelDerechoPrincipal, BorderLayout.EAST);    // Panel de control a la derecha
         
+        
+        
         setVisible(true);
     }
     
@@ -68,7 +71,7 @@ public class InterfazPrincipal extends JFrame{
     private void inicializarTablero() {
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
-                casillas[i][j] = new Casilla(i, j);  // Crear nueva casilla
+//                casillas[i][j] = new Casilla(i, j);  // Crear nueva casilla
                 botones[i][j] = new JButton();
                 botones[i][j].setFocusPainted(false);
                 botones[i][j].setBackground(Color.LIGHT_GRAY);
@@ -93,7 +96,7 @@ public class InterfazPrincipal extends JFrame{
             for (int j = 0; j < SIZE; j++) {
                 botones[i][j].setText("");
                 botones[i][j].setBackground(Color.LIGHT_GRAY);
-                casillas[i][j].reiniciarCasilla();
+                tablero.reiniciarTablero();
             }
         }
     }
@@ -117,8 +120,8 @@ public class InterfazPrincipal extends JFrame{
                 // Verificar si el movimiento es a una casilla adyacente 
                  if (Math.abs(elementoSeleccionado.x - x) <= 1 && Math.abs(elementoSeleccionado.y - y) <= 1) {                    
                     // Mover el superviviente a la nueva casilla y marcarla como ocupada
-                    casillas[elementoSeleccionado.x][elementoSeleccionado.y].removeSuperviviente(partida.getSupervivienteActual());
-                    casillas[x][y].addSuperviviente(partida.getSupervivienteActual());
+                    tablero.getCasilla[elementoSeleccionado.x][elementoSeleccionado.y].removeSuperviviente(partida.getSupervivienteActual());
+                    tablero.getCasilla[x][y].addSuperviviente(partida.getSupervivienteActual());
                     posicionesOcupadas[x][y] = true;
                     botones[elementoSeleccionado.x][elementoSeleccionado.y].setBackground(Color.LIGHT_GRAY);
                     // Coger el texto del nuevo boton y añadirle el superviviente
@@ -133,8 +136,8 @@ public class InterfazPrincipal extends JFrame{
                     // Quitamos del boton el nombre del superviviente
                     String textoBotonOrigen = botones[elementoSeleccionado.x][elementoSeleccionado.y].getText();
                     textoBotonOrigen = textoBotonOrigen.replace(partida.getSupervivienteActual().getNombre() + "<br>","");
-                    if(casillas[elementoSeleccionado.x][elementoSeleccionado.y].getContadorSupervivientes() == 0){
-                        if(casillas[elementoSeleccionado.x][elementoSeleccionado.y].getContadorZombis() == 0){
+                    if(tablero.getCasilla[elementoSeleccionado.x][elementoSeleccionado.y].getContadorSupervivientes() == 0){
+                        if(tablero.getCasilla[elementoSeleccionado.x][elementoSeleccionado.y].getContadorZombis() == 0){
                             // Marcamos la casilla como vacia
                             posicionesOcupadas[elementoSeleccionado.x][elementoSeleccionado.y] = false;
                             botones[elementoSeleccionado.x][elementoSeleccionado.y].setText("<html></html>"); // Vacio
