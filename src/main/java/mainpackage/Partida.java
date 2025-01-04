@@ -187,7 +187,7 @@ public class Partida implements Serializable{
         }
 
         interfazPrincipal = new InterfazPrincipal(this);
-        // LLamamos a la InterfazPrincipal
+        // LLamamos a la InterfazPrincipal (NO USAR POR AHORA)
 //        Partida estaPartida = this;
 //        SwingUtilities.invokeLater(new Runnable() {
 //           @Override public void run() {
