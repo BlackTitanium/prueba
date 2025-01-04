@@ -1,9 +1,11 @@
 package mainpackage;
 
 import java.io.Serializable;
+import java.util.Random;
 
 public class Tablero implements Serializable{
     private Casilla mapa[][];
+    private Random random = new Random();
     public void setMapa(Casilla c){
         mapa[c.getX()][c.getY()] = c;
     }
@@ -42,5 +44,25 @@ public class Tablero implements Serializable{
                     }
                 }
         return objetivo;
+    }
+
+    public void aparicionZombi(){
+        int x = random.nextInt(10);
+        int y = random.nextInt(10);
+        int tipo = random.nextInt(3);
+        int subtipo = random.nextInt(3);
+        Zombi nuevoZombi =  null;
+        switch(subtipo){
+            case 0:
+                nuevoZombi = new Zombi(this, mapa[x][y], Zombi.tiposZombi[tipo], "NORMAL");
+                break;
+            case 1:
+                nuevoZombi = new Toxico(this, mapa[x][y], Zombi.tiposZombi[tipo], "TOXICO");
+                break;
+            case 2:
+                nuevoZombi = new Berserker(this, mapa[x][y], Zombi.tiposZombi[tipo], "BERSERKER");
+                break;
+        }
+        mapa[x][y].addZombi(nuevoZombi);
     }
 }

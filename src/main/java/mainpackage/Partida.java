@@ -6,10 +6,11 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Partida implements Serializable{
-    public static ArrayList<Superviviente> supervivientes;
-    private static int turnoActual = 0;
-    private static Scanner scanner = new Scanner(System.in);
-    private static Tablero tablero;
+    public ArrayList<Superviviente> supervivientes;
+    public ArrayList<Zombi> zombis;
+    private int turnoActual = 0;
+    private Scanner scanner = new Scanner(System.in);
+    private Tablero tablero;
     private Equipo[] inventarioActual;
     private Superviviente supervivienteActual;
     private AlmacenDeAtaques almacen;
@@ -33,7 +34,7 @@ public class Partida implements Serializable{
         turnoActual = (turnoActual + 1) % supervivientes.size();
     }
 
-    public static void introducirSupervivientes(String[] nombres){
+    public void introducirSupervivientes(String[] nombres){
         for (String nombre : nombres) {
             supervivientes.add(new Superviviente(nombre, null));
         }
@@ -44,8 +45,8 @@ public class Partida implements Serializable{
         inventarioActual = supervivienteActual.getInventario();
         supervivienteActual.setAcciones(3);
         System.out.println("Turno de " + supervivienteActual.getNombre());
-        for (int i= 0; i < supervivienteActual.getAcciones(); i++){
-            System.out.println("Acción " + (i+1));
+        while(supervivienteActual.getAcciones() > 0){
+            System.out.println("Acciones restantes: " + supervivienteActual.getAcciones());
             switch(eleccion){
                 case 1:
                     //Interfaz dara el input para el movimiento; int casillaObjetivo = [0-8]
@@ -59,33 +60,67 @@ public class Partida implements Serializable{
                     //supervivienteActual.activar(int a); Este es el arma [0-1];
                     Ataque ataque = supervivienteActual.getUltimoAtaque();
                     List<Casilla> objetivo = supervivienteActual.elegirObjetivo(supervivienteActual.getArma(a));
+                    Casilla casillaObjetivo = null;
                     if(objetivo == null){
                         int intento = 0;
                         while(intento < supervivienteActual.getCasillaActual().getContadorZombis()){
                             try {
                                 supervivienteActual.getCasillaActual().getZombi(intento).reaccion(supervivienteActual.getArma(a), ataque.numExitos(almacen));
                             } catch (IllegalArgumentException e) {
-                                if ("Alcance".equals(e.getMessage())) {
-                                    supervivienteActual.addAcciones(); // Give back 1 action
-                                    intento++; // Try the next Zombi
+                                if ("Alcance".equals(e.getMessage())) { //Si es Berserker
+                                    supervivienteActual.addAcciones(); // Devuelve la accion para seguir intentando
+                                    intento++; // Siguiente zombi
                                 }
                             }
                         
+                        }
+                    } else {
+                     // Asociar de alguna forma las opciones disponibles objetivo con un input y la interfaz
+                    // Las casillas objetivo estan en la List<Casilla> objetivo
+                    // Guardar en casillaObjetivo la casilla seleccionada
+                    int intento = 0;
+                    while(intento < casillaObjetivo.getContadorZombis()){
+                        try {
+                            casillaObjetivo.getZombi(intento).reaccion(supervivienteActual.getArma(a), ataque.numExitos(almacen));
+                        } catch (IllegalArgumentException e) {
+                            if ("Alcance".equals(e.getMessage())) { //Si es Berserker
+                                supervivienteActual.addAcciones(); // Devuelve la accion para seguir intentando
+                                intento++; // Siguiente zombi
+                            }
+                        }
                     }
-                } else {
-                    // Asociar de alguna forma las opciones disponibles objetivo con un input y la interfaz
-                }
+                } continue;  
+
+                case 3: //Buscar
+                    supervivienteActual.setSeleccion(Entidad.accion.BUSCAR);
+                    int slotInventario = 0;
+                    // Input de interfaz para elegir el slot del inventario
+                    supervivienteActual.activar(slotInventario);
+                    continue;
+                case 4: //Elegir arma o usar provision
+                    int objetoInventario = 0;
+                    int ranuraObjetivo = 0;
+                    // Input de interfaz para elegir el objeto del inventario, si es un arma tambien la ranura
+                    supervivienteActual.elegirArma(objetoInventario, ranuraObjetivo);
+                    supervivienteActual.setAcciones(supervivienteActual.getAcciones()+1);
+                    continue;
+                case 5: //Nada
+                    break;
             }
         }
     }
     
 
-    private void faseZombie(){
-
+    public void faseZombie(){
+        for (int i = 0; i < zombis.size(); i++){
+            zombis.get(i).activar();
+        }
     }
 
-    private void faseAparición(){
-
+    public void faseAparición(){
+        for (int i =0; i<3; i++){
+            tablero.aparicionZombi();
+        }
     }
 
     public Partida(int numJugadores){
@@ -95,12 +130,11 @@ public class Partida implements Serializable{
             System.out.println("Introduce el nombre del superviviente " + (i+1));
             nombres[i] = scanner.next();
             supervivientes.add(new Superviviente(nombres[i], tablero.getCasilla(0, 0)));
-        }{
+        }
         // LLamamos a la InterfazPrincipal
 //        SwingUtilities.invokeLater(new Runnable() {
 //           @Override public void run() {
 //                new InterfazPrincipal();
 //            }
-        }
     }
 }
