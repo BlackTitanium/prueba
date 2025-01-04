@@ -34,5 +34,6 @@ public class Juego implements Serializable{
         System.out.println("Introduce el número de supervivientes (1 a 4): ");
         int nSupervivientes = scanner.nextInt();
         partida = new Partida(nSupervivientes);
+//        partida = new Partida();
     }
 }

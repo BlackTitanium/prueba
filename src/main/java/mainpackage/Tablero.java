@@ -6,11 +6,14 @@ import java.util.Random;
 public class Tablero implements Serializable{
     private Casilla mapa[][];
     private Random random = new Random();
+    public boolean[][] posicionesOcupadas = new boolean[10][10];
+
     public void setMapa(Casilla c){
         mapa[c.getX()][c.getY()] = c;
     }
 
     public Tablero(){
+        mapa = new Casilla[10][10];
         for (int i=0; i<10; i++){
             for(int j=0; j<10; j++){
                 mapa[i][j] = new Casilla(i, j);
@@ -18,14 +21,14 @@ public class Tablero implements Serializable{
         }
     }
     
-    public void mostrar(){
-        for(int i = 0; i < 10; i++){
-            for(int j = 0; j < 10; j++){
-                System.out.print("[" + mapa[i][j].getContenido() + "]");
-            }
-            System.out.println();
-        }
-    }
+//    public void mostrar(){
+//        for(int i = 0; i < 10; i++){
+//            for(int j = 0; j < 10; j++){
+//                System.out.print("[" + mapa[i][j].getContenido() + "]");
+//            }
+//            System.out.println();
+//        }
+//    }
 
     public Casilla getCasilla(int a, int b){
         return mapa[a][b];
@@ -52,25 +55,5 @@ public class Tablero implements Serializable{
                     }
                 }
         return objetivo;
-    }
-
-    public void aparicionZombi(){
-        int x = random.nextInt(10);
-        int y = random.nextInt(10);
-        int tipo = random.nextInt(3);
-        int subtipo = random.nextInt(3);
-        Zombi nuevoZombi =  null;
-        switch(subtipo){
-            case 0:
-                nuevoZombi = new Zombi(this, mapa[x][y], Zombi.tiposZombi[tipo], "NORMAL");
-                break;
-            case 1:
-                nuevoZombi = new Toxico(this, mapa[x][y], Zombi.tiposZombi[tipo], "TOXICO");
-                break;
-            case 2:
-                nuevoZombi = new Berserker(this, mapa[x][y], Zombi.tiposZombi[tipo], "BERSERKER");
-                break;
-        }
-        mapa[x][y].addZombi(nuevoZombi);
     }
 }

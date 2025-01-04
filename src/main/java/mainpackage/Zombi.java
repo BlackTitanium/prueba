@@ -1,6 +1,7 @@
 package mainpackage;
 
 import java.io.Serializable;
+import java.util.Random;
 
 public class Zombi extends Entidad implements Serializable{
     public static String[] tiposZombi = {"CAMINANTE", "CORREDOR", "ABOMINACION"};
@@ -8,10 +9,11 @@ public class Zombi extends Entidad implements Serializable{
     protected String tipo;
     protected String subtipo;
 
-    public Zombi(Tablero t, Casilla c, String tipoZ, String subtipoZ){
+    public Zombi(Tablero t, Casilla c, String subtipoZ){
         tableroActual = t;
         casillaActual = c;
-        this.tipo = tipoZ;
+        String tipos = aparicionZombi();
+        this.tipo = tipos;
         switch(tipo){
             case "CAMINANTE":
                 activaciones = 1;
@@ -28,6 +30,27 @@ public class Zombi extends Entidad implements Serializable{
         }
         subtipo = subtipoZ;
     }
+
+    public String aparicionZombi(){
+        String tipos = "";
+        Random random = new Random();
+        int tipo = random.nextInt(3);
+        int subtipo = random.nextInt(3);
+        Zombi nuevoZombi =  null;
+        switch(subtipo){
+            case 0:
+                tipos = tiposZombi[tipo];
+                break;
+            case 1:
+                tipos = tiposZombi[tipo];
+                break;
+            case 2:
+                tipos = tiposZombi[tipo];
+                break;
+        }
+        return tipos;
+    }
+
     public void activar(){
         for (int i=0; i<activaciones; i++){
             if(casillaActual.getContadorSupervivientes()!=0){
@@ -58,5 +81,31 @@ public class Zombi extends Entidad implements Serializable{
             casillaActual.removeEntidad(s);
             s.setEstado(Superviviente.estado.MUERTO);
         }
+    }
+
+    public String getZombiParaBoton(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("<html>");
+        sb.append("Z.");
+        switch(tipo){
+            case "CAMINANTE":
+                sb.append("Ca.");
+                break;
+            case "CORREDOR":
+                sb.append("Co.");
+                break;
+            case "ABOMINACION":
+                sb.append("Ab.");
+                break;
+        }
+        if(subtipo.contains("NORMAL")){
+            sb.append("N");
+        } else if(subtipo.contains("TOXICO")){
+            sb.append("T");
+        } else if(subtipo.contains("BERSERKER")){
+            sb.append("B");
+        }
+        sb.append("</html>");
+        return sb.toString();
     }
 }

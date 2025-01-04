@@ -21,7 +21,6 @@ public class InterfazPrincipal extends JFrame{
     PanelMenuJugador panelMenuJugador;
     
     public int nJugadores = 0;
-    public boolean[][] posicionesOcupadas = new boolean[SIZE][SIZE];
     public boolean movimientoActivado = false;
     
     private Partida partida;
@@ -120,10 +119,11 @@ public class InterfazPrincipal extends JFrame{
                 // Verificar si el movimiento es a una casilla adyacente 
                  if (Math.abs(elementoSeleccionado.x - x) <= 1 && Math.abs(elementoSeleccionado.y - y) <= 1) {                    
                     // Mover el superviviente a la nueva casilla y marcarla como ocupada
-                    tablero.getCasilla[elementoSeleccionado.x][elementoSeleccionado.y].removeSuperviviente(partida.getSupervivienteActual());
-                    tablero.getCasilla[x][y].addSuperviviente(partida.getSupervivienteActual());
-                    posicionesOcupadas[x][y] = true;
+//                    tablero.getCasilla(elementoSeleccionado.x, elementoSeleccionado.y).removeSuperviviente(partida.getSupervivienteActual());
+//                    tablero.getCasilla(x,y).addSuperviviente(partida.getSupervivienteActual());
+                    tablero.posicionesOcupadas[x][y] = true;
                     botones[elementoSeleccionado.x][elementoSeleccionado.y].setBackground(Color.LIGHT_GRAY);
+                    
                     // Coger el texto del nuevo boton y añadirle el superviviente
                     StringBuilder sb = new StringBuilder();
                     String textoBotonDestino = botones[x][y].getText();
@@ -133,13 +133,14 @@ public class InterfazPrincipal extends JFrame{
                     sb.append("<br>"); // Salto de linea en HTML
                     sb.append("</html>"); // Colocamos el cierre HTML
                     botones[x][y].setText(sb.toString());
+                    
                     // Quitamos del boton el nombre del superviviente
                     String textoBotonOrigen = botones[elementoSeleccionado.x][elementoSeleccionado.y].getText();
                     textoBotonOrigen = textoBotonOrigen.replace(partida.getSupervivienteActual().getNombre() + "<br>","");
-                    if(tablero.getCasilla[elementoSeleccionado.x][elementoSeleccionado.y].getContadorSupervivientes() == 0){
-                        if(tablero.getCasilla[elementoSeleccionado.x][elementoSeleccionado.y].getContadorZombis() == 0){
+                    if(tablero.getCasilla(elementoSeleccionado.x, elementoSeleccionado.y).getContadorSupervivientes() == 0){
+                        if(tablero.getCasilla(elementoSeleccionado.x, elementoSeleccionado.y).getContadorZombis() == 0){
                             // Marcamos la casilla como vacia
-                            posicionesOcupadas[elementoSeleccionado.x][elementoSeleccionado.y] = false;
+                            tablero.posicionesOcupadas[elementoSeleccionado.x][elementoSeleccionado.y] = false;
                             botones[elementoSeleccionado.x][elementoSeleccionado.y].setText("<html></html>"); // Vacio
                         } else{
                             botones[elementoSeleccionado.x][elementoSeleccionado.y].setText(textoBotonOrigen);
@@ -163,6 +164,6 @@ public class InterfazPrincipal extends JFrame{
 //                new InterfazPrincipal(new Partida());
 //            }
 //        });
-        new InterfazPrincipal(new Partida());
+//        new InterfazPrincipal(new Partida(2));
     }
 }

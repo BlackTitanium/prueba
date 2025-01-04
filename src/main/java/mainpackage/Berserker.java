@@ -2,8 +2,8 @@ package mainpackage;
 
 public class Berserker extends Zombi{
 
-    public Berserker(Tablero t, Casilla c, String tipoZ, String subtipoZ){
-        super(t, c, tipoZ, subtipoZ);
+    public Berserker(Tablero t, Casilla c, String subtipoZ){
+        super(t, c, subtipoZ);
     }
 
     @Override

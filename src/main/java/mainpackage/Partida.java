@@ -16,6 +16,7 @@ public class Partida implements Serializable{
     private Equipo[] inventarioActual;
     private Superviviente supervivienteActual;
     private AlmacenDeAtaques almacen;
+    private InterfazPrincipal interfazPrincipal;
         
     public Superviviente getSupervivienteActual() {
         return supervivientes.get(turnoActual);
@@ -43,6 +44,29 @@ public class Partida implements Serializable{
         for (String nombre : nombres) {
             supervivientes.add(new Superviviente(nombre, null));
         }
+    }
+
+    public void colocarElementosIniciales(String[] nombres){
+//        supervivientes = new ArrayList<>();
+        Casilla.inicializarArrayList();
+        interfazPrincipal.reiniciarTablero();
+        StringBuilder sb1 = new StringBuilder();
+        sb1.append("<html>"); // Inicio con HTML
+        for(int i = 0; i<interfazPrincipal.nJugadores; i++){
+            Superviviente s = new Superviviente(nombres[i], tablero.getCasilla(0,0));
+            tablero.getCasilla(0,0).addSuperviviente(s);
+            supervivientes.add(s);
+            sb1.append(s.getNombre());
+            interfazPrincipal.botones[0][0].setText(sb1.toString());
+            sb1.append("<br>"); // Salto de linea en HTML
+        }
+        sb1.append("</html>"); // Final con HTML
+        tablero.posicionesOcupadas[0][0] = true; // Marcar la [0][0] como ocupada
+
+        for (int i = 0; i < 3; i++) {
+            faseApariciónZombi();
+        }
+        interfazPrincipal.cardLayout.show(interfazPrincipal.panelDerechoPrincipal, "PanelMenuJugador");
     }
 
     private void faseSuperviviente(int eleccion){ //eleccion viene del input de la interfaz
@@ -122,24 +146,53 @@ public class Partida implements Serializable{
         }
     }
 
-    public void faseAparición(){
-        for (int i =0; i<3; i++){
-            tablero.aparicionZombi();
+    public void faseApariciónZombi(){
+        // Generar casilla random no ocupada
+        Random random = new Random();
+        int x, y;
+        do { 
+            x = random.nextInt(10); 
+            y = random.nextInt(10); 
+        } while (tablero.posicionesOcupadas[x][y]);        
+        tablero.posicionesOcupadas[x][y] = true; // Marcar la nueva casilla como ocupada
+        // Crear Zombi
+        Zombi z =  null;
+        int subtipo = random.nextInt(3);
+        switch(subtipo){
+            case 0:
+                z = new Zombi(tablero,tablero.getCasilla(x, y),"NORMAL");
+                break;
+            case 1:
+                z = new Toxico(tablero,tablero.getCasilla(x, y),"TOXICO");
+                break;
+            case 2:
+                z = new Berserker(tablero,tablero.getCasilla(x, y),"BERSERKER");
+                break;
         }
+        // Añadir al tablero
+        tablero.getCasilla(x, y).addEntidad(z);
+        // Aparecer en la interfaz
+        interfazPrincipal.botones[x][y].setText(z.getZombiParaBoton());  // Mostrar el tipo de Zombi
     }
-
+    
+//    public Partida(){
     public Partida(int numJugadores){
         tablero = new Tablero();
+        supervivientes = new ArrayList<>();
         String[] nombres = new String[numJugadores];
         for(int i = 0; i < numJugadores; i++){
             System.out.println("Introduce el nombre del superviviente " + (i+1));
             nombres[i] = scanner.next();
             supervivientes.add(new Superviviente(nombres[i], tablero.getCasilla(0, 0)));
         }
+
+        interfazPrincipal = new InterfazPrincipal(this);
         // LLamamos a la InterfazPrincipal
+//        Partida estaPartida = this;
 //        SwingUtilities.invokeLater(new Runnable() {
 //           @Override public void run() {
-//                new InterfazPrincipal();
+//                new InterfazPrincipal(estaPartida);
 //            }
+//        });
     }
 }

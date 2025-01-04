@@ -80,7 +80,6 @@ public class Casilla implements Serializable{
     public void removeZombi(Zombi z){
         if (zombis.remove(z)) {
             contadorZombis--;
-            //InterfazPrincipal.posicionesOcupadas[z.casillaActual.x][z.casillaActual.y] = false;
         }
     }
 
@@ -98,24 +97,6 @@ public class Casilla implements Serializable{
         }else if(e instanceof Superviviente){
             addSuperviviente((Superviviente) e);
         }
-    }
-
-    public String getContenido(){
-        String contenido = "";
-        if(contadorSupervivientes == 0){
-            if(contadorZombis == 0){
-                contenido = "*";
-            }else if(contadorZombis > 0){
-                contenido = "Z";
-            }
-        }else if(contadorSupervivientes > 0){
-            if(contadorZombis == 0){
-                contenido = "S";
-            }else if(contadorZombis > 0){
-                contenido = "C";
-            }
-        }
-        return contenido;
     }
 
     public Equipo buscar(){
