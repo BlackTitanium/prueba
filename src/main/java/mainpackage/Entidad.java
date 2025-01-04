@@ -27,7 +27,10 @@ public abstract class Entidad implements Serializable{
     public void mover(int x, int y){
         posicion[0] += x;
         posicion[1] += y;
+        Casilla casillaAnterior = casillaActual;
         casillaActual = tableroActual.getCasilla(posicion[0], posicion[1]);
+        casillaAnterior.removeEntidad(this);
+        casillaActual.addEntidad(this);
     }
 
     /*  atacar() y activar() no van a ser implementados en esta clase, ya que los Zombis

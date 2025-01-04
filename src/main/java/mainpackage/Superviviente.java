@@ -1,15 +1,15 @@
 package mainpackage;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.io.Serializable;
 
 public class Superviviente extends Entidad implements Serializable{
     private String nombre;
     private int contadorZombis, mordeduras, acciones = 3;
     private accion seleccion; //Mover o atacar
     private Arma[] arma = new Arma[2];
-    private enum estado {VIVO, MUERTO};
+    public enum estado {VIVO, MUERTO};
     private estado estadoActual;
     private Equipo[] inventario = new Equipo[5]; 
     private Ataque ultimoAtaque;
@@ -51,6 +51,10 @@ public class Superviviente extends Entidad implements Serializable{
     }
     public void setInventario(Equipo e, int a){
         this.inventario[a] = e;
+    }
+
+    public void setEstado(estado estadoActual) {
+        this.estadoActual = estadoActual;
     }
 
     public Superviviente(String nombre, Casilla c){
@@ -99,7 +103,6 @@ public class Superviviente extends Entidad implements Serializable{
     public void activar(int a) {
         if (estadoActual == estado.MUERTO) {
             acciones = 0;
-            return;
         }  else {
             if(seleccion==accion.MOVER){
                 switch (a) {

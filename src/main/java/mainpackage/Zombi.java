@@ -3,28 +3,30 @@ package mainpackage;
 import java.io.Serializable;
 
 public class Zombi extends Entidad implements Serializable{
-    public enum tipoZombi {CAMINANTE, CORREDOR, ABOMINACION};
-    tipoZombi tipo;
+    public static String[] tiposZombi = {"CAMINANTE", "CORREDOR", "ABOMINACION"};
     protected int activaciones, aguante;
+    protected String tipo;
+    protected String subtipo;
 
-    public Zombi(Tablero t, Casilla c, tipoZombi tipoZ){
+    public Zombi(Tablero t, Casilla c, String tipoZ, String subtipoZ){
         tableroActual = t;
         casillaActual = c;
         this.tipo = tipoZ;
         switch(tipo){
-            case CAMINANTE:
+            case "CAMINANTE":
                 activaciones = 1;
                 aguante = 1;
                 break;
-            case CORREDOR:
+            case "CORREDOR":
                 activaciones = 2;
                 aguante = 1;
                 break;
-            case ABOMINACION:
+            case "ABOMINACION":
                 activaciones = 1;
                 aguante = 3;
                 break;
         }
+        subtipo = subtipoZ;
     }
     public void activar(){
         for (int i=0; i<activaciones; i++){
@@ -44,7 +46,7 @@ public class Zombi extends Entidad implements Serializable{
         for (int i=0; i<a; i++){
             aguante--;
             if( aguante == 0){
-                casillaActual.removeZombi(this);
+                casillaActual.removeEntidad(this);
                 break;
             }
         }
@@ -52,5 +54,9 @@ public class Zombi extends Entidad implements Serializable{
     }
     public void atacar(Superviviente s){
         s.addMordeduras();
+        if(s.getMordeduras() == 2){
+            casillaActual.removeEntidad(s);
+            s.setEstado(Superviviente.estado.MUERTO);
+        }
     }
 }
