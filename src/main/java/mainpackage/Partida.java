@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
+import javax.swing.*;
 
 public class Partida implements Serializable{
     public ArrayList<Superviviente> supervivientes;
@@ -47,7 +48,12 @@ public class Partida implements Serializable{
     public void colocarElementosIniciales(String[] nombres){
 //        supervivientes = new ArrayList<>();
         Casilla.inicializarArrayList();
-        interfazPrincipal.reiniciarTablero();
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override public void run() {
+                interfazPrincipal.reiniciarTablero();
+            }
+        });
+        
         StringBuilder sb1 = new StringBuilder();
         sb1.append("<html>"); // Inicio con HTML
         for(int i = 0; i<interfazPrincipal.nJugadores; i++){
@@ -55,16 +61,25 @@ public class Partida implements Serializable{
             tablero.getCasilla(0,0).addSuperviviente(s);
             supervivientes.add(s);
             sb1.append(s.getNombre());
-            interfazPrincipal.botones[0][0].setText(sb1.toString());
             sb1.append("<br>"); // Salto de linea en HTML
         }
         sb1.append("</html>"); // Final con HTML
+        String textoBotonSupervivientes = sb1.toString();
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override public void run() {
+                interfazPrincipal.botones[0][0].setText(textoBotonSupervivientes);
+            }
+        });
         tablero.posicionesOcupadas[0][0] = true; // Marcar la [0][0] como ocupada
 
         for (int i = 0; i < 3; i++) {
             faseApariciónZombi();
         }
-        interfazPrincipal.cardLayout.show(interfazPrincipal.panelDerechoPrincipal, "PanelMenuJugador");
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override public void run() {
+                interfazPrincipal.cardLayout.show(interfazPrincipal.panelDerechoPrincipal, "PanelMenuJugador");
+            }
+        });    
     }
 
     private void faseSuperviviente(int eleccion){ //eleccion viene del input de la interfaz
@@ -78,7 +93,7 @@ public class Partida implements Serializable{
                 case 1:
                     //Interfaz dara el input para el movimiento; int casillaObjetivo = [0-8]
                     supervivienteActual.setSeleccion(Entidad.accion.MOVER);
-                    // supervivienteActual.activar(casillaObjetivo);
+                    //supervivienteActual.activar(casillaObjetivo);
                     continue;
                 case 2:
                     //Interfaz dara el input para el arma a usar
@@ -122,7 +137,7 @@ public class Partida implements Serializable{
                     supervivienteActual.setSeleccion(Entidad.accion.BUSCAR);
                     int slotInventario = 0;
                     // Input de interfaz para elegir el slot del inventario
-                    supervivienteActual.activar(slotInventario);
+                    //supervivienteActual.activar(slotInventario);
                     continue;
                 case 4: //Elegir arma o usar provision
                     int objetoInventario = 0;
@@ -170,27 +185,34 @@ public class Partida implements Serializable{
         // Añadir al tablero
         tablero.getCasilla(x, y).addEntidad(z);
         // Aparecer en la interfaz
-        interfazPrincipal.botones[x][y].setText(z.getZombiParaBoton());  // Mostrar el tipo de Zombi
+        int X = x, Y = y;
+        Zombi Z = z;
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override public void run() {
+                interfazPrincipal.botones[X][Y].setText(Z.getZombiParaBoton());  // Mostrar el tipo de Zombi
+            }
+        });
+        
     }
     
-//    public Partida(){
-    public Partida(int numJugadores){
+    public Partida(){
+//    public Partida(int numJugadores){
         tablero = new Tablero();
         supervivientes = new ArrayList<>();
-        String[] nombres = new String[numJugadores];
-        for(int i = 0; i < numJugadores; i++){
-            System.out.println("Introduce el nombre del superviviente " + (i+1));
-            nombres[i] = scanner.next();
-            supervivientes.add(new Superviviente(nombres[i], tablero.getCasilla(0, 0)));
-        }
+//        String[] nombres = new String[numJugadores];
+//        for(int i = 0; i < numJugadores; i++){
+//            System.out.println("Introduce el nombre del superviviente " + (i+1));
+//            nombres[i] = scanner.next();
+//            supervivientes.add(new Superviviente(nombres[i], tablero.getCasilla(0, 0)));
+//        }
 
         interfazPrincipal = new InterfazPrincipal(this);
         // LLamamos a la InterfazPrincipal (NO USAR POR AHORA)
-//        Partida estaPartida = this;
-//        SwingUtilities.invokeLater(new Runnable() {
-//           @Override public void run() {
-//                new InterfazPrincipal(estaPartida);
-//            }
-//        });
+        Partida estaPartida = this;
+        SwingUtilities.invokeLater(new Runnable() {
+           @Override public void run() {
+                new InterfazPrincipal(estaPartida);
+            }
+        });
     }
 }

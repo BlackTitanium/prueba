@@ -35,6 +35,7 @@ public class Juego implements Serializable{
         main(new String[]{"0"});
     }
     public void iniciarPartida(){
-        interfazPrincipal = new InterfazPrincipal();
+//        interfazPrincipal = new InterfazPrincipal();
+        partida = new Partida();
     }
 }
