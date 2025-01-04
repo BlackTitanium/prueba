@@ -1,18 +1,17 @@
-C:\Users\albio\Desktop\PracticaPOO\ZombisPOO\src\main\java\mainpackage\AlmacenDeAtaques.java
-C:\Users\albio\Desktop\PracticaPOO\ZombisPOO\src\main\java\mainpackage\Arma.java
-C:\Users\albio\Desktop\PracticaPOO\ZombisPOO\src\main\java\mainpackage\Ataque.java
-C:\Users\albio\Desktop\PracticaPOO\ZombisPOO\src\main\java\mainpackage\Berserker.java
-C:\Users\albio\Desktop\PracticaPOO\ZombisPOO\src\main\java\mainpackage\Casilla.java
-C:\Users\albio\Desktop\PracticaPOO\ZombisPOO\src\main\java\mainpackage\Entidad.java
-C:\Users\albio\Desktop\PracticaPOO\ZombisPOO\src\main\java\mainpackage\Equipo.java
-C:\Users\albio\Desktop\PracticaPOO\ZombisPOO\src\main\java\mainpackage\InterfazPrincipal.java
-C:\Users\albio\Desktop\PracticaPOO\ZombisPOO\src\main\java\mainpackage\Juego.java
-C:\Users\albio\Desktop\PracticaPOO\ZombisPOO\src\main\java\mainpackage\panelInicio.java
-C:\Users\albio\Desktop\PracticaPOO\ZombisPOO\src\main\java\mainpackage\PanelMenuJugador.java
-C:\Users\albio\Desktop\PracticaPOO\ZombisPOO\src\main\java\mainpackage\Partida.java
-C:\Users\albio\Desktop\PracticaPOO\ZombisPOO\src\main\java\mainpackage\PracticaPOO.java
-C:\Users\albio\Desktop\PracticaPOO\ZombisPOO\src\main\java\mainpackage\Provision.java
-C:\Users\albio\Desktop\PracticaPOO\ZombisPOO\src\main\java\mainpackage\Superviviente.java
-C:\Users\albio\Desktop\PracticaPOO\ZombisPOO\src\main\java\mainpackage\Tablero.java
-C:\Users\albio\Desktop\PracticaPOO\ZombisPOO\src\main\java\mainpackage\Toxico.java
-C:\Users\albio\Desktop\PracticaPOO\ZombisPOO\src\main\java\mainpackage\Zombi.java
+C:\Users\maroa_crfkf22\Downloads\Universidad\Programación Orientada a Objetos\PracticaGrupal\ZombisPOO\src\main\java\mainpackage\Ataque.java
+C:\Users\maroa_crfkf22\Downloads\Universidad\Programación Orientada a Objetos\PracticaGrupal\ZombisPOO\src\main\java\mainpackage\Tablero.java
+C:\Users\maroa_crfkf22\Downloads\Universidad\Programación Orientada a Objetos\PracticaGrupal\ZombisPOO\src\main\java\mainpackage\Equipo.java
+C:\Users\maroa_crfkf22\Downloads\Universidad\Programación Orientada a Objetos\PracticaGrupal\ZombisPOO\src\main\java\mainpackage\Partida.java
+C:\Users\maroa_crfkf22\Downloads\Universidad\Programación Orientada a Objetos\PracticaGrupal\ZombisPOO\src\main\java\mainpackage\PanelInicio.java
+C:\Users\maroa_crfkf22\Downloads\Universidad\Programación Orientada a Objetos\PracticaGrupal\ZombisPOO\src\main\java\mainpackage\Arma.java
+C:\Users\maroa_crfkf22\Downloads\Universidad\Programación Orientada a Objetos\PracticaGrupal\ZombisPOO\src\main\java\mainpackage\AlmacenDeAtaques.java
+C:\Users\maroa_crfkf22\Downloads\Universidad\Programación Orientada a Objetos\PracticaGrupal\ZombisPOO\src\main\java\mainpackage\Juego.java
+C:\Users\maroa_crfkf22\Downloads\Universidad\Programación Orientada a Objetos\PracticaGrupal\ZombisPOO\src\main\java\mainpackage\Toxico.java
+C:\Users\maroa_crfkf22\Downloads\Universidad\Programación Orientada a Objetos\PracticaGrupal\ZombisPOO\src\main\java\mainpackage\Superviviente.java
+C:\Users\maroa_crfkf22\Downloads\Universidad\Programación Orientada a Objetos\PracticaGrupal\ZombisPOO\src\main\java\mainpackage\Zombi.java
+C:\Users\maroa_crfkf22\Downloads\Universidad\Programación Orientada a Objetos\PracticaGrupal\ZombisPOO\src\main\java\mainpackage\Berserker.java
+C:\Users\maroa_crfkf22\Downloads\Universidad\Programación Orientada a Objetos\PracticaGrupal\ZombisPOO\src\main\java\mainpackage\Provision.java
+C:\Users\maroa_crfkf22\Downloads\Universidad\Programación Orientada a Objetos\PracticaGrupal\ZombisPOO\src\main\java\mainpackage\Casilla.java
+C:\Users\maroa_crfkf22\Downloads\Universidad\Programación Orientada a Objetos\PracticaGrupal\ZombisPOO\src\main\java\mainpackage\InterfazPrincipal.java
+C:\Users\maroa_crfkf22\Downloads\Universidad\Programación Orientada a Objetos\PracticaGrupal\ZombisPOO\src\main\java\mainpackage\PanelMenuJugador.java
+C:\Users\maroa_crfkf22\Downloads\Universidad\Programación Orientada a Objetos\PracticaGrupal\ZombisPOO\src\main\java\mainpackage\Entidad.java

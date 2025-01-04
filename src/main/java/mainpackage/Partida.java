@@ -2,8 +2,10 @@ package mainpackage;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Random;
 import java.util.ArrayList;
 import java.util.Scanner;
+import javax.swing.*;
 
 public class Partida implements Serializable{
     public ArrayList<Superviviente> supervivientes;
@@ -39,7 +41,7 @@ public class Partida implements Serializable{
             supervivientes.add(new Superviviente(nombre, null));
         }
     }
-    
+
     private void faseSuperviviente(int eleccion){ //eleccion viene del input de la interfaz
         supervivienteActual = this.getSupervivienteActual();
         inventarioActual = supervivienteActual.getInventario();

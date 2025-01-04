@@ -1,14 +1,14 @@
 package mainpackage;
 
-import java.util.ArrayList;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Casilla implements Serializable{
 
     private int x, y, contadorZombis, contadorSupervivientes;
-    public ArrayList<Zombi> zombis;
-    public ArrayList<Superviviente> supervivientes;
+    public static ArrayList<Zombi> zombis;
+    public static ArrayList<Superviviente> supervivientes;
     private static Random random = new Random();
     private boolean buscada = false;
 
@@ -16,11 +16,23 @@ public class Casilla implements Serializable{
         x = a; y = b;
     }
 
+    public static void inicializarArrayList(){
+        zombis = new ArrayList<>();
+        supervivientes = new ArrayList<>();
+    }
+
     public int getX(){
         return x;
     }
     public int getY(){
         return y;
+    }
+
+    public void reiniciarCasilla(){
+        contadorSupervivientes = 0;
+        contadorZombis = 0;
+        supervivientes.clear();
+        zombis.clear();
     }
 
     public int getContadorZombis(){
@@ -68,6 +80,7 @@ public class Casilla implements Serializable{
     public void removeZombi(Zombi z){
         if (zombis.remove(z)) {
             contadorZombis--;
+            //InterfazPrincipal.posicionesOcupadas[z.casillaActual.x][z.casillaActual.y] = false;
         }
     }
 
