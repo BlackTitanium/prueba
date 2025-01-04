@@ -46,7 +46,7 @@ public class Partida implements Serializable{
     }
 
     public void colocarElementosIniciales(String[] nombres){
-//        supervivientes = new ArrayList<>();
+        supervivientes = new ArrayList<Superviviente>(interfazPrincipal.nJugadores);
         Casilla.inicializarArrayList();
         SwingUtilities.invokeLater(new Runnable() {
             @Override public void run() {
@@ -65,18 +65,21 @@ public class Partida implements Serializable{
         }
         sb1.append("</html>"); // Final con HTML
         String textoBotonSupervivientes = sb1.toString();
+        // Poner texto en el boton[0][0]
         SwingUtilities.invokeLater(new Runnable() {
             @Override public void run() {
                 interfazPrincipal.botones[0][0].setText(textoBotonSupervivientes);
             }
         });
         tablero.posicionesOcupadas[0][0] = true; // Marcar la [0][0] como ocupada
-
+        // Spawnear Zombis
         for (int i = 0; i < 3; i++) {
             faseApariciónZombi();
         }
+        // Cambiar el panel derecho
         SwingUtilities.invokeLater(new Runnable() {
             @Override public void run() {
+                interfazPrincipal.añadirActionListener();
                 interfazPrincipal.cardLayout.show(interfazPrincipal.panelDerechoPrincipal, "PanelMenuJugador");
             }
         });    
@@ -195,10 +198,14 @@ public class Partida implements Serializable{
         
     }
     
+//    public void inicializarSupervivientes(int nJugadores){
+//        supervivientes = new ArrayList<Superviviente>(nJugadores);
+//    }
+
     public Partida(){
 //    public Partida(int numJugadores){
         tablero = new Tablero();
-        supervivientes = new ArrayList<>();
+        supervivientes = new ArrayList<Superviviente>(4);
 //        String[] nombres = new String[numJugadores];
 //        for(int i = 0; i < numJugadores; i++){
 //            System.out.println("Introduce el nombre del superviviente " + (i+1));
@@ -208,11 +215,11 @@ public class Partida implements Serializable{
 
         interfazPrincipal = new InterfazPrincipal(this);
         // LLamamos a la InterfazPrincipal (NO USAR POR AHORA)
-        Partida estaPartida = this;
-        SwingUtilities.invokeLater(new Runnable() {
-           @Override public void run() {
-                new InterfazPrincipal(estaPartida);
-            }
-        });
+//        Partida estaPartida = this;
+//        SwingUtilities.invokeLater(new Runnable() {
+//           @Override public void run() {
+//                new InterfazPrincipal(estaPartida);
+//            }
+//        });
     }
 }

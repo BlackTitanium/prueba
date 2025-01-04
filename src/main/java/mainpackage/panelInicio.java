@@ -117,6 +117,7 @@ public class PanelInicio extends JPanel{
                         JOptionPane.showMessageDialog(null,"Debes poner el número de supervivientes.");
                     } else {
                         interfazPrincipal.nJugadores = Integer.parseInt(nSup); // Convertir a entero el número de jugadores
+//                        partida.inicializarSupervivientes(interfazPrincipal.nJugadores);
                         panelNombreSuperviviente.setVisible(true);
                     }
                 }
@@ -134,7 +135,7 @@ public class PanelInicio extends JPanel{
                     } else {
                         partida.colocarElementosIniciales(nombres);
                         panelNombreSuperviviente.setVisible(false);
-//                        InterfazPrincipal.cardLayout.show(InterfazPrincipal.panelDerechoPrincipal, "PanelMenuJugador");
+//                        interfazPrincipal.cardLayout.show(interfazPrincipal.panelDerechoPrincipal, "PanelMenuJugador");
                     }
                 }
             }
