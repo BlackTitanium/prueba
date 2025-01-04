@@ -28,6 +28,9 @@ public class Partida implements Serializable{
         return null;
     }
     
+    public Tablero getTablero() {
+        return tablero;
+    }
     public int getTurnoActual(){
         return turnoActual;
     }

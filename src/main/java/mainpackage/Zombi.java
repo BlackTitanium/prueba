@@ -46,7 +46,7 @@ public class Zombi extends Entidad implements Serializable{
         for (int i=0; i<a; i++){
             aguante--;
             if( aguante == 0){
-                casillaActual.removeZombi(this);
+                casillaActual.removeEntidad(this);
                 break;
             }
         }
@@ -54,5 +54,9 @@ public class Zombi extends Entidad implements Serializable{
     }
     public void atacar(Superviviente s){
         s.addMordeduras();
+        if(s.getMordeduras() == 2){
+            casillaActual.removeEntidad(s);
+            s.setEstado(Superviviente.estado.MUERTO);
+        }
     }
 }

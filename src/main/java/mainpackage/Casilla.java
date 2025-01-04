@@ -84,6 +84,22 @@ public class Casilla implements Serializable{
         }
     }
 
+    public void removeEntidad(Entidad e){
+        if(e instanceof Zombi){
+            removeZombi((Zombi) e);
+        }else if(e instanceof Superviviente){
+            removeSuperviviente((Superviviente) e);
+        }
+    }
+
+    public void addEntidad(Entidad e){
+        if(e instanceof Zombi){
+            addZombi((Zombi) e);
+        }else if(e instanceof Superviviente){
+            addSuperviviente((Superviviente) e);
+        }
+    }
+
     public String getContenido(){
         String contenido = "";
         if(contadorSupervivientes == 0){
