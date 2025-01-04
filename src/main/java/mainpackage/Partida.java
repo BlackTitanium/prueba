@@ -217,7 +217,7 @@ public class Partida implements Serializable{
         Partida estaPartida = this;
         SwingUtilities.invokeLater(new Runnable() {
            @Override public void run() {
-                new InterfazPrincipal(estaPartida);
+                interfazPrincipal = new InterfazPrincipal(estaPartida);
             }
         });
     }

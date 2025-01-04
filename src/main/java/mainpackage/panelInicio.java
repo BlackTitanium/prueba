@@ -136,8 +136,14 @@ public class PanelInicio extends JPanel{
                     if (nombres.length != interfazPrincipal.nJugadores) {
                         JOptionPane.showMessageDialog(null, "Por favor, introduce exactamente " + interfazPrincipal.nJugadores + " nombres.");
                     } else {
-                        partida.colocarElementosIniciales(nombres);
-                        panelNombreSuperviviente.setVisible(false);
+                        if (interfazPrincipal != null) {
+                            partida.colocarElementosIniciales(nombres);
+                            panelNombreSuperviviente.setVisible(false);
+                        } else {
+                            System.err.println("interfazPrincipal es null");
+                        }
+//                        partida.colocarElementosIniciales(nombres);
+//                        panelNombreSuperviviente.setVisible(false);
 //                        interfazPrincipal.cardLayout.show(interfazPrincipal.panelDerechoPrincipal, "PanelMenuJugador");
                     }
                 }
