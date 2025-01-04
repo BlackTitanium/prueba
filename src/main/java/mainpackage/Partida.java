@@ -1,11 +1,9 @@
 package mainpackage;
 
 import java.io.Serializable;
-import java.util.List;
-import java.util.Random;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Scanner;
-import javax.swing.*;
 
 public class Partida implements Serializable{
     public ArrayList<Superviviente> supervivientes;
@@ -85,12 +83,12 @@ public class Partida implements Serializable{
                 case 2:
                     //Interfaz dara el input para el arma a usar
                     supervivienteActual.setSeleccion(Entidad.accion.ATACAR);
-                    int alcanceTemp = supervivienteActual.getArma(a).getAlcance();
+                    //int alcanceTemp = supervivienteActual.getArma(a).getAlcance();
                     //supervivienteActual.activar(int a); Este es el arma [0-1];
                     Ataque ataque = supervivienteActual.getUltimoAtaque();
-                    List<Casilla> objetivo = supervivienteActual.elegirObjetivo(supervivienteActual.getArma(a));
+                    //List<Casilla> objetivo = supervivienteActual.elegirObjetivo(supervivienteActual.getArma(a));
                     Casilla casillaObjetivo = null;
-                    if(objetivo == null){
+                    /* if(objetivo == null){
                         int intento = 0;
                         while(intento < supervivienteActual.getCasillaActual().getContadorZombis()){
                             try {
@@ -118,7 +116,7 @@ public class Partida implements Serializable{
                             }
                         }
                     }
-                } continue;  
+                } */continue;  
 
                 case 3: //Buscar
                     supervivienteActual.setSeleccion(Entidad.accion.BUSCAR);
