@@ -208,16 +208,9 @@ public class Partida implements Serializable{
 //    }
 
     public Partida(){
-//    public Partida(int numJugadores){
         tablero = new Tablero();
         almacen =  new AlmacenDeAtaques();
-//        supervivientes = new ArrayList<Superviviente>(4);
-//        String nombre = "";
-//        for(int i = 0; i < 4; i++){
-//            supervivientes.add(new Superviviente(nombre, tablero.getCasilla(0, 0)));
-//        }
 
-//        interfazPrincipal = new InterfazPrincipal(this);
         // LLamamos a la InterfazPrincipal
         Partida estaPartida = this;
         SwingUtilities.invokeLater(new Runnable() {
