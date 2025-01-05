@@ -72,8 +72,10 @@ public class Casilla implements Serializable{
     }
     
     public void removeSuperviviente(Superviviente s) {
+        System.out.println("Antes del removeSuperviviente: Supervivientes: " + s.tableroActual.getCasilla(x, y).getContadorSupervivientes() + " Zombis: " + s.tableroActual.getCasilla(x, y).getContadorZombis());
         if (supervivientes.remove(s)) { // remove(s) busca y elimina el superviviente "s" en "supervivientes" y devuelve "true" si lo logra
             contadorSupervivientes--;
+            System.out.println("Despues del removeSuperviviente: Supervivientes: " + s.tableroActual.getCasilla(x, y).getContadorSupervivientes() + " Zombis: " + s.tableroActual.getCasilla(x, y).getContadorZombis());
         }
     }
     
@@ -87,6 +89,7 @@ public class Casilla implements Serializable{
         if(e instanceof Zombi){
             removeZombi((Zombi) e);
         }else if(e instanceof Superviviente){
+            System.out.println("Llama a removeSuperviviente");
             removeSuperviviente((Superviviente) e);
         }
     }

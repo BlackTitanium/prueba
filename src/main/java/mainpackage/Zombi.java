@@ -10,8 +10,9 @@ public class Zombi extends Entidad implements Serializable{
     protected String subtipo;
 
     public Zombi(Tablero t, Casilla c, String subtipoZ){
-        tableroActual = t;
-        casillaActual = c;
+        super(t, c);
+        //tableroActual = t;
+        //casillaActual = c;
         String tipos = aparicionZombi();
         this.tipo = tipos;
         switch(tipo){

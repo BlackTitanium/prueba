@@ -57,7 +57,10 @@ public class Superviviente extends Entidad implements Serializable{
         this.estadoActual = estadoActual;
     }
 
-    public Superviviente(String nombre, Casilla c){
+    public Superviviente(String nombre, Casilla c, Tablero t){
+        super(t, c);
+        //tableroActual = t;
+        //casillaActual = c;
         this.nombre = nombre;
         this.contadorZombis = 0;
         this.mordeduras = 0;
@@ -101,6 +104,7 @@ public class Superviviente extends Entidad implements Serializable{
     }
 
     public void activar(int ranura, int x, int y) {
+        System.out.println("En Activar: Supervivientes: " + tableroActual.getCasilla(x, y).getContadorSupervivientes() + " Zombis: " + tableroActual.getCasilla(x, y).getContadorZombis());
         if (estadoActual == estado.MUERTO) {
             acciones = 0;
         }  else {
@@ -118,8 +122,9 @@ public class Superviviente extends Entidad implements Serializable{
 
     
     public void mover(int x, int y) {
-        
-        super.mover(x, y);
+        System.out.println("En Mover de Superviviente: Supervivientes: " + tableroActual.getCasilla(x, y).getContadorSupervivientes() + " Zombis: " + tableroActual.getCasilla(x, y).getContadorZombis());
+        //super.moverSuperviviente(x, y, this);
+        super.mover(x,y);
         for (int i=0; i<=casillaActual.getContadorZombis(); i++){
             acciones--;
         }

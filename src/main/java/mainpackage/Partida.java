@@ -44,7 +44,7 @@ public class Partida implements Serializable{
 
     public void introducirSupervivientes(String[] nombres){
         for (String nombre : nombres) {
-            supervivientes.add(new Superviviente(nombre, null));
+            supervivientes.add(new Superviviente(nombre, null, tablero));
         }
     }
 
@@ -60,7 +60,7 @@ public class Partida implements Serializable{
         StringBuilder sb1 = new StringBuilder();
         sb1.append("<html>"); // Inicio con HTML
         for(int i = 0; i<interfazPrincipal.nJugadores; i++){
-            Superviviente s = new Superviviente(nombres[i], tablero.getCasilla(0,0));
+            Superviviente s = new Superviviente(nombres[i], tablero.getCasilla(0,0), tablero);
             tablero.getCasilla(0,0).addSuperviviente(s);
             supervivientes.add(s);
             sb1.append(s.getNombre());
@@ -80,17 +80,16 @@ public class Partida implements Serializable{
             faseApariciónZombi();
         }
         // Cambiar el panel derecho
-        Partida estaPartida = this;
         SwingUtilities.invokeLater(new Runnable() {
             @Override public void run() {
-                interfazPrincipal.añadirActionListener();
-                interfazPrincipal.inicializarPaneles(estaPartida);
+                //interfazPrincipal.añadirActionListener();
+                interfazPrincipal.inicializarPaneles();
                 interfazPrincipal.cardLayout.show(interfazPrincipal.panelDerechoPrincipal, "PanelMenuJugador");
             }
         });    
     }
 
-    private void faseSuperviviente(int eleccion){ //eleccion viene del input de la interfaz
+    public void faseSuperviviente(int eleccion, int ranura, int x, int y){ //eleccion viene del input de la interfaz
         supervivienteActual = this.getSupervivienteActual();
         inventarioActual = supervivienteActual.getInventario();
         supervivienteActual.setAcciones(3);
@@ -101,7 +100,8 @@ public class Partida implements Serializable{
                 case 1:
                     //Interfaz dara el input para el movimiento; int casillaObjetivo = [0-8]
                     supervivienteActual.setSeleccion(Entidad.accion.MOVER);
-                    //supervivienteActual.activar(casillaObjetivo);
+                    supervivienteActual.activar(ranura, x, y);
+                    System.out.println("Despues del case1 en faseSuperviviente: Supervivientes: " + tablero.getCasilla(x, y).getContadorSupervivientes() + " Zombis: " + tablero.getCasilla(x, y).getContadorZombis());
                     continue;
                 case 2:
                     //Interfaz dara el input para el arma a usar

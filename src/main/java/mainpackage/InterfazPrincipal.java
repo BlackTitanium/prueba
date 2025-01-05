@@ -21,7 +21,7 @@ public class InterfazPrincipal extends JFrame{
     PanelMenuJugador panelMenuJugador;
     
     public int nJugadores = 0;
-    public boolean movimientoActivado = false;
+//    public boolean movimientoActivado;
     
     public Partida partida;
     private Tablero tablero;
@@ -62,11 +62,13 @@ public class InterfazPrincipal extends JFrame{
         setVisible(true);
     }
     
-    public void inicializarPaneles(Partida p){
-        panelMenuJugador = new PanelMenuJugador(p,this);
+    public void inicializarPaneles(){
+        System.out.println("Inicializando PanelMenuJugador...");
+        panelMenuJugador = new PanelMenuJugador(partida,this);
         panelDerechoPrincipal.add(panelMenuJugador,"PanelMenuJugador");
         panelDerechoPrincipal.revalidate();
         panelDerechoPrincipal.repaint();
+        System.out.println("PanelMenuJugador añadido al CardLayout.");
     }
     
     // Inicializar el tablero con Casillas y Botones
@@ -77,9 +79,10 @@ public class InterfazPrincipal extends JFrame{
                 botones[i][j] = new JButton();
                 botones[i][j].setFocusPainted(false);
                 botones[i][j].setBackground(Color.LIGHT_GRAY);
+                botones[i][j].setForeground(Color.BLACK);
                 botones[i][j].setFont(new Font("Arial",0,10));
                 botones[i][j].setText("<html></html>");
-                //botones[i][j].addActionListener(new MoverElemento(i, j));
+                botones[i][j].addActionListener(new MoverElemento(i, j));
                 panelTablero.add(botones[i][j]);
             }
         }
@@ -98,6 +101,7 @@ public class InterfazPrincipal extends JFrame{
             for (int j = 0; j < SIZE; j++) {
                 botones[i][j].setText("");
                 botones[i][j].setBackground(Color.LIGHT_GRAY);
+                botones[i][j].setForeground(Color.BLACK);
                 tablero.reiniciarTablero();
             }
         }
@@ -113,61 +117,76 @@ public class InterfazPrincipal extends JFrame{
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            JButton boton = botones[x][y];
-            
-            if (elementoSeleccionado == null && boton.getText().equals(partida.getSupervivienteActual().getNombre())) {
-                // Selecciona un elemento para mover
-                elementoSeleccionado = new Point(x, y);
-                boton.setBackground(Color.DARK_GRAY);  // Resaltar elemento
-            } else if (elementoSeleccionado != null) {
-                // Verificar si el movimiento es a una casilla adyacente 
-                 if (Math.abs(elementoSeleccionado.x - x) <= 1 && Math.abs(elementoSeleccionado.y - y) <= 1) {                    
-                    // Mover el superviviente a la nueva casilla y marcarla como ocupada
-//                    tablero.getCasilla(elementoSeleccionado.x, elementoSeleccionado.y).removeSuperviviente(partida.getSupervivienteActual());
-//                    tablero.getCasilla(x,y).addSuperviviente(partida.getSupervivienteActual());
-                    tablero.posicionesOcupadas[x][y] = true;
-                    botones[elementoSeleccionado.x][elementoSeleccionado.y].setBackground(Color.LIGHT_GRAY);
-                    
-                    // Coger el texto del nuevo boton y añadirle el superviviente
-                    StringBuilder sb = new StringBuilder();
-                    String textoBotonDestino = botones[x][y].getText();
-                    textoBotonDestino = textoBotonDestino.replace("</html>", ""); // Quitamos el cierre de HTML
-                    sb.append(textoBotonDestino);
-                    sb.append(partida.getSupervivienteActual().getNombre());
-                    sb.append("<br>"); // Salto de linea en HTML
-                    sb.append("</html>"); // Colocamos el cierre HTML
-                    botones[x][y].setText(sb.toString());
-                    
-                    // Quitamos del boton el nombre del superviviente
-                    String textoBotonOrigen = botones[elementoSeleccionado.x][elementoSeleccionado.y].getText();
-                    textoBotonOrigen = textoBotonOrigen.replace(partida.getSupervivienteActual().getNombre() + "<br>","");
-                    if(tablero.getCasilla(elementoSeleccionado.x, elementoSeleccionado.y).getContadorSupervivientes() == 0){
-                        if(tablero.getCasilla(elementoSeleccionado.x, elementoSeleccionado.y).getContadorZombis() == 0){
-                            // Marcamos la casilla como vacia
-                            tablero.posicionesOcupadas[elementoSeleccionado.x][elementoSeleccionado.y] = false;
-                            botones[elementoSeleccionado.x][elementoSeleccionado.y].setText("<html></html>"); // Vacio
+            if(panelMenuJugador.movimientoActivado == true){
+                JButton boton = botones[x][y];
+                Superviviente supervivienteActual = partida.getSupervivienteActual();
+                if (elementoSeleccionado == null && boton.getText().contains(supervivienteActual.getNombre())) {
+                    // Selecciona un elemento para mover
+                    elementoSeleccionado = new Point(x, y);
+                    boton.setBackground(Color.DARK_GRAY);  // Resaltar elemento
+                    boton.setForeground(Color.WHITE);
+                } else if (elementoSeleccionado != null) {
+                    // Verificar si el movimiento es a una casilla adyacente 
+                     if (Math.abs(elementoSeleccionado.x - x) <= 1 && Math.abs(elementoSeleccionado.y - y) <= 1) {                    
+                        // Mover el superviviente a la nueva casilla y marcarla como ocupada
+//                        tablero.getCasilla(elementoSeleccionado.x, elementoSeleccionado.y).removeSuperviviente(supervivienteActual);
+//                        tablero.getCasilla(x,y).addSuperviviente(supervivienteActual);
+
+                        partida.faseSuperviviente(1,0,x,y);
+//                        supervivienteActual.setSeleccion(Entidad.accion.MOVER);
+//                        supervivienteActual.activar(0, x, y);
+//                        System.out.println("Despues de llamar en InterfazPrincipal: Superviviente: " + tablero.getCasilla(elementoSeleccionado.x, elementoSeleccionado.y).getContadorSupervivientes() +
+//                                "Zombis: " + tablero.getCasilla(elementoSeleccionado.x, elementoSeleccionado.y).getContadorZombis());
+
+                        tablero.posicionesOcupadas[x][y] = true;
+                        botones[elementoSeleccionado.x][elementoSeleccionado.y].setBackground(Color.LIGHT_GRAY);
+                        botones[elementoSeleccionado.x][elementoSeleccionado.y].setForeground(Color.BLACK);
+                        
+                        // Coger el texto del nuevo boton y añadirle el superviviente
+                        StringBuilder sb = new StringBuilder();
+                        String textoBotonDestino = botones[x][y].getText();
+                        textoBotonDestino = textoBotonDestino.replace("</html>", ""); // Quitamos el cierre de HTML
+                        sb.append(textoBotonDestino);
+                        sb.append(partida.getSupervivienteActual().getNombre());
+                        sb.append("<br>"); // Salto de linea en HTML
+                        sb.append("</html>"); // Colocamos el cierre HTML
+                        botones[x][y].setText(sb.toString());
+                        
+                        // Comprobación
+                        System.out.println("Boton Origen: Supervivientes: " + tablero.getCasilla(elementoSeleccionado.x, elementoSeleccionado.y).getContadorSupervivientes() +
+                                "Zombis: " + tablero.getCasilla(elementoSeleccionado.x, elementoSeleccionado.y).getContadorZombis());
+                        
+                        // Quitamos del boton el nombre del superviviente
+                        String textoBotonOrigen = botones[elementoSeleccionado.x][elementoSeleccionado.y].getText();
+                        textoBotonOrigen = textoBotonOrigen.replace(supervivienteActual.getNombre() + "<br>","");
+                        if(tablero.getCasilla(elementoSeleccionado.x, elementoSeleccionado.y).getContadorSupervivientes() == 0){
+                            if(tablero.getCasilla(elementoSeleccionado.x, elementoSeleccionado.y).getContadorZombis() == 0){
+                                // Marcamos la casilla como vacia
+                                tablero.posicionesOcupadas[elementoSeleccionado.x][elementoSeleccionado.y] = false;
+                                botones[elementoSeleccionado.x][elementoSeleccionado.y].setText("<html></html>"); // Vacio
+                            } else{
+                                botones[elementoSeleccionado.x][elementoSeleccionado.y].setText(textoBotonOrigen);
+                            }
                         } else{
                             botones[elementoSeleccionado.x][elementoSeleccionado.y].setText(textoBotonOrigen);
                         }
-                    } else{
-                        botones[elementoSeleccionado.x][elementoSeleccionado.y].setText(textoBotonOrigen);
+
+                        elementoSeleccionado = null;
+
+                        panelMenuJugador.activacionBotones(true);
+                        panelMenuJugador.movimientoActivado = false;
+//                        movimientoActivado = false;
                     }
-                    
-                    elementoSeleccionado = null;
-                    
-                    panelMenuJugador.activacionBotones(true);
-                    movimientoActivado = false;
+                } else{
+                    System.out.println("Movimiento activado: " + panelMenuJugador.movimientoActivado);
+                    JOptionPane.showMessageDialog(null,"No puede moverse en este momento");
                 }
             }
         }
     }
     
-    public static void main(String args[]){
-//        SwingUtilities.invokeLater(new Runnable() {
-//            @Override public void run() {
-//                new InterfazPrincipal(new Partida());
-//            }
-//        });
-//        new InterfazPrincipal(new Partida(2));
+    public static void main(String args[]){ 
+        Juego juego = new Juego();
+        juego.iniciarPartida();
     }
 }

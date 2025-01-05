@@ -7,6 +7,9 @@ import java.awt.event.ActionListener;
 
 public class PanelMenuJugador extends JPanel{
     private JButton botonMoverse, botonBuscar, botonAtacar, botonElegirArma, botonNada;
+    JLabel turnoDe, numAcciones;
+    
+    public static boolean movimientoActivado = false;
     
     private Partida partida;
     private InterfazPrincipal interfazPrincipal;    
@@ -34,11 +37,11 @@ public class PanelMenuJugador extends JPanel{
         panelCombo1.setLayout(new FlowLayout(FlowLayout.LEFT, 50, 0)); // FlowLayoaut para una distribución horizontal FlowLayout(alineación, espacioHorizontal, espacioVertical)
         panelCombo1.setBounds(15,60,300,15);
         
-        JLabel turnoDe = new JLabel("Turno de: " + partida.getSupervivienteActual().getNombre());
+        turnoDe = new JLabel();
         turnoDe.setFont(new Font("Arial", 1, 15));
         panelCombo1.add(turnoDe);
         
-        JLabel numAcciones = new JLabel("Acciones: " + partida.getSupervivienteActual().getAcciones());
+        numAcciones = new JLabel();
         numAcciones.setFont(new Font("Arial", 1, 15));
         panelCombo1.add(numAcciones);
         
@@ -85,7 +88,7 @@ public class PanelMenuJugador extends JPanel{
         add(botonNada);
         
         activacionBotones(true);
-//        actualizarLabels(turnoDe);
+        actualizarLabels();
         
         botonElegirArma = new JButton("Elegir Arma");
         botonElegirArma.setBounds(230,200,120,30);
@@ -97,8 +100,11 @@ public class PanelMenuJugador extends JPanel{
         botonMoverse.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                interfazPrincipal.movimientoActivado = true;
+//                interfazPrincipal.movimientoActivado = true;
+                movimientoActivado = true;
                 activacionBotones(false);
+                System.out.println("Movimiento activado: " + movimientoActivado);
+//                partida.faseSuperviviente(1);
             }
         });
         
@@ -137,5 +143,9 @@ public class PanelMenuJugador extends JPanel{
         botonAtacar.setEnabled(enabled);
         botonElegirArma.setEnabled(enabled);
         botonNada.setEnabled(enabled);
+    }
+    public void actualizarLabels(){
+        turnoDe.setText("Turno de: " + partida.getSupervivienteActual().getNombre());
+        numAcciones.setText("Acciones: " + partida.getSupervivienteActual().getAcciones());
     }
 }
