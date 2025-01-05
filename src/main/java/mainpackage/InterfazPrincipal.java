@@ -24,6 +24,7 @@ public class InterfazPrincipal extends JFrame{
     public JPanel panelTablero, panelDerechoPrincipal, panelBotonesPermanentes;
     
     PanelMenuJugador panelMenuJugador;
+    PanelInicio panelInicio;
     
     public int nJugadores = 0;
 //    public boolean movimientoActivado;
@@ -57,7 +58,7 @@ public class InterfazPrincipal extends JFrame{
         panelDerechoPrincipal.setPreferredSize(new Dimension(400, 745));
         
         // Añadimos voy las clases panel al panel de derecho principal
-        PanelInicio panelInicio = new PanelInicio(partida, this);
+        panelInicio = new PanelInicio(partida, this);
         panelDerechoPrincipal.add(panelInicio,"PanelInicio");
         
         // Añadir paneles al JFrame
@@ -151,7 +152,7 @@ public class InterfazPrincipal extends JFrame{
 //                        tablero.getCasilla(elementoSeleccionado.x, elementoSeleccionado.y).removeSuperviviente(supervivienteActual);
 //                        tablero.getCasilla(x,y).addSuperviviente(supervivienteActual);
 
-                        partida.faseSuperviviente(1,0,x,y);
+                        partida.getSupervivienteActual().mover(x,y);
 //                        supervivienteActual.setSeleccion(Entidad.accion.MOVER);
 //                        supervivienteActual.activar(0, x, y);
 //                        System.out.println("Despues de llamar en InterfazPrincipal: Superviviente: " + tablero.getCasilla(elementoSeleccionado.x, elementoSeleccionado.y).getContadorSupervivientes() +
