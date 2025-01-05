@@ -12,12 +12,19 @@ public class PanelMenuJugador extends JPanel{
     private InterfazPrincipal interfazPrincipal;    
     
     // TAMAÑO 400 * 745 (Ancho, Alto)
-    public PanelMenuJugador(Partida partida, InterfazPrincipal interfazPrincipal){
-        this.partida = partida;
-        this.interfazPrincipal = interfazPrincipal;
+    public PanelMenuJugador(Partida Partida, InterfazPrincipal interfazprincipal){
+        this.partida = Partida;
+        this.interfazPrincipal = interfazprincipal;
+//        this.partida = interfazPrincipal.partida;
         
         setSize(400,745);
         setLayout(null);
+        
+        System.out.println("Antes de imprimir los nombres");
+        for(int i=0; i<interfazPrincipal.nJugadores; i++){
+            String nombre = partida.getSupervivienteIndice(i).getNombre();
+            System.out.print(nombre + "/");
+        }
         
         JLabel titulo = new JLabel("Menu Jugador");
         titulo.setFont(new Font("Arial", 1, 20));
@@ -28,6 +35,7 @@ public class PanelMenuJugador extends JPanel{
         panelCombo1.setLayout(new FlowLayout(FlowLayout.LEFT, 50, 0)); // FlowLayoaut para una distribución horizontal FlowLayout(alineación, espacioHorizontal, espacioVertical)
         panelCombo1.setBounds(15,60,300,15);
         
+//        JLabel turnoDe = new JLabel();
         JLabel turnoDe = new JLabel("Turno de: " + partida.getSupervivienteActual().getNombre());
         turnoDe.setFont(new Font("Arial", 1, 15));
         panelCombo1.add(turnoDe);
@@ -79,6 +87,14 @@ public class PanelMenuJugador extends JPanel{
         add(botonNada);
         
         activacionBotones(true);
+//        actualizarLabels(turnoDe);
+        
+        botonElegirArma = new JButton("Elegir Arma");
+        botonElegirArma.setBounds(230,200,120,30);
+        botonElegirArma.setBackground(Color.LIGHT_GRAY);
+        botonElegirArma.setFont(new Font("Arial", 1, 14));
+        botonElegirArma.setForeground(Color.BLACK);
+        add(botonElegirArma);
         
         botonMoverse.addActionListener(new ActionListener(){
             @Override
@@ -124,4 +140,8 @@ public class PanelMenuJugador extends JPanel{
         botonElegirArma.setEnabled(enabled);
         botonNada.setEnabled(enabled);
     }
+    
+//    public void actualizarLabels(JLabel turnoDe){
+//        turnoDe.setText("Turno de: " + partida.getSupervivienteActual().getNombre());
+//    }
 }

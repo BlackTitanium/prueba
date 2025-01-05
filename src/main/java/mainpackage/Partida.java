@@ -18,6 +18,9 @@ public class Partida implements Serializable{
     private InterfazPrincipal interfazPrincipal;
         
     public Superviviente getSupervivienteActual() {
+        if (supervivientes == null || supervivientes.isEmpty()) {
+            throw new IllegalStateException("No hay supervivientes en la lista.");
+        }
         return supervivientes.get(turnoActual);
     }
     
@@ -77,9 +80,11 @@ public class Partida implements Serializable{
             faseApariciónZombi();
         }
         // Cambiar el panel derecho
+        Partida estaPartida = this;
         SwingUtilities.invokeLater(new Runnable() {
             @Override public void run() {
                 interfazPrincipal.añadirActionListener();
+                interfazPrincipal.inicializarPaneles(estaPartida);
                 interfazPrincipal.cardLayout.show(interfazPrincipal.panelDerechoPrincipal, "PanelMenuJugador");
             }
         });    
@@ -206,14 +211,14 @@ public class Partida implements Serializable{
 //    public Partida(int numJugadores){
         tablero = new Tablero();
         almacen =  new AlmacenDeAtaques();
-        supervivientes = new ArrayList<Superviviente>(4);
-        String nombre = "";
-        for(int i = 0; i < 4; i++){
-            supervivientes.add(new Superviviente(nombre, tablero.getCasilla(0, 0)));
-        }
+//        supervivientes = new ArrayList<Superviviente>(4);
+//        String nombre = "";
+//        for(int i = 0; i < 4; i++){
+//            supervivientes.add(new Superviviente(nombre, tablero.getCasilla(0, 0)));
+//        }
 
 //        interfazPrincipal = new InterfazPrincipal(this);
-        // LLamamos a la InterfazPrincipal (NO USAR POR AHORA)
+        // LLamamos a la InterfazPrincipal
         Partida estaPartida = this;
         SwingUtilities.invokeLater(new Runnable() {
            @Override public void run() {
