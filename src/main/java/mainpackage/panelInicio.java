@@ -138,7 +138,6 @@ public class PanelInicio extends JPanel{
                     } else {
                         partida.colocarElementosIniciales(nombres);
                         panelNombreSuperviviente.setVisible(false);
-//                        interfazPrincipal.cardLayout.show(interfazPrincipal.panelDerechoPrincipal, "PanelMenuJugador");
                     }
                 }
             }

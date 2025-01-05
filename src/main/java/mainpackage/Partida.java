@@ -202,10 +202,6 @@ public class Partida implements Serializable{
         });
         
     }
-    
-//    public void inicializarSupervivientes(int nJugadores){
-//        supervivientes = new ArrayList<Superviviente>(nJugadores);
-//    }
 
     public Partida(){
         tablero = new Tablero();

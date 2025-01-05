@@ -54,14 +54,10 @@ public class InterfazPrincipal extends JFrame{
         // Añadimos voy las clases panel al panel de derecho principal
         PanelInicio panelInicio = new PanelInicio(partida, this);
         panelDerechoPrincipal.add(panelInicio,"PanelInicio");
-//        panelMenuJugador = new PanelMenuJugador(/*partida,*/ this);
-//        panelDerechoPrincipal.add(panelMenuJugador,"PanelMenuJugador");
         
         // Añadir paneles al JFrame
         add(panelTablero, BorderLayout.CENTER);  // Tablero en el centro (ocupa la izquierda)
         add(panelDerechoPrincipal, BorderLayout.EAST);    // Panel de control a la derecha
-        
-        
         
         setVisible(true);
     }

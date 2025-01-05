@@ -15,16 +15,15 @@ public class PanelMenuJugador extends JPanel{
     public PanelMenuJugador(Partida Partida, InterfazPrincipal interfazprincipal){
         this.partida = Partida;
         this.interfazPrincipal = interfazprincipal;
-//        this.partida = interfazPrincipal.partida;
         
         setSize(400,745);
         setLayout(null);
         
-        System.out.println("Antes de imprimir los nombres");
-        for(int i=0; i<interfazPrincipal.nJugadores; i++){
-            String nombre = partida.getSupervivienteIndice(i).getNombre();
-            System.out.print(nombre + "/");
-        }
+//        System.out.println("Antes de imprimir los nombres");
+//        for(int i=0; i<interfazPrincipal.nJugadores; i++){
+//            String nombre = partida.getSupervivienteIndice(i).getNombre();
+//            System.out.print(nombre + "/");
+//        }
         
         JLabel titulo = new JLabel("Menu Jugador");
         titulo.setFont(new Font("Arial", 1, 20));
@@ -35,7 +34,6 @@ public class PanelMenuJugador extends JPanel{
         panelCombo1.setLayout(new FlowLayout(FlowLayout.LEFT, 50, 0)); // FlowLayoaut para una distribución horizontal FlowLayout(alineación, espacioHorizontal, espacioVertical)
         panelCombo1.setBounds(15,60,300,15);
         
-//        JLabel turnoDe = new JLabel();
         JLabel turnoDe = new JLabel("Turno de: " + partida.getSupervivienteActual().getNombre());
         turnoDe.setFont(new Font("Arial", 1, 15));
         panelCombo1.add(turnoDe);
@@ -140,8 +138,4 @@ public class PanelMenuJugador extends JPanel{
         botonElegirArma.setEnabled(enabled);
         botonNada.setEnabled(enabled);
     }
-    
-//    public void actualizarLabels(JLabel turnoDe){
-//        turnoDe.setText("Turno de: " + partida.getSupervivienteActual().getNombre());
-//    }
 }
