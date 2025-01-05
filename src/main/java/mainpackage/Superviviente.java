@@ -8,7 +8,7 @@ public class Superviviente extends Entidad implements Serializable{
     private String nombre;
     private int contadorZombis, mordeduras, acciones = 3;
     private accion seleccion; //Mover o atacar
-    private Arma[] arma = new Arma[2];
+    private Arma[] armas = new Arma[2];
     public enum estado {VIVO, MUERTO};
     private estado estadoActual;
     private Equipo[] inventario = new Equipo[5]; 
@@ -38,8 +38,8 @@ public class Superviviente extends Entidad implements Serializable{
         return nombre;
     }
 
-    public Arma[] getArma() {
-        return arma;
+    public Arma[] getArmas() {
+        return armas;
     }
    
 
@@ -133,7 +133,7 @@ public class Superviviente extends Entidad implements Serializable{
     public void elegirArma(int a, int b){
         if(inventario[a] instanceof Arma){
             Equipo equipoSeleccionado = inventario[a];
-            arma[b] = (Arma) equipoSeleccionado;
+            armas[b] = (Arma) equipoSeleccionado;
         } else {
             inventario[a] = null;
             lessMordeduras();
@@ -151,13 +151,13 @@ public class Superviviente extends Entidad implements Serializable{
         }
     }
 
-    public List<Casilla> elegirObjetivo(Arma arma){
+    public ArrayList<Casilla> elegirObjetivo(Arma arma){
         Casilla temp = null;
         int alcance = arma.getAlcance();
         if (alcance == 0){
             return null;
         }
-        List<Casilla> casillasEnRango = new ArrayList<>();
+        ArrayList<Casilla> casillasEnRango = new ArrayList<>();
         for(int i = -alcance; i <= alcance; i++){
             for(int j = -alcance; j <= alcance; j++){
                 if(i != 0 || j != 0){
@@ -173,7 +173,7 @@ public class Superviviente extends Entidad implements Serializable{
     
     public void atacar(int a) {
         acciones--;
-        ultimoAtaque = new Ataque(arma[a]);
+        ultimoAtaque = new Ataque(armas[a]);
     }
     
 }

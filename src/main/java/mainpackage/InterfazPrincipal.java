@@ -1,14 +1,19 @@
 package mainpackage;
 
-import java.util.Random;
-import javax.swing.*; // Porque estamos haciendo una interfaz gráfica
-import javax.swing.event.*; // Cuando usamos CheckBox
-import java.awt.*; // Porque vamos a trabajar con colores
-import java.awt.event.*; // Porque vamos a trabajar con eventos: botones, combox, ...
-import mainpackage.*; // Para usar Casilla
+import java.awt.BorderLayout;
+import java.awt.CardLayout; // Porque estamos haciendo una interfaz gráfica
+import java.awt.Color; // Cuando usamos CheckBox
+import java.awt.Dimension; // Porque vamos a trabajar con colores
+import java.awt.Font; // Porque vamos a trabajar con eventos: botones, combox, ...
+import java.awt.GridLayout; // Para usar Casilla
+import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 public class InterfazPrincipal extends JFrame{
     private static final int SIZE = 10;  // Tamaño del tablero 10x10
@@ -107,6 +112,20 @@ public class InterfazPrincipal extends JFrame{
         }
     }
     
+    public void gestorTurnos(){
+        partida.setTurnoActual(0);
+        for (int i = 0; i < partida.getSupervivientes().size(); i++){
+            partida.faseSuperviviente();
+            Superviviente supervivienteActual = partida.getSupervivienteActual();
+            int acciones = supervivienteActual.getAcciones();
+            while(acciones > 0){
+                panelMenuJugador.activacionBotones(true);
+                panelMenuJugador.actualizarLabels();
+                
+            }
+        }
+
+    }
     // Acción al hacer clic en una celda
     private class MoverElemento implements ActionListener {
         private int x, y;

@@ -5,7 +5,7 @@ import java.io.Serializable;
 public abstract class Entidad implements Serializable{
     protected int[] posicion = new int[2];
     protected Casilla casillaActual;
-    public enum accion {MOVER, ATACAR, BUSCAR};
+    public enum accion {MOVER, ATACAR, BUSCAR, INVENTARIO, NADA};
     protected Tablero tableroActual;
 
     public Entidad(Tablero t, Casilla c){

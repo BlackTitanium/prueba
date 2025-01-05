@@ -1,9 +1,14 @@
 package mainpackage;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 public class PanelMenuJugador extends JPanel{
     private JButton botonMoverse, botonBuscar, botonAtacar, botonElegirArma, botonNada;
@@ -104,7 +109,7 @@ public class PanelMenuJugador extends JPanel{
                 movimientoActivado = true;
                 activacionBotones(false);
                 System.out.println("Movimiento activado: " + movimientoActivado);
-//                partida.faseSuperviviente(1);
+//              
             }
         });
         
