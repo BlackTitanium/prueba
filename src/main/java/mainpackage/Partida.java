@@ -115,7 +115,6 @@ public class Partida implements Serializable{
             case Entidad.accion.MOVER:
                 //Interfaz dara el input para el movimiento; int casillaObjetivo = [0-8]
                 supervivienteActual.activar(ranura, x, y);
-                System.out.println("Despues del case1 en faseSuperviviente: Supervivientes: " + tablero.getCasilla(x, y).getContadorSupervivientes() + " Zombis: " + tablero.getCasilla(x, y).getContadorZombis());
                 break;
             case Entidad.accion.ATACAR: //Atacar
                     int alcanceTemp = supervivienteActual.getArmas()[ranura].getAlcance();
