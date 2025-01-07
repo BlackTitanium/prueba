@@ -125,8 +125,6 @@ public class Superviviente extends Entidad implements Serializable{
 
     
     public void mover(int x, int y) {
-        System.out.println("En Mover de Superviviente: Supervivientes: " + tableroActual.getCasilla(x, y).getContadorSupervivientes() + " Zombis: " + tableroActual.getCasilla(x, y).getContadorZombis());
-        //super.moverSuperviviente(x, y, this);
         super.mover(x,y);
         for (int i=0; i<=casillaActual.getContadorZombis(); i++){
             acciones--;

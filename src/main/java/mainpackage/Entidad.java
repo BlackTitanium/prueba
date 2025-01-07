@@ -33,23 +33,12 @@ public abstract class Entidad implements Serializable{
     }
 
     public void mover(int x, int y){
-        System.out.println("Principio de Mover en Entidad: Supervivientes(CO): " + tableroActual.getCasilla(posicion[0], posicion[1]).getContadorSupervivientes() + " Zombis: " + tableroActual.getCasilla(posicion[0], posicion[1]).getContadorZombis());
-        System.out.println("Origen: x: " + posicion[0] + ", y: " + posicion[1]);
-        System.out.println("Principio de Mover en Entidad: Supervivientes(CD): " + tableroActual.getCasilla(x, y).getContadorSupervivientes() + " Zombis: " + tableroActual.getCasilla(x, y).getContadorZombis());
-        System.out.println("Destino: x: " + x + ", y: " + y);
-        tableroActual.moverSuperviviente(posicion[0], posicion[1], x, y);
-        System.out.println("Despues Tablero en Mover en Entidad: Supervivientes(CO): " + tableroActual.getCasilla(posicion[0], posicion[1]).getContadorSupervivientes() + " Zombis: " + tableroActual.getCasilla(posicion[0], posicion[1]).getContadorZombis());
-        System.out.println("Origen: x: " + posicion[0] + ", y: " + posicion[1]);
-        System.out.println("Despues Tablero en Mover en Entidad: Supervivientes(CD): " + tableroActual.getCasilla(x, y).getContadorSupervivientes() + " Zombis: " + tableroActual.getCasilla(x, y).getContadorZombis());
-        System.out.println("Destino: x: " + x + ", y: " + y);
         posicion[0] = x;
         posicion[1] = y;
         Casilla casillaAnterior = casillaActual;
         casillaActual = tableroActual.getCasilla(posicion[0], posicion[1]);
-        //casillaAnterior.removeEntidad(this);
-        //casillaActual.addEntidad(this);
-        System.out.println("Final de Mover en Entidad: Supervivientes: " + tableroActual.getCasilla(x, y).getContadorSupervivientes() + " Zombis: " + tableroActual.getCasilla(x, y).getContadorZombis());
-        System.out.println("Destino: x: " + x + ", y: " + y);
+        casillaAnterior.removeEntidad(this);
+        casillaActual.addEntidad(this);
     }
 
     /*  atacar() y activar() no van a ser implementados en esta clase, ya que los Zombis

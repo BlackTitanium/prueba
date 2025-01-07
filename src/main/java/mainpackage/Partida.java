@@ -63,12 +63,8 @@ public class Partida implements Serializable{
     public void colocarElementosIniciales(String[] nombres){
         supervivientes = new ArrayList<Superviviente>(interfazPrincipal.nJugadores);
         Casilla casillaInicial = new Casilla(0,0);
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override public void run() {
-                interfazPrincipal.reiniciarTablero();
-            }
-        });
-        System.out.println("En colocarElementosIniciales/Antes: Supervivientes: " + tablero.getCasilla(0, 0).getContadorSupervivientes() + " Zombis: " + tablero.getCasilla(0, 0).getContadorZombis());
+        interfazPrincipal.reiniciarTablero();
+        
         StringBuilder sb1 = new StringBuilder();
         sb1.append("<html>"); // Inicio con HTML
         for(int i = 0; i<interfazPrincipal.nJugadores; i++){
@@ -81,36 +77,21 @@ public class Partida implements Serializable{
         tablero.setMapa(casillaInicial);
         sb1.append("</html>"); // Final con HTML
         String textoBotonSupervivientes = sb1.toString();
-        supervivienteActual = supervivientes.get(0);
-        System.out.println("En colocarElementosIniciales/Despues: Supervivientes: " + tablero.getCasilla(0, 0).getContadorSupervivientes() + " Zombis: " + tablero.getCasilla(0, 0).getContadorZombis());
-        // Poner texto en el boton[0][0]
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override public void run() {
-                interfazPrincipal.botones[0][0].setText(textoBotonSupervivientes);
-            }
-        });
-        tablero.posicionesOcupadas[0][0] = true; // Marcar la [0][0] como ocupada
-        // Cambiar el panel derecho
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override public void run() {
-                //interfazPrincipal.añadirActionListener();
-                interfazPrincipal.inicializarPaneles();
-                interfazPrincipal.cardLayout.show(interfazPrincipal.panelDerechoPrincipal, "PanelMenuJugador");
-            }
-        });    
-    }
 
-//    public void moverSuperviviente(int xOrigen, int yOrigen, int xDestino, int yDestino){
-//        System.out.println("En moverSuperPartida/Antes(CO): Supervivientes: " + tablero.getCasilla(xOrigen, yOrigen).getContadorSupervivientes() + " Zombis: " + tablero.getCasilla(xOrigen, yOrigen).getContadorZombis());
-//        System.out.println("En moverSuperPartida/Antes(CD): Supervivientes: " + tablero.getCasilla(xDestino, yDestino).getContadorSupervivientes() + " Zombis: " + tablero.getCasilla(xDestino, yDestino).getContadorZombis());
-//
-//        tablero.getCasilla(xOrigen, yOrigen).removeSuperviviente(supervivienteActual);
-//        tablero.getCasilla(xDestino,yDestino).addSuperviviente(supervivienteActual);
-//
-//        System.out.println("En moverSuperPartida/Despues(CO): Supervivientes: " + tablero.getCasilla(xOrigen, yOrigen).getContadorSupervivientes() + " Zombis: " + tablero.getCasilla(xOrigen, yOrigen).getContadorZombis());
-//        System.out.println("En moverSuperPartida/Antes(CD): Supervivientes: " + tablero.getCasilla(xDestino, yDestino).getContadorSupervivientes() + " Zombis: " + tablero.getCasilla(xDestino, yDestino).getContadorZombis());
-//
-//    }
+        supervivienteActual = supervivientes.get(0);
+
+        interfazPrincipal.botones[0][0].setText(textoBotonSupervivientes);
+        tablero.posicionesOcupadas[0][0] = true; // Marcar la [0][0] como ocupada
+        
+        // Crear los 3 zombis
+        for(int i=0;i<3;i++){
+            faseApariciónZombi();
+        }
+        
+        // Cambiar el panel derecho
+        interfazPrincipal.inicializarPaneles();
+        interfazPrincipal.cardLayout.show(interfazPrincipal.panelDerechoPrincipal, "PanelMenuJugador");
+    }
 
     public void activarSuperviviente(int ranura, int x, int y){
         switch(supervivienteActual.getSeleccion()){
@@ -207,15 +188,8 @@ public class Partida implements Serializable{
         }
         // Añadir al tablero
         tablero.getCasilla(x, y).addEntidad(z);
-        // Aparecer en la interfaz
-        int X = x, Y = y;
-        Zombi Z = z;
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override public void run() {
-                interfazPrincipal.botones[X][Y].setText(Z.getZombiParaBoton());  // Mostrar el tipo de Zombi
-            }
-        });
         
+        interfazPrincipal.botones[x][y].setText(z.getZombiParaBoton());  // Mostrar el tipo de Zombi
     }
 
     public Partida(){
@@ -223,11 +197,6 @@ public class Partida implements Serializable{
         almacen =  new AlmacenDeAtaques();
 
         // LLamamos a la InterfazPrincipal
-        Partida estaPartida = this;
-        SwingUtilities.invokeLater(new Runnable() {
-           @Override public void run() {
-                interfazPrincipal = new InterfazPrincipal(estaPartida);
-            }
-        });
+        interfazPrincipal = new InterfazPrincipal(this);
     }
 }
