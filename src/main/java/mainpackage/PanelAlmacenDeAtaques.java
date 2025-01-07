@@ -30,11 +30,11 @@ public class PanelAlmacenDeAtaques extends JPanel{
         textArea.setFont(new Font("Arial", 0, 12));
         textArea.setText(almacen.mostrarHistorialAtaquesInterfaz());
         scrollPane = new JScrollPane(textArea);
-        scrollPane.setBounds(50, 65, 300, 510);
+        scrollPane.setBounds(50, 65, 300, 560);
         add(scrollPane);
         
         botonVolver = new JButton("Volver");
-        botonVolver.setBounds(150,595,100,30);
+        botonVolver.setBounds(150,645,100,30);
         botonVolver.setBackground(Color.LIGHT_GRAY);
         botonVolver.setFont(new Font("Arial", 1, 14));
         botonVolver.setForeground(Color.BLACK);

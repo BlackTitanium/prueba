@@ -1,11 +1,15 @@
 package mainpackage;
 
+import java.awt.*;
+import java.awt.Color;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.event.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.*;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -259,38 +263,52 @@ public class PanelMenuJugador extends JPanel{
         mordeduras.setText("Mordeduras : " + partida.getSupervivienteActual().getMordeduras());
         try {
             botonArma1.setText(partida.getSupervivienteActual().getArmas()[0].getNombre());
+            botonArma1.setToolTipText(partida.getSupervivienteActual().getArmas()[0].toString());
         } catch (NullPointerException e) {
             botonArma1.setText("Arma 1: Vacío");
+            botonArma1.setToolTipText("");
         }
         try {
             botonArma2.setText(partida.getSupervivienteActual().getArmas()[1].getNombre());
+            botonArma2.setToolTipText(partida.getSupervivienteActual().getArmas()[1].toString());
         } catch (NullPointerException e) {
             botonArma2.setText("Arma 2: Vacío");
+            botonArma2.setToolTipText("");
         }
         try {
             botonInv1.setText(partida.getSupervivienteActual().getInventario()[0].getNombre());
+            botonInv1.setToolTipText(partida.getSupervivienteActual().getInventario()[0].toString());
         } catch (NullPointerException e) {
             botonInv1.setText("Inventario 1: Vacío");
+            botonInv1.setToolTipText("");
         }
         try {
             botonInv2.setText(partida.getSupervivienteActual().getInventario()[1].getNombre());
+            botonInv2.setToolTipText(partida.getSupervivienteActual().getInventario()[1].toString());
         } catch (NullPointerException e) {
             botonInv2.setText("Inventario 2: Vacío");
+            botonInv2.setToolTipText("");
         }
         try {
             botonInv3.setText(partida.getSupervivienteActual().getInventario()[2].getNombre());
+            botonInv3.setToolTipText(partida.getSupervivienteActual().getInventario()[2].toString());
         } catch (NullPointerException e) {
             botonInv3.setText("Inventario 3: Vacío");
+            botonInv3.setToolTipText("");
         }
         try {
             botonInv4.setText(partida.getSupervivienteActual().getInventario()[3].getNombre());
+            botonInv4.setToolTipText(partida.getSupervivienteActual().getInventario()[3].toString());
         } catch (NullPointerException e) {
             botonInv4.setText("Inventario 4: Vacío");
+            botonInv4.setToolTipText("");
         }
         try {
             botonInv5.setText(partida.getSupervivienteActual().getInventario()[4].getNombre());
+            botonInv5.setToolTipText(partida.getSupervivienteActual().getInventario()[4].toString());
         } catch (NullPointerException e) {
             botonInv5.setText("Inventario 5: Vacío");
+            botonInv5.setToolTipText("");
         }
     }
 }
