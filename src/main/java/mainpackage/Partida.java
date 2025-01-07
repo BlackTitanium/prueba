@@ -62,7 +62,7 @@ public class Partida implements Serializable{
 
     public void colocarElementosIniciales(String[] nombres){
         supervivientes = new ArrayList<Superviviente>(interfazPrincipal.nJugadores);
-        //Casilla.inicializarArrayList();
+        Casilla casillaInicial = new Casilla(0,0);
         SwingUtilities.invokeLater(new Runnable() {
             @Override public void run() {
                 interfazPrincipal.reiniciarTablero();
@@ -72,12 +72,13 @@ public class Partida implements Serializable{
         StringBuilder sb1 = new StringBuilder();
         sb1.append("<html>"); // Inicio con HTML
         for(int i = 0; i<interfazPrincipal.nJugadores; i++){
-            Superviviente s = new Superviviente(nombres[i], tablero.getCasilla(0,0), tablero, this);
-            tablero.getCasilla(0,0).addSuperviviente(s);
+            Superviviente s = new Superviviente(nombres[i], casillaInicial, tablero, this);
+            casillaInicial.addEntidad(s);
             supervivientes.add(s);
             sb1.append(s.getNombre());
             sb1.append("<br>"); // Salto de linea en HTML
         }
+        tablero.setMapa(casillaInicial);
         sb1.append("</html>"); // Final con HTML
         String textoBotonSupervivientes = sb1.toString();
         supervivienteActual = supervivientes.get(0);

@@ -17,10 +17,12 @@ public class Casilla implements Serializable{
         supervivientes = new ArrayList<>();
         x = a; y = b;
     }
+    public void setSupervivientes(ArrayList<Superviviente> supervivientes){
+        this.supervivientes = supervivientes;
+    }
 
-    public void inicializarArrayList(){
-        zombis = new ArrayList<>();
-        supervivientes = new ArrayList<>();
+    public void setContadorSupervivientes(int contadorSupervivientes){
+        this.contadorSupervivientes = contadorSupervivientes;
     }
 
     public int getX(){
