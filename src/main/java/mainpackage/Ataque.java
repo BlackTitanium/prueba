@@ -11,7 +11,7 @@ public class Ataque implements Serializable{
     private int exito;
     public int nExitos;
     private AlmacenDeAtaques almacen;
-    private static int nCarasDado = 6;
+    private final static int nCarasDado = 6;
 
     public Ataque(Arma a, AlmacenDeAtaques al){
         this.nDados = a.getDados();
