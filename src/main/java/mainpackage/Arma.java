@@ -1,8 +1,6 @@
 package mainpackage;
 
-import java.io.Serializable;    
-
-public class Arma extends Equipo implements Serializable{
+public class Arma extends Equipo{
     private String nombre;
     private int potencia, dados, alcance, exito;
 
