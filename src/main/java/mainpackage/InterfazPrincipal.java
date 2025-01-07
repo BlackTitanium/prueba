@@ -14,6 +14,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 public class InterfazPrincipal extends JFrame{
     private static final int SIZE = 10;  // Tamaño del tablero 10x10
@@ -24,6 +25,7 @@ public class InterfazPrincipal extends JFrame{
     public JPanel panelTablero, panelDerechoPrincipal, panelBotonesPermanentes;
     
     PanelMenuJugador panelMenuJugador;
+    PanelInicio panelInicio;
     
     public int nJugadores = 0;
 //    public boolean movimientoActivado;
@@ -57,7 +59,7 @@ public class InterfazPrincipal extends JFrame{
         panelDerechoPrincipal.setPreferredSize(new Dimension(400, 745));
         
         // Añadimos voy las clases panel al panel de derecho principal
-        PanelInicio panelInicio = new PanelInicio(partida, this);
+        panelInicio = new PanelInicio(partida, this);
         panelDerechoPrincipal.add(panelInicio,"PanelInicio");
         
         // Añadir paneles al JFrame
@@ -112,20 +114,28 @@ public class InterfazPrincipal extends JFrame{
         }
     }
     
-    public void gestorTurnos(){
-        partida.setTurnoActual(0);
-        for (int i = 0; i < partida.getSupervivientes().size(); i++){
+    public void gestorTurnos() {
+    while (true) {
+        for (int i = 0; i < partida.getSupervivientes().size(); i++) {
+            partida.setTurnoActual(i);
             partida.faseSuperviviente();
             Superviviente supervivienteActual = partida.getSupervivienteActual();
-            int acciones = supervivienteActual.getAcciones();
-            while(acciones > 0){
-                panelMenuJugador.activacionBotones(true);
-                panelMenuJugador.actualizarLabels();
-                
+            while (supervivienteActual.getAcciones() > 0) {
+                // Wait for the player to perform actions
+                // This can be handled by the UI event listeners
             }
+            // Actualizar para el siguiente jugador
+            SwingUtilities.invokeLater(() -> {
+                panelMenuJugador.actualizarLabels();
+                panelMenuJugador.activacionBotones(true);
+            });
         }
-
+        // After all players have taken their turns, handle the zombie phase
+        partida.faseZombie();
+        // Handle new zombie appearances
+        partida.faseApariciónZombi();
     }
+}
     // Acción al hacer clic en una celda
     private class MoverElemento implements ActionListener {
         private int x, y;
@@ -136,7 +146,7 @@ public class InterfazPrincipal extends JFrame{
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            if(panelMenuJugador.movimientoActivado == true){
+            if(panelMenuJugador.movimientoActivado){
                 JButton boton = botones[x][y];
                 Superviviente supervivienteActual = partida.getSupervivienteActual();
                 if (elementoSeleccionado == null && boton.getText().contains(supervivienteActual.getNombre())) {
@@ -148,12 +158,11 @@ public class InterfazPrincipal extends JFrame{
                     // Verificar si el movimiento es a una casilla adyacente 
                      if (Math.abs(elementoSeleccionado.x - x) <= 1 && Math.abs(elementoSeleccionado.y - y) <= 1) {                    
                         // Mover el superviviente a la nueva casilla y marcarla como ocupada
-//                        tablero.getCasilla(elementoSeleccionado.x, elementoSeleccionado.y).removeSuperviviente(supervivienteActual);
-//                        tablero.getCasilla(x,y).addSuperviviente(supervivienteActual);
-
-                        partida.faseSuperviviente(1,0,x,y);
-//                        supervivienteActual.setSeleccion(Entidad.accion.MOVER);
-//                        supervivienteActual.activar(0, x, y);
+                        supervivienteActual.setSeleccion(Entidad.accion.MOVER);
+                        supervivienteActual.activar(0, x, y);
+                        tablero.posicionesOcupadas[x][y] = true;
+                        botones[elementoSeleccionado.x][elementoSeleccionado.y].setBackground(Color.LIGHT_GRAY);
+                        botones[elementoSeleccionado.x][elementoSeleccionado.y].setForeground(Color.BLACK);
 //                        System.out.println("Despues de llamar en InterfazPrincipal: Superviviente: " + tablero.getCasilla(elementoSeleccionado.x, elementoSeleccionado.y).getContadorSupervivientes() +
 //                                "Zombis: " + tablero.getCasilla(elementoSeleccionado.x, elementoSeleccionado.y).getContadorZombis());
 
@@ -202,10 +211,5 @@ public class InterfazPrincipal extends JFrame{
                 }
             }
         }
-    }
-    
-    public static void main(String args[]){ 
-        Juego juego = new Juego();
-        juego.iniciarPartida();
-    }
+    }    
 }

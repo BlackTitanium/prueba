@@ -104,7 +104,7 @@ public class Partida implements Serializable{
                 supervivienteActual.activar(ranura, x, y);
                 System.out.println("Despues del case1 en faseSuperviviente: Supervivientes: " + tablero.getCasilla(x, y).getContadorSupervivientes() + " Zombis: " + tablero.getCasilla(x, y).getContadorZombis());
             case Entidad.accion.ATACAR: //Atacar
-                    int alcanceTemp = supervivienteActual.getArma(a).getAlcance();
+                    int alcanceTemp = supervivienteActual.getArmas()[ranura].getAlcance();
                     supervivienteActual.activar(ranura,0,0); 
                     Ataque ataque = supervivienteActual.getUltimoAtaque();
                     ArrayList<Casilla> objetivo = supervivienteActual.elegirObjetivo(supervivienteActual.getArmas()[ranura]);
@@ -113,7 +113,7 @@ public class Partida implements Serializable{
                         int intento = 0;
                         while(intento < supervivienteActual.getCasillaActual().getContadorZombis()){
                             try {
-                                supervivienteActual.getCasillaActual().getZombi(intento).reaccion(supervivienteActual.getArma(a), ataque.numExitos(almacen));
+                                supervivienteActual.getCasillaActual().getZombi(intento).reaccion(supervivienteActual.getArmas()[ranura], ataque.numExitos(almacen));
                             } catch (IllegalArgumentException e) {
                                 if ("Alcance".equals(e.getMessage())) { //Si es Berserker
                                     supervivienteActual.addAcciones(); // Devuelve la accion para seguir intentando
@@ -129,7 +129,7 @@ public class Partida implements Serializable{
                     int intento = 0;
                     while(intento < casillaObjetivo.getContadorZombis()){
                         try {
-                            casillaObjetivo.getZombi(intento).reaccion(supervivienteActual.getArma(a), ataque.numExitos(almacen));
+                            casillaObjetivo.getZombi(intento).reaccion(supervivienteActual.getArmas()[ranura], ataque.numExitos(almacen));
                         } catch (IllegalArgumentException e) {
                             if ("Alcance".equals(e.getMessage())) { //Si es Berserker
                                 supervivienteActual.addAcciones(); // Devuelve la accion para seguir intentando
