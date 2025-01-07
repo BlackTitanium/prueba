@@ -5,6 +5,10 @@ public class Toxico extends Zombi {
         super(c, subtipoZ,partida,id);
     }
 
+    public Toxico(Casilla c, String subtipoZ, Partida partida, int id, String tipo) {
+        super(c, subtipoZ,partida,id,tipo);
+    }
+
     @Override
     public void reaccion(Arma arma, int a){
         super.reaccion(arma, a);

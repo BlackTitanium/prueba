@@ -37,6 +37,29 @@ public class Zombi extends Entidad implements Serializable{
         this.supervivientesAtacados = new ArrayList<>();
     }
 
+    public Zombi(Casilla c, String subtipoZ, Partida partida, int id, String tipos){
+        super(partida, c);
+        this.identificador = id;
+        this.partida = partida;
+        this.tipo = tipos;
+        switch(tipo){
+            case "CAMINANTE":
+                activaciones = 1;
+                aguante = 1;
+                break;
+            case "CORREDOR":
+                activaciones = 2;
+                aguante = 1;
+                break;
+            case "ABOMINACION":
+                activaciones = 1;
+                aguante = 3;
+                break;
+        }
+        subtipo = subtipoZ;
+        this.supervivientesAtacados = new ArrayList<>();
+    }
+
     public String aparicionZombi(){
         String tipos = "";
         Random random = new Random();

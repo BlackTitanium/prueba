@@ -63,6 +63,19 @@ public class Partida implements Serializable{
         }
     }
 
+    public Equipo crearEquipo(){
+        Random random = new Random();
+        int n = random.nextInt(2);
+        Equipo equipo = null;
+        if(n==0){
+            equipo = new Arma();
+        }
+        if(n==1){
+            equipo = new Provision();
+        }
+        return equipo;
+    }
+
     public void colocarElementosIniciales(String[] nombres){
         supervivientes = new ArrayList<Superviviente>(interfazPrincipal.nJugadores);
         Casilla casillaInicial = new Casilla(0,0);
@@ -161,8 +174,6 @@ public class Partida implements Serializable{
         supervivienteActual.setAcciones(3);
         System.out.println("Acciones restantes: " + supervivienteActual.getAcciones());
     }
-    
-    
 
     public void faseZombie(){
         for (int i = 0; i < zombis.size(); i++){

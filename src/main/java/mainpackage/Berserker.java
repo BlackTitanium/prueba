@@ -6,6 +6,10 @@ public class Berserker extends Zombi{
         super(c, subtipoZ, partida, id);
     }
 
+    public Berserker(Casilla c, String subtipoZ, Partida partida, int id, String tipo) {
+        super(c, subtipoZ,partida,id,tipo);
+    }
+
     @Override
     public void reaccion(Arma arma, int a){
         super.reaccion(arma, a);
