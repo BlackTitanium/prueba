@@ -4,8 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 
-import javax.swing.SwingUtilities;
-
 public class Partida implements Serializable{
     public ArrayList<Superviviente> supervivientes;
     public ArrayList<Zombi> zombis;
@@ -95,6 +93,7 @@ public class Partida implements Serializable{
         // Cambiar el panel derecho
         interfazPrincipal.inicializarPaneles();
         interfazPrincipal.cardLayout.show(interfazPrincipal.panelDerechoPrincipal, "PanelMenuJugador");
+        interfazPrincipal.gestorTurnos();
     }
 
     public void activarSuperviviente(int ranura, int x, int y){
