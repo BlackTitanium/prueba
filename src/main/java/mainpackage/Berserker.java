@@ -21,4 +21,11 @@ public class Berserker extends Zombi{
             throw new IllegalArgumentException("Alcance");
         }
     }
+
+    public int reaccion(Arma arma){
+        if(arma.getAlcance()>0){
+            throw new IllegalArgumentException("Alcance");
+        }
+        return super.reaccion(arma);
+    }
 }

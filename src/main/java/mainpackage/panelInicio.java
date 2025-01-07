@@ -132,7 +132,6 @@ public class PanelInicio extends JPanel{
                 if(e.getSource() == botonListo){
                     String texto = textAreaNombreSupervivientes.getText();
                     nombres = texto.split("\\r?\\n");
-//                    System.out.println("Nombres introducidos: " + Arrays.toString(nombres)); // Depuración
                     if (nombres.length != interfazPrincipal.nJugadores) {
                         JOptionPane.showMessageDialog(null, "Por favor, introduce exactamente " + interfazPrincipal.nJugadores + " nombres.");
                     } else {

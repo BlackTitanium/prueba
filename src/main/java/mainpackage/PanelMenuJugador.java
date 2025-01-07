@@ -171,14 +171,17 @@ public class PanelMenuJugador extends JPanel{
 
         activacionBotones(true);
         actualizarLabels();
+        System.out.println("Todo añadido en Panel Menu Jugador");
         
         botonMoverse.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
+                System.out.println("Movimiento activado antes: " + movimientoActivado);
                 movimientoActivado = true;
                 activacionBotones(false);
                 partida.getSupervivienteActual().setSeleccion(Entidad.accion.MOVER);
-                System.out.println("Movimiento activado: " + movimientoActivado);
+                System.out.println("Movimiento activado despues: " + movimientoActivado);
+//                interfazPrincipal.accionTerminada();
             }
         });
         
@@ -186,6 +189,7 @@ public class PanelMenuJugador extends JPanel{
             @Override
             public void actionPerformed(ActionEvent e) {
                 partida.getSupervivienteActual().setSeleccion(Entidad.accion.BUSCAR);
+//                interfazPrincipal.accionTerminada();
             }
         });
         
@@ -196,6 +200,7 @@ public class PanelMenuJugador extends JPanel{
                 activacionBotones(false);
                 activacionArmas(atacarActivado);
                 partida.getSupervivienteActual().setSeleccion(Entidad.accion.ATACAR);
+//                interfazPrincipal.accionTerminada();
             }
         });
         
@@ -203,6 +208,7 @@ public class PanelMenuJugador extends JPanel{
             @Override
             public void actionPerformed(ActionEvent e) {
                 partida.getSupervivienteActual().setSeleccion(Entidad.accion.INVENTARIO);
+//                interfazPrincipal.accionTerminada();
             }
         });
         
@@ -210,6 +216,7 @@ public class PanelMenuJugador extends JPanel{
             @Override
             public void actionPerformed(ActionEvent e) {
                 partida.getSupervivienteActual().setSeleccion(Entidad.accion.NADA);
+//                interfazPrincipal.accionTerminada();
             }
         });
 
@@ -219,6 +226,7 @@ public class PanelMenuJugador extends JPanel{
                 interfazPrincipal.armaActiva = partida.getSupervivienteActual().getArmas()[0];
                 activacionArmas(false);
                 activacionInventario(true);
+//                interfazPrincipal.accionTerminada();
             }
         });
         botonAlmacenDeAtaques.addActionListener(new ActionListener(){

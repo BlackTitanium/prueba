@@ -18,4 +18,14 @@ public class Toxico extends Zombi {
             }
         }
     }
+
+    @Override
+    public int reaccion(Arma arma){
+        int muertoOvivo =  super.reaccion(arma);
+        if(muertoOvivo == 1){ // Se a muerto
+            partida.getSupervivienteActual().addMordeduras();
+            return 2; // Porque ha habido una herida
+        }
+        return muertoOvivo;
+    }
 }

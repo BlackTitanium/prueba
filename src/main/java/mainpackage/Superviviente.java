@@ -42,6 +42,9 @@ public class Superviviente extends Entidad implements Serializable{
         return armas;
     }
    
+    public void setArma(Arma arma, int a){
+        armas[a] = arma;
+    }
 
     public estado getEstadoActual() {
         return estadoActual;

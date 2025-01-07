@@ -10,8 +10,8 @@ public class Zombi extends Entidad implements Serializable{
     protected String tipo;
     protected String subtipo;
     protected int identificador;
-    private Partida partida;
-    private ArrayList<String> supervivientesAtacados;
+    protected Partida partida;
+    protected ArrayList<String> supervivientesAtacados;
 
     public Zombi(Casilla c, String subtipoZ, Partida partida, int id){
         super(partida, c);
@@ -104,6 +104,15 @@ public class Zombi extends Entidad implements Serializable{
         }
         
     }
+
+    public int reaccion(Arma arma){
+        if(aguante <= arma.getPotencia()){
+            return 1; // El zombi ha muerto
+        }else{
+            return 0; // El zombi sigue vivo
+        }
+    }
+
     public void atacar(Superviviente s){
         s.addMordeduras();
         if(s.getMordeduras() == 2){

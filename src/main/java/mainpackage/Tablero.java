@@ -53,7 +53,7 @@ public class Tablero implements Serializable{
     }
 
     public Casilla objetivoZombi(Casilla c){
-        Casilla objetivo = null;
+        Casilla objetivo = c;
         for (int j=0; j<10; j++){
                     for(int k=0; k<10; k++){
                         if(mapa[j][k].getContadorSupervivientes()!=0){
