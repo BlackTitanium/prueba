@@ -10,9 +10,8 @@ import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.regex.Pattern;
 import java.util.regex.Matcher;
-import java.util.zip.ZipEntry;
+import java.util.regex.Pattern;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -99,9 +98,16 @@ public class InterfazPrincipal extends JFrame{
                 botones[i][j].addActionListener(new ActionListener(){
                     @Override
                     public void actionPerformed(ActionEvent e){
+                        Superviviente supervivienteActual = partida.getSupervivienteActual();
                         if(panelMenuJugador.movimientoActivado){
                             moverElemento(botones[I][J], I, J);
                             actualizarCasillas(tablero.getCasilla(botones[I][J].getX(), botones[I][J].getY()), tablero.getCasilla(I,J));
+                            supervivienteActual.setAcciones(supervivienteActual.getAcciones()-1);
+                            panelMenuJugador.actualizarLabels();
+                            if(supervivienteActual.getAcciones() == 0){
+                                panelMenuJugador.activacionBotones(false);
+                                partida.avanzarTurno();
+                            }
                         } else if(panelMenuJugador.atacarActivado){
                             if(armaActiva != null){
                                 atacar(botones[I][J], I, J);
@@ -112,6 +118,10 @@ public class InterfazPrincipal extends JFrame{
                             }
                         } else{
                             JOptionPane.showMessageDialog(null,"No puede moverse en este momento");
+                        }
+                        if(supervivienteActual.getAcciones() == 0){
+                            panelMenuJugador.activacionBotones(false);
+                            partida.avanzarTurno();
                         }
                     }
                 });
@@ -198,6 +208,10 @@ public class InterfazPrincipal extends JFrame{
                 boton.setBackground(Color.DARK_GRAY);  // Resaltar elemento
                 boton.setForeground(Color.WHITE);
             } else if (elementoSeleccionado != null) {
+                if(x == supervivienteActual.getCasillaActual().getX() && y == supervivienteActual.getCasillaActual().getY()){
+                    JOptionPane.showMessageDialog(null,"No puede moverse a la misma casilla");   
+                    return;
+                }
                 // Verificar si el movimiento es a una casilla adyacente 
                  if (Math.abs(elementoSeleccionado.x - x) <= 1 && Math.abs(elementoSeleccionado.y - y) <= 1) {                  
                     // Mover el superviviente a la nueva casilla y marcarla como ocupada
