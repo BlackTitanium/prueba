@@ -14,7 +14,7 @@ public class PanelMenuJugador extends JPanel{
     private JButton botonMoverse, botonBuscar, botonAtacar, botonElegirArma, botonNada;
     JLabel turnoDe, numAcciones;
     
-    public static boolean movimientoActivado = false;
+    public boolean movimientoActivado = false;
     
     private Partida partida;
     private InterfazPrincipal interfazPrincipal;    
@@ -26,12 +26,6 @@ public class PanelMenuJugador extends JPanel{
         
         setSize(400,745);
         setLayout(null);
-        
-//        System.out.println("Antes de imprimir los nombres");
-//        for(int i=0; i<interfazPrincipal.nJugadores; i++){
-//            String nombre = partida.getSupervivienteIndice(i).getNombre();
-//            System.out.print(nombre + "/");
-//        }
         
         JLabel titulo = new JLabel("Menu Jugador");
         titulo.setFont(new Font("Arial", 1, 20));

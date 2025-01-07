@@ -109,6 +109,7 @@ public class Zombi extends Entidad implements Serializable{
         } else if(subtipo.contains("BERSERKER")){
             sb.append("B");
         }
+        sb.append("<br>");
         sb.append("</html>");
         return sb.toString();
     }
