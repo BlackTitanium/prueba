@@ -16,6 +16,10 @@ public class Partida implements Serializable{
     private Superviviente supervivienteActual;
     private AlmacenDeAtaques almacen;
     private InterfazPrincipal interfazPrincipal;
+
+    public InterfazPrincipal getInterfazPrincipal(){
+        return interfazPrincipal;
+    }
     
     public void setTurnoActual(int turno){
         turnoActual = turno;
@@ -99,6 +103,7 @@ public class Partida implements Serializable{
                 //Interfaz dara el input para el movimiento; int casillaObjetivo = [0-8]
                 supervivienteActual.activar(ranura, x, y);
                 System.out.println("Despues del case1 en faseSuperviviente: Supervivientes: " + tablero.getCasilla(x, y).getContadorSupervivientes() + " Zombis: " + tablero.getCasilla(x, y).getContadorZombis());
+                break;
             case Entidad.accion.ATACAR: //Atacar
                     int alcanceTemp = supervivienteActual.getArmas()[ranura].getAlcance();
                     supervivienteActual.activar(ranura,0,0); 
@@ -147,6 +152,7 @@ public class Partida implements Serializable{
                 case Entidad.accion.NADA: //Nada
                     break;
         }
+        interfazPrincipal.panelMenuJugador.actualizarLabels();
     }
     public void faseSuperviviente(){ //eleccion viene del input de la interfaz
         supervivienteActual = this.getSupervivienteActual();

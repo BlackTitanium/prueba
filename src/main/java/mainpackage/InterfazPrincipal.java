@@ -146,9 +146,7 @@ public class InterfazPrincipal extends JFrame{
                 // Verificar si el movimiento es a una casilla adyacente 
                  if (Math.abs(elementoSeleccionado.x - x) <= 1 && Math.abs(elementoSeleccionado.y - y) <= 1) {                  
                     // Mover el superviviente a la nueva casilla y marcarla como ocupada
-                    supervivienteActual.setSeleccion(Entidad.accion.MOVER);
-                    //partida.activarSuperviviente(0, x, y);
-                    supervivienteActual.activar(0, x, y);
+                    partida.activarSuperviviente(0, x, y);
 
                     tablero.posicionesOcupadas[x][y] = true;
                     botones[elementoSeleccionado.x][elementoSeleccionado.y].setBackground(Color.LIGHT_GRAY);

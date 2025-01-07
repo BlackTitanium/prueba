@@ -102,6 +102,7 @@ public class PanelMenuJugador extends JPanel{
 //                interfazPrincipal.movimientoActivado = true;
                 movimientoActivado = true;
                 activacionBotones(false);
+                partida.getSupervivienteActual().setSeleccion(Entidad.accion.MOVER);
                 System.out.println("Movimiento activado: " + movimientoActivado);
 //              
             }
