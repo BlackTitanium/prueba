@@ -90,10 +90,6 @@ public class Partida implements Serializable{
             }
         });
         tablero.posicionesOcupadas[0][0] = true; // Marcar la [0][0] como ocupada
-        // Spawnear Zombis
-        for (int i = 0; i < 3; i++) {
-            faseApariciónZombi();
-        }
         // Cambiar el panel derecho
         SwingUtilities.invokeLater(new Runnable() {
             @Override public void run() {
