@@ -4,7 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Partida implements Serializable{
+import javax.swing.SwingUtilities;
+
+public class Partida implements Serializable, Runnable{
     public ArrayList<Superviviente> supervivientes;
     public ArrayList<Zombi> zombis;
     private int turnoActual = 0;
@@ -107,7 +109,8 @@ public class Partida implements Serializable{
         // Cambiar el panel derecho
         interfazPrincipal.inicializarPaneles();
         interfazPrincipal.cardLayout.show(interfazPrincipal.panelDerechoPrincipal, "PanelMenuJugador");
-        interfazPrincipal.gestorTurnos();
+        Thread partidaThread = new Thread(this);
+        partidaThread.start();
     }
 
     public void activarSuperviviente(int ranura, int x, int y){
@@ -217,5 +220,35 @@ public class Partida implements Serializable{
 
         // LLamamos a la InterfazPrincipal
         interfazPrincipal = new InterfazPrincipal(this);
+    }
+
+    @Override
+    public void run(){
+            for (int i = 0; i < getSupervivientes().size(); i++) {
+                setTurnoActual(i);
+                faseSuperviviente();
+                Superviviente supervivienteActual = getSupervivienteActual();
+                while (supervivienteActual.getAcciones() > 0) {
+                    // Mostrar el panel de control del jugador
+                    interfazPrincipal.cardLayout.show(interfazPrincipal.panelDerechoPrincipal, "PanelMenuJugador");
+                    interfazPrincipal.panelMenuJugador.activacionBotones(true);
+                    // Esperar a que el jugador seleccione una acción
+                    while (!interfazPrincipal.accionRealizada) {
+                        try {
+                            this.wait(1000);
+                        } catch (InterruptedException e) {
+                        }
+                    }
+                    SwingUtilities.invokeLater(() -> {
+                    interfazPrincipal.accionRealizada = false;
+                // Actualizar para el siguiente jugador
+                    interfazPrincipal.panelMenuJugador.actualizarLabels();
+                    interfazPrincipal.panelMenuJugador.activacionBotones(true);
+                    avanzarTurno();
+                });
+                }
+                faseZombie();
+                faseApariciónZombi();
+        } 
     }
 }

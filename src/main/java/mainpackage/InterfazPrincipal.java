@@ -131,33 +131,7 @@ public class InterfazPrincipal extends JFrame{
         }
     }
     
-    public void gestorTurnos() {
-            for (int i = 0; i < partida.getSupervivientes().size(); i++) {
-                partida.setTurnoActual(i);
-                partida.faseSuperviviente();
-                Superviviente supervivienteActual = partida.getSupervivienteActual();
-                while (supervivienteActual.getAcciones() > 0) {
-                    // Mostrar el panel de control del jugador
-                    cardLayout.show(panelDerechoPrincipal, "PanelMenuJugador");
-                    panelMenuJugador.activacionBotones(true);
-                    // Esperar a que el jugador seleccione una acción
-                    while (!accionRealizada) {
-                        try {
-                            this.wait(10000);
-                        } catch (InterruptedException e) {
-                            Thread.currentThread().interrupt();
-                        }
-                    }
-                    accionRealizada = false;
-                // Actualizar para el siguiente jugador
-                    panelMenuJugador.actualizarLabels();
-                    panelMenuJugador.activacionBotones(true);
-                    partida.avanzarTurno();
-                }
-                partida.faseZombie();
-                partida.faseApariciónZombi();
-            }
-        } 
+   
     
     public void accionTerminada(){
             accionRealizada = true;
