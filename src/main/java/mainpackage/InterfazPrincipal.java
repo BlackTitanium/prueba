@@ -29,8 +29,9 @@ public class InterfazPrincipal extends JFrame{
     public JPanel panelTablero, panelDerechoPrincipal, panelBotonesPermanentes;
     public Arma armaActiva;
     
-    PanelMenuJugador panelMenuJugador;
     PanelInicio panelInicio;
+    PanelMenuJugador panelMenuJugador;
+    PanelAlmacenDeAtaques panelAlmacenDeAtaques;
     
     public int nJugadores = 0;
     private String[] nombresZombis = {"Z.Ca.N", "Z.Co.N", "Z.Ab.N", "Z.Ca.B", "Z.Co.B", "Z.Ab.B", "Z.Ca.T", "Z.Co.T", "Z.Ab.T"};
@@ -79,6 +80,10 @@ public class InterfazPrincipal extends JFrame{
         panelDerechoPrincipal.revalidate();
         panelDerechoPrincipal.repaint();
         System.out.println("PanelMenuJugador añadido al CardLayout.");
+        panelAlmacenDeAtaques = new PanelAlmacenDeAtaques(partida.getAlmacenDeAtaques(),this);
+        panelDerechoPrincipal.add(panelAlmacenDeAtaques,"PanelAlmacenDeAtaques");
+        panelDerechoPrincipal.revalidate();
+        panelDerechoPrincipal.repaint();
     }
     
     // Inicializar el tablero con Casillas y Botones

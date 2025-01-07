@@ -14,6 +14,7 @@ public class Partida implements Serializable{
     private Superviviente supervivienteActual;
     private AlmacenDeAtaques almacen;
     private InterfazPrincipal interfazPrincipal;
+    private static int idZombiCont = 1;
 
     public InterfazPrincipal getInterfazPrincipal(){
         return interfazPrincipal;
@@ -60,6 +61,19 @@ public class Partida implements Serializable{
         for (String nombre : nombres) {
             supervivientes.add(new Superviviente(nombre, null, tablero, this));
         }
+    }
+
+    public Equipo crearEquipo(){
+        Random random = new Random();
+        int n = random.nextInt(2);
+        Equipo equipo = null;
+        if(n==0){
+            equipo = new Arma();
+        }
+        if(n==1){
+            equipo = new Provision();
+        }
+        return equipo;
     }
 
     public void colocarElementosIniciales(String[] nombres){
@@ -160,8 +174,6 @@ public class Partida implements Serializable{
         supervivienteActual.setAcciones(3);
         System.out.println("Acciones restantes: " + supervivienteActual.getAcciones());
     }
-    
-    
 
     public void faseZombie(){
         for (int i = 0; i < zombis.size(); i++){
@@ -183,19 +195,21 @@ public class Partida implements Serializable{
         int subtipo = random.nextInt(3);
         switch(subtipo){
             case 0:
-                z = new Zombi(tablero.getCasilla(x, y),"NORMAL",this);
+                z = new Zombi(tablero.getCasilla(x, y),"NORMAL",this,idZombiCont);
                 break;
             case 1:
-                z = new Toxico(tablero.getCasilla(x, y),"TOXICO",this);
+                z = new Toxico(tablero.getCasilla(x, y),"TOXICO",this,idZombiCont);
                 break;
             case 2:
-                z = new Berserker(tablero.getCasilla(x, y),"BERSERKER",this);
+                z = new Berserker(tablero.getCasilla(x, y),"BERSERKER",this,idZombiCont);
                 break;
         }
         // Añadir al tablero
         tablero.getCasilla(x, y).addEntidad(z);
-        
-        interfazPrincipal.botones[x][y].setText(z.getZombiParaBoton());  // Mostrar el tipo de Zombi
+        // Mostrar el Zombi y su tipo en el Tablero(interfaz)
+        interfazPrincipal.botones[x][y].setText(z.getZombiParaBoton());
+        // Incrementar el contador de zombis
+        idZombiCont++;
     }
 
     public Partida(){

@@ -12,9 +12,8 @@ public class Superviviente extends Entidad implements Serializable{
     private estado estadoActual;
     private Equipo[] inventario = new Equipo[5]; 
     private Ataque ultimoAtaque;
-
     private Partida partida;
-
+    private ArrayList<String> zombisAsesinados;
 
     public int getContadorZombis() {
         return contadorZombis;
@@ -61,14 +60,12 @@ public class Superviviente extends Entidad implements Serializable{
     public Superviviente(String nombre, Casilla c, Tablero t, Partida p){
         super(p, c);
         this.partida = p;
-        //tableroActual = t;
-        //casillaActual = c;
         this.nombre = nombre;
         this.contadorZombis = 0;
         this.mordeduras = 0;
         this.estadoActual = estado.VIVO;
         this.casillaActual = c;
-        //partida.getTablero().getCasilla(c).addSuperviviente(this);
+        this.zombisAsesinados = new ArrayList<>();
     }
 
     public void addMordeduras(){
@@ -177,4 +174,25 @@ public class Superviviente extends Entidad implements Serializable{
         ultimoAtaque = new Ataque(armas[a], partida.getAlmacenDeAtaques());
     }
     
+    public String infoSuperviviente(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("Nombre: ").append(nombre).append("\n");
+        sb.append("Estado: ").append(estadoActual).append("\n");
+        sb.append("Acciones por turno: ").append(acciones).append("\n");
+        sb.append("Inventario: ");
+        for(int i = 0; i < inventario.length; i++){
+            if(inventario[i]!= null){
+                sb.append(inventario[i].getNombre()).append(", ");
+            }
+        }
+        sb.append("\nArmas activas: ");
+        sb.append(armas[0].getNombre()).append(" y ").append(armas[1].getNombre()).append("\n");
+        sb.append("Contador de zombis: ").append(contadorZombis).append("\n");
+        sb.append("Tipo de ataque recibido: ");
+        return sb.toString();
+    }
+
+    public void añadirZombiAsesinado(String infoZombiAsesinado){
+        zombisAsesinados.add(infoZombiAsesinado);
+    }
 }

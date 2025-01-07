@@ -1,12 +1,36 @@
 package mainpackage;
 
 import java.io.Serializable;
+import java.util.Random;
 
 public class Provision extends Equipo implements Serializable{
     private int valorEnergetico;  
     private String caducidad;
 
     
+    public Provision() {
+        switch (generarTipoProvision()) {
+            case 1:  
+                nombre = "Comida";
+                valorEnergetico = 600;  
+                caducidad = generarFecha();  
+                break;
+            case 2:  
+                nombre = "Bebida";
+                valorEnergetico = 200;  
+                caducidad = generarFecha();  
+                break;
+            case 3:  
+                nombre = "Medicinas";
+                valorEnergetico = 800;  
+                caducidad = generarFecha();  
+                break;
+            default:
+                System.out.println("Tipo de provisión no válida.");
+                break;
+        }
+    }
+
     public Provision(int tipo) {
         switch (tipo) {
             case 1:  
@@ -26,11 +50,15 @@ public class Provision extends Equipo implements Serializable{
                 break;
             default:
                 System.out.println("Tipo de provisión no válida.");
-                
                 break;
         }
     }
 
+    public int generarTipoProvision(){
+        Random random = new Random();
+        // Generar un número aleatorio entre 1, 2 y 3
+        return random.nextInt(3) + 1;
+    }
     
     public String getNombre() {
         return nombre;
