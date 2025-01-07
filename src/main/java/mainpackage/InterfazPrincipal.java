@@ -74,12 +74,11 @@ public class InterfazPrincipal extends JFrame{
     }
     
     public void inicializarPaneles(){
-        System.out.println("Inicializando PanelMenuJugador...");
         panelMenuJugador = new PanelMenuJugador(partida,this);
         panelDerechoPrincipal.add(panelMenuJugador,"PanelMenuJugador");
         panelDerechoPrincipal.revalidate();
         panelDerechoPrincipal.repaint();
-        System.out.println("PanelMenuJugador añadido al CardLayout.");
+        
         panelAlmacenDeAtaques = new PanelAlmacenDeAtaques(partida.getAlmacenDeAtaques(),this);
         panelDerechoPrincipal.add(panelAlmacenDeAtaques,"PanelAlmacenDeAtaques");
         panelDerechoPrincipal.revalidate();
