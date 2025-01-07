@@ -10,6 +10,9 @@ import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+import java.util.zip.ZipEntry;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -30,6 +33,7 @@ public class InterfazPrincipal extends JFrame{
     PanelInicio panelInicio;
     
     public int nJugadores = 0;
+    private String[] nombresZombis = {"Z.Ca.N", "Z.Co.N", "Z.Ab.N", "Z.Ca.B", "Z.Co.B", "Z.Ab.B", "Z.Ca.T", "Z.Co.T", "Z.Ab.T"};
     
     public Partida partida;
     private Tablero tablero;
@@ -51,7 +55,6 @@ public class InterfazPrincipal extends JFrame{
         // GridLayout(,) organiza los componentes en una cuadrícula rectangular con un número fijo de filas y columnas,
         // donde todos los componentes tienen el mismo tamaño
         panelTablero.setPreferredSize(new Dimension(745, 745));  // Tamaño fijo para el tablero
-        inicializarTablero();
         
         // Manejador de Paneles
         cardLayout = new CardLayout();
@@ -66,7 +69,6 @@ public class InterfazPrincipal extends JFrame{
         // Añadir paneles al JFrame
         add(panelTablero, BorderLayout.CENTER);  // Tablero en el centro (ocupa la izquierda)
         add(panelDerechoPrincipal, BorderLayout.EAST);    // Panel de control a la derecha
-        
         setVisible(true);
     }
     
@@ -80,7 +82,7 @@ public class InterfazPrincipal extends JFrame{
     }
     
     // Inicializar el tablero con Casillas y Botones
-    private void inicializarTablero() {
+    public void inicializarTablero() {
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
                 botones[i][j] = new JButton();
@@ -95,9 +97,11 @@ public class InterfazPrincipal extends JFrame{
                     public void actionPerformed(ActionEvent e){
                         if(panelMenuJugador.movimientoActivado){
                             moverElemento(botones[I][J], I, J);
+                            actualizarCasillas(tablero.getCasilla(botones[I][J].getX(), botones[I][J].getY()), tablero.getCasilla(I,J));
                         } else if(panelMenuJugador.atacarActivado){
                             if(armaActiva != null){
                                 atacar(botones[I][J], I, J);
+                                actualizarCasillas(tablero.getCasilla(botones[I][J].getX(), botones[I][J].getY()), tablero.getCasilla(I,J));
                             } else{
                                 JOptionPane.showMessageDialog(null,"No puede atacar en este momento");
                                 panelMenuJugador.activacionBotones(true);
@@ -146,19 +150,66 @@ public class InterfazPrincipal extends JFrame{
                     panelMenuJugador.activacionBotones(true);
                     partida.avanzarTurno();
                 }
-                // After all players have taken their turns, handle the zombie phase
                 partida.faseZombie();
-                // Handle new zombie appearances
                 partida.faseApariciónZombi();
             }
         } 
     
     public void accionTerminada(){
-        synchronized(this){
             accionRealizada = true;
-            this.notify();
-        }
     }
+
+    public void actualizarCasillas(Casilla origen, Casilla destino){
+        Casilla[] casillas = {origen, destino};
+        for (int i = 0; i < 2; i++){
+                StringBuilder sb1 = new StringBuilder("<html>");
+                StringBuilder sb2 = new StringBuilder();   
+                if(casillas[i].getContadorSupervivientes() != 0){
+                    for (int k = 0; k < casillas[i].getContadorSupervivientes(); k++){
+                            String nombreTemp = casillas[i].getSuperviviente(k).getNombre();
+                            sb1.append(nombreTemp);
+                            sb1.append("<br>");
+                        }
+                    }
+                if(casillas[i].getContadorZombis() != 0){
+                    for (int k = 0; k < casillas[i].getContadorZombis(); k++){
+                        String zombiTemp = casillas[i].getZombi(k).getZombiParaBoton(); 
+                        sb2.append(zombiTemp);      
+                    }
+                    
+                }
+                sb1.append(sb2.toString());
+                sb1.append("</html>");
+                botones[casillas[i].getX()][casillas[i].getY()].setText(sb1.toString());
+            }
+        }
+    public static int contarApariciones(String texto, String patron) {
+        Pattern pattern = Pattern.compile(patron);
+        Matcher matcher = pattern.matcher(texto);
+        int contador = 0;
+    
+        while (matcher.find()) {
+            contador++;
+        }
+        return contador;
+    }
+    public static String eliminarPatron(String texto, String patron, int veces) {
+        Pattern pattern = Pattern.compile(patron);
+        Matcher matcher = pattern.matcher(texto);
+        StringBuilder resultado = new StringBuilder(texto);
+        int eliminados = 0;
+    
+        while (matcher.find() && eliminados < veces) {
+            int start = matcher.start();
+            int end = matcher.end();
+            resultado.replace(start, end, ""); // Eliminar el patrón encontrado
+            matcher.reset(resultado); // Reiniciar el matcher con el nuevo texto
+            eliminados++;
+        }
+        return resultado.toString();
+    }
+    
+
     // Acción al hacer clic en una casilla del tablero
     public void moverElemento(JButton boton, int x, int y){
         if(panelMenuJugador.movimientoActivado){

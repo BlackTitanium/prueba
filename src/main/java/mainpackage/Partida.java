@@ -65,7 +65,7 @@ public class Partida implements Serializable{
     public void colocarElementosIniciales(String[] nombres){
         supervivientes = new ArrayList<Superviviente>(interfazPrincipal.nJugadores);
         Casilla casillaInicial = new Casilla(0,0);
-        interfazPrincipal.reiniciarTablero();
+        interfazPrincipal.inicializarTablero();
         
         StringBuilder sb1 = new StringBuilder();
         sb1.append("<html>"); // Inicio con HTML

@@ -54,8 +54,8 @@ public class Casilla implements Serializable{
         contadorSupervivientes++;
     }
 
-    public Superviviente getSuperviviente(){
-        return supervivientes.get(0);
+    public Superviviente getSuperviviente(int a){
+        return supervivientes.get(a);
     }
 
     public Zombi getZombi(int a){
