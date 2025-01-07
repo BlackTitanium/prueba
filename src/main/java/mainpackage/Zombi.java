@@ -83,7 +83,7 @@ public class Zombi extends Entidad implements Serializable{
     public void activar(){
         for (int i=0; i<activaciones; i++){
             if(casillaActual.getContadorSupervivientes()!=0){
-                atacar(casillaActual.getSuperviviente());
+                atacar(casillaActual.getSuperviviente(0));
             } else {
                 if(Math.abs(casillaActual.getX()-tableroActual.objetivoZombi(casillaActual).getX())>Math.abs(casillaActual.getY()-tableroActual.objetivoZombi(casillaActual).getY())){
                     mover(casillaActual.getX()+1,casillaActual.getY());

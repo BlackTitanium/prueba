@@ -14,7 +14,7 @@ public class Toxico extends Zombi {
         super.reaccion(arma, a);
         if(aguante == 0){
             if(casillaActual.getContadorSupervivientes()!=0){
-                casillaActual.getSuperviviente().addMordeduras();
+                casillaActual.getSuperviviente(0).addMordeduras();
             }
         }
     }
