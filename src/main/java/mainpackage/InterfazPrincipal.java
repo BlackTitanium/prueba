@@ -211,8 +211,8 @@ public class InterfazPrincipal extends JFrame{
                     panelMenuJugador.activacionBotones(true);
                 });
             }
-            partida.faseZombie();
-            partida.faseApariciónZombi();
+//            partida.faseZombie();
+//            partida.faseApariciónZombi();
             partida.avanzarTurno();
             System.out.println(partida.getTurnoParaSuperviviente());
         }
