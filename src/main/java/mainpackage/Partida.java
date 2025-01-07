@@ -152,7 +152,8 @@ public class Partida implements Serializable{
                 case Entidad.accion.NADA: //Nada
                     break;
         }
-        interfazPrincipal.panelMenuJugador.actualizarLabels();
+        // NS SI PONERLO AQUÍ O EN EL GESTOR DE TURNOS AL FINAL, ES PARA QUE SE ACTUALIZEN LAS ACCIONES EN LA INTERFAZ
+        //interfazPrincipal.panelMenuJugador.actualizarLabels();
     }
     public void faseSuperviviente(){ //eleccion viene del input de la interfaz
         supervivienteActual = this.getSupervivienteActual();
