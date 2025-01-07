@@ -171,12 +171,10 @@ public class PanelMenuJugador extends JPanel{
         botonMoverse.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-//                interfazPrincipal.movimientoActivado = true;
                 movimientoActivado = true;
                 activacionBotones(false);
                 partida.getSupervivienteActual().setSeleccion(Entidad.accion.MOVER);
                 System.out.println("Movimiento activado: " + movimientoActivado);
-//              
             }
         });
         
@@ -217,6 +215,12 @@ public class PanelMenuJugador extends JPanel{
                 interfazPrincipal.armaActiva = partida.getSupervivienteActual().getArmas()[0];
                 activacionArmas(false);
                 activacionInventario(true);
+            }
+        });
+        botonAlmacenDeAtaques.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                interfazPrincipal.cardLayout.show(interfazPrincipal.panelDerechoPrincipal,"PanelAlmacenDeAtaques");
             }
         });
     }

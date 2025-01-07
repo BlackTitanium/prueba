@@ -26,8 +26,9 @@ public class InterfazPrincipal extends JFrame{
     public JPanel panelTablero, panelDerechoPrincipal, panelBotonesPermanentes;
     public Arma armaActiva;
     
-    PanelMenuJugador panelMenuJugador;
     PanelInicio panelInicio;
+    PanelMenuJugador panelMenuJugador;
+    PanelAlmacenDeAtaques panelAlmacenDeAtaques;
     
     public int nJugadores = 0;
     
@@ -77,6 +78,10 @@ public class InterfazPrincipal extends JFrame{
         panelDerechoPrincipal.revalidate();
         panelDerechoPrincipal.repaint();
         System.out.println("PanelMenuJugador añadido al CardLayout.");
+        panelAlmacenDeAtaques = new PanelAlmacenDeAtaques(partida.getAlmacenDeAtaques(),this);
+        panelDerechoPrincipal.add(panelAlmacenDeAtaques,"PanelAlmacenDeAtaques");
+        panelDerechoPrincipal.revalidate();
+        panelDerechoPrincipal.repaint();
     }
     
     // Inicializar el tablero con Casillas y Botones

@@ -2,19 +2,20 @@ package mainpackage;
 
 import java.io.Serializable;
 import java.util.Random;
+import java.util.ArrayList;
 
 public class Zombi extends Entidad implements Serializable{
     public static String[] tiposZombi = {"CAMINANTE", "CORREDOR", "ABOMINACION"};
     protected int activaciones, aguante;
     protected String tipo;
     protected String subtipo;
-
+    protected int identificador;
     private Partida partida;
+    private ArrayList<String> supervivientesAtacados;
 
-    public Zombi(Casilla c, String subtipoZ, Partida partida){
+    public Zombi(Casilla c, String subtipoZ, Partida partida, int id){
         super(partida, c);
-        //tableroActual = t;
-        //casillaActual = c;
+        this.identificador = id;
         this.partida = partida;
         String tipos = aparicionZombi();
         this.tipo = tipos;
@@ -33,6 +34,7 @@ public class Zombi extends Entidad implements Serializable{
                 break;
         }
         subtipo = subtipoZ;
+        this.supervivientesAtacados = new ArrayList<>();
     }
 
     public String aparicionZombi(){
@@ -112,5 +114,31 @@ public class Zombi extends Entidad implements Serializable{
         sb.append("<br>");
         sb.append("</html>");
         return sb.toString();
+    }
+
+    public String infoZombi(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("ID: ").append(identificador).append("\n");
+        sb.append("Zombi: ").append(tipo).append(" ").append(subtipo).append("\n");
+        sb.append("Aguante: ").append(aguante).append("\n");
+        sb.append("Activaciones: ").append(activaciones).append("\n");
+        sb.append("Características:\n");
+        if(subtipo.contains("NORMAL")){
+            sb.append("Se elimina con un ataque de potencia igual a su aguante.\n");
+        } else if(subtipo.contains("TOXICO")){
+            sb.append("Al morir en la misma casilla que un Superviviente\n");
+            sb.append("causa una herida al atacante debido a su sangre tóxica.\n");
+        } else if(subtipo.contains("BERSERKER")){
+            sb.append("Inmune a ataques a distancia\n");
+            sb.append("(desde casillas diferentes a las que se encuentre el zombi)\n");
+        }
+        return sb.toString();
+    }
+
+    public void añadirSupervivienteAtacado(String infoSupervivienteAtacado){
+        StringBuilder sb = new StringBuilder();
+        sb.append(infoSupervivienteAtacado);
+        sb.append("mordedura/herida").append("\n"); // ESTO HAY QUE MODIFICARLO
+        supervivientesAtacados.add(sb.toString());
     }
 }

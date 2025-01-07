@@ -23,4 +23,12 @@ public class AlmacenDeAtaques implements Serializable{
             System.out.println(ataque);
         }
     }
+
+    public String mostrarHistorialAtaquesInterfaz(){
+        StringBuilder sb = new StringBuilder();
+        for(String ataque : historialAtaques){
+            sb.append(ataque);
+        }
+        return sb.toString();
+    }
 }
