@@ -158,15 +158,15 @@ public class PanelMenuJugador extends JPanel{
         botonInv5.setForeground(Color.BLACK);
         add(botonInv5);
         
-        activacionBotones(true);
-        actualizarLabels();
-        
         botonAlmacenDeAtaques = new JButton("Historial Ataques");
         botonAlmacenDeAtaques.setBounds(70,650,155,30);
         botonAlmacenDeAtaques.setBackground(Color.LIGHT_GRAY);
         botonAlmacenDeAtaques.setFont(new Font("Arial", 1, 14));
         botonAlmacenDeAtaques.setForeground(Color.BLACK);
         add(botonAlmacenDeAtaques);
+
+        activacionBotones(true);
+        actualizarLabels();
         
         botonMoverse.addActionListener(new ActionListener(){
             @Override
@@ -253,5 +253,40 @@ public class PanelMenuJugador extends JPanel{
         numAcciones.setText("Acciones: " + partida.getSupervivienteActual().getAcciones());
         contZombis.setText("Numero de zombis asesinados: " + partida.getSupervivienteActual().getContadorZombis());
         mordeduras.setText("Mordeduras : " + partida.getSupervivienteActual().getMordeduras());
+        try {
+            botonArma1.setText(partida.getSupervivienteActual().getArmas()[0].getNombre());
+        } catch (NullPointerException e) {
+            botonArma1.setText("Arma 1: Vacío");
+        }
+        try {
+            botonArma2.setText(partida.getSupervivienteActual().getArmas()[1].getNombre());
+        } catch (NullPointerException e) {
+            botonArma2.setText("Arma 2: Vacío");
+        }
+        try {
+            botonInv1.setText(partida.getSupervivienteActual().getInventario()[0].getNombre());
+        } catch (NullPointerException e) {
+            botonInv1.setText("Inventario 1: Vacío");
+        }
+        try {
+            botonInv2.setText(partida.getSupervivienteActual().getInventario()[1].getNombre());
+        } catch (NullPointerException e) {
+            botonInv2.setText("Inventario 2: Vacío");
+        }
+        try {
+            botonInv3.setText(partida.getSupervivienteActual().getInventario()[2].getNombre());
+        } catch (NullPointerException e) {
+            botonInv3.setText("Inventario 3: Vacío");
+        }
+        try {
+            botonInv4.setText(partida.getSupervivienteActual().getInventario()[3].getNombre());
+        } catch (NullPointerException e) {
+            botonInv4.setText("Inventario 4: Vacío");
+        }
+        try {
+            botonInv5.setText(partida.getSupervivienteActual().getInventario()[4].getNombre());
+        } catch (NullPointerException e) {
+            botonInv5.setText("Inventario 5: Vacío");
+        }
     }
 }

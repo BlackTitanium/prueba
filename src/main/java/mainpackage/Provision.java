@@ -3,7 +3,6 @@ package mainpackage;
 import java.io.Serializable;
 
 public class Provision extends Equipo implements Serializable{
-    private String nombre;
     private int valorEnergetico;  
     private String caducidad;
 

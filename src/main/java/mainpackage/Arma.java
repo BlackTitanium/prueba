@@ -1,7 +1,6 @@
 package mainpackage;
 
 public class Arma extends Equipo{
-    private String nombre;
     private int potencia, dados, alcance, exito;
 
 

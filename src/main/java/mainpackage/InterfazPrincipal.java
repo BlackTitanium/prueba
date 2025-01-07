@@ -96,7 +96,12 @@ public class InterfazPrincipal extends JFrame{
                         if(panelMenuJugador.movimientoActivado){
                             moverElemento(botones[I][J], I, J);
                         } else if(panelMenuJugador.atacarActivado){
-                            atacar(botones[I][J], I, J);
+                            if(armaActiva != null){
+                                atacar(botones[I][J], I, J);
+                            } else{
+                                JOptionPane.showMessageDialog(null,"No puede atacar en este momento");
+                                panelMenuJugador.activacionBotones(true);
+                            }
                         } else{
                             JOptionPane.showMessageDialog(null,"No puede moverse en este momento");
                         }
