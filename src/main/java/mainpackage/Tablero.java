@@ -74,7 +74,7 @@ public class Tablero implements Serializable{
 
         System.out.println("En moverSuperTablero/Despues(CO): Supervivientes: " + getCasilla(xOrigen, yOrigen).getContadorSupervivientes() + " Zombis: " + getCasilla(xOrigen, yOrigen).getContadorZombis());
         System.out.println("Origen: x: " + xOrigen + ", y: " + yOrigen);
-        System.out.println("En moverSuperTablero/Antes(CD): Supervivientes: " + getCasilla(xDestino, yDestino).getContadorSupervivientes() + " Zombis: " + getCasilla(xDestino, yDestino).getContadorZombis());
+        System.out.println("En moverSuperTablero/Despues(CD): Supervivientes: " + getCasilla(xDestino, yDestino).getContadorSupervivientes() + " Zombis: " + getCasilla(xDestino, yDestino).getContadorZombis());
         System.out.println("Destino: x: " + xDestino + ", y: " + yDestino);
     }
 }
