@@ -9,14 +9,22 @@ public class Ataque implements Serializable{
     private String resultado;
     private int nDados;
     private int exito;
+    public int nExitos;
+    private AlmacenDeAtaques almacen;
     private static int nCarasDado = 6;
 
-    public Ataque(Arma a){
-        nDados = a.getDados();
-        exito = a.getExito();
+    public Ataque(Arma a, AlmacenDeAtaques al){
+        this.nDados = a.getDados();
+        this.exito = a.getExito();
+        this.almacen = al;
+        this.nExitos = numExitos(al);
     }
 
-    public void obtenerResultado(AlmacenDeAtaques almacen, int numExitos){
+    public int getNumExitos(){
+        return nExitos;
+    }
+
+    private void obtenerResultado(AlmacenDeAtaques almacen, int numExitos){
         StringBuilder sb = new StringBuilder();
 
         sb.append("Resultado del ataque:\n");

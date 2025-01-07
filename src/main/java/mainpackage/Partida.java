@@ -3,8 +3,8 @@ package mainpackage;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.Scanner;
-import javax.swing.*;
+
+import javax.swing.SwingUtilities;
 
 public class Partida implements Serializable{
     public ArrayList<Superviviente> supervivientes;
@@ -42,6 +42,10 @@ public class Partida implements Serializable{
     public Tablero getTablero() {
         return tablero;
     }
+
+    public AlmacenDeAtaques getAlmacenDeAtaques(){
+        return almacen;
+    }
     public int getTurnoActual(){
         return turnoActual;
     }
@@ -52,23 +56,23 @@ public class Partida implements Serializable{
 
     public void introducirSupervivientes(String[] nombres){
         for (String nombre : nombres) {
-            supervivientes.add(new Superviviente(nombre, null, tablero));
+            supervivientes.add(new Superviviente(nombre, null, tablero, this));
         }
     }
 
     public void colocarElementosIniciales(String[] nombres){
         supervivientes = new ArrayList<Superviviente>(interfazPrincipal.nJugadores);
-        Casilla.inicializarArrayList();
+        //Casilla.inicializarArrayList();
         SwingUtilities.invokeLater(new Runnable() {
             @Override public void run() {
                 interfazPrincipal.reiniciarTablero();
             }
         });
-        
+        System.out.println("En colocarElementosIniciales/Antes: Supervivientes: " + tablero.getCasilla(0, 0).getContadorSupervivientes() + " Zombis: " + tablero.getCasilla(0, 0).getContadorZombis());
         StringBuilder sb1 = new StringBuilder();
         sb1.append("<html>"); // Inicio con HTML
         for(int i = 0; i<interfazPrincipal.nJugadores; i++){
-            Superviviente s = new Superviviente(nombres[i], tablero.getCasilla(0,0), tablero);
+            Superviviente s = new Superviviente(nombres[i], tablero.getCasilla(0,0), tablero, this);
             tablero.getCasilla(0,0).addSuperviviente(s);
             supervivientes.add(s);
             sb1.append(s.getNombre());
@@ -76,6 +80,8 @@ public class Partida implements Serializable{
         }
         sb1.append("</html>"); // Final con HTML
         String textoBotonSupervivientes = sb1.toString();
+        supervivienteActual = supervivientes.get(0);
+        System.out.println("En colocarElementosIniciales/Despues: Supervivientes: " + tablero.getCasilla(0, 0).getContadorSupervivientes() + " Zombis: " + tablero.getCasilla(0, 0).getContadorZombis());
         // Poner texto en el boton[0][0]
         SwingUtilities.invokeLater(new Runnable() {
             @Override public void run() {
@@ -96,6 +102,18 @@ public class Partida implements Serializable{
             }
         });    
     }
+
+//    public void moverSuperviviente(int xOrigen, int yOrigen, int xDestino, int yDestino){
+//        System.out.println("En moverSuperPartida/Antes(CO): Supervivientes: " + tablero.getCasilla(xOrigen, yOrigen).getContadorSupervivientes() + " Zombis: " + tablero.getCasilla(xOrigen, yOrigen).getContadorZombis());
+//        System.out.println("En moverSuperPartida/Antes(CD): Supervivientes: " + tablero.getCasilla(xDestino, yDestino).getContadorSupervivientes() + " Zombis: " + tablero.getCasilla(xDestino, yDestino).getContadorZombis());
+//
+//        tablero.getCasilla(xOrigen, yOrigen).removeSuperviviente(supervivienteActual);
+//        tablero.getCasilla(xDestino,yDestino).addSuperviviente(supervivienteActual);
+//
+//        System.out.println("En moverSuperPartida/Despues(CO): Supervivientes: " + tablero.getCasilla(xOrigen, yOrigen).getContadorSupervivientes() + " Zombis: " + tablero.getCasilla(xOrigen, yOrigen).getContadorZombis());
+//        System.out.println("En moverSuperPartida/Antes(CD): Supervivientes: " + tablero.getCasilla(xDestino, yDestino).getContadorSupervivientes() + " Zombis: " + tablero.getCasilla(xDestino, yDestino).getContadorZombis());
+//
+//    }
 
     public void activarSuperviviente(int ranura, int x, int y){
         switch(supervivienteActual.getSeleccion()){
@@ -181,13 +199,13 @@ public class Partida implements Serializable{
         int subtipo = random.nextInt(3);
         switch(subtipo){
             case 0:
-                z = new Zombi(tablero,tablero.getCasilla(x, y),"NORMAL");
+                z = new Zombi(tablero.getCasilla(x, y),"NORMAL",this);
                 break;
             case 1:
-                z = new Toxico(tablero,tablero.getCasilla(x, y),"TOXICO");
+                z = new Toxico(tablero.getCasilla(x, y),"TOXICO",this);
                 break;
             case 2:
-                z = new Berserker(tablero,tablero.getCasilla(x, y),"BERSERKER");
+                z = new Berserker(tablero.getCasilla(x, y),"BERSERKER",this);
                 break;
         }
         // Añadir al tablero
@@ -204,7 +222,7 @@ public class Partida implements Serializable{
     }
 
     public Partida(){
-        tablero = new Tablero();
+        tablero = new Tablero(this);
         almacen =  new AlmacenDeAtaques();
 
         // LLamamos a la InterfazPrincipal

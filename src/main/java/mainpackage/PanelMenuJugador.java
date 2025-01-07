@@ -123,7 +123,8 @@ public class PanelMenuJugador extends JPanel{
         botonAtacar.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                
+                partida.getSupervivienteActual().setSeleccion(Entidad.accion.MOVER);
+//                partida.getSupervivienteActual().activar(0, x, y);
             }
         });
         

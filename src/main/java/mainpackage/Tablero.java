@@ -8,11 +8,14 @@ public class Tablero implements Serializable{
     private Random random = new Random();
     public boolean[][] posicionesOcupadas = new boolean[10][10];
 
+    private Partida partida;
+
     public void setMapa(Casilla c){
         mapa[c.getX()][c.getY()] = c;
     }
 
-    public Tablero(){
+    public Tablero(Partida partida){
+        this.partida = partida;
         mapa = new Casilla[10][10];
         for (int i=0; i<10; i++){
             for(int j=0; j<10; j++){
@@ -34,6 +37,9 @@ public class Tablero implements Serializable{
         return mapa[a][b];
     }
 
+    public Casilla getCasilla(Casilla c){
+        return mapa[c.getX()][c.getY()];
+    }
     public void reiniciarTablero(){
         for (int i=0; i<10; i++){
             for(int j=0; j<10; j++){
@@ -55,5 +61,20 @@ public class Tablero implements Serializable{
                     }
                 }
         return objetivo;
+    }
+
+    public void moverSuperviviente(int xOrigen, int yOrigen, int xDestino, int yDestino){
+        System.out.println("En moverSuperTablero/Antes(CO): Supervivientes: " + getCasilla(xOrigen, yOrigen).getContadorSupervivientes() + " Zombis: " + getCasilla(xOrigen, yOrigen).getContadorZombis());
+        System.out.println("Origen: x: " + xOrigen + ", y: " + yOrigen);
+        System.out.println("En moverSuperTablero/Antes(CD): Supervivientes: " + getCasilla(xDestino, yDestino).getContadorSupervivientes() + " Zombis: " + getCasilla(xDestino, yDestino).getContadorZombis());
+        System.out.println("Origen: x: " + xDestino + ", y: " + yDestino);
+
+        getCasilla(xOrigen, yOrigen).removeSuperviviente(partida.getSupervivienteActual());
+        getCasilla(xDestino,yDestino).addSuperviviente(partida.getSupervivienteActual());
+
+        System.out.println("En moverSuperTablero/Despues(CO): Supervivientes: " + getCasilla(xOrigen, yOrigen).getContadorSupervivientes() + " Zombis: " + getCasilla(xOrigen, yOrigen).getContadorZombis());
+        System.out.println("Origen: x: " + xOrigen + ", y: " + yOrigen);
+        System.out.println("En moverSuperTablero/Antes(CD): Supervivientes: " + getCasilla(xDestino, yDestino).getContadorSupervivientes() + " Zombis: " + getCasilla(xDestino, yDestino).getContadorZombis());
+        System.out.println("Origen: x: " + xDestino + ", y: " + yDestino);
     }
 }

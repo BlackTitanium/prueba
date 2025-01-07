@@ -2,7 +2,6 @@ package mainpackage;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 
 public class Superviviente extends Entidad implements Serializable{
     private String nombre;
@@ -13,6 +12,8 @@ public class Superviviente extends Entidad implements Serializable{
     private estado estadoActual;
     private Equipo[] inventario = new Equipo[5]; 
     private Ataque ultimoAtaque;
+
+    private Partida partida;
 
 
     public int getContadorZombis() {
@@ -57,8 +58,9 @@ public class Superviviente extends Entidad implements Serializable{
         this.estadoActual = estadoActual;
     }
 
-    public Superviviente(String nombre, Casilla c, Tablero t){
-        super(t, c);
+    public Superviviente(String nombre, Casilla c, Tablero t, Partida p){
+        super(p, c);
+        this.partida = p;
         //tableroActual = t;
         //casillaActual = c;
         this.nombre = nombre;
@@ -66,6 +68,7 @@ public class Superviviente extends Entidad implements Serializable{
         this.mordeduras = 0;
         this.estadoActual = estado.VIVO;
         this.casillaActual = c;
+        //partida.getTablero().getCasilla(c).addSuperviviente(this);
     }
 
     public void addMordeduras(){
@@ -173,7 +176,7 @@ public class Superviviente extends Entidad implements Serializable{
     
     public void atacar(int a) {
         acciones--;
-        ultimoAtaque = new Ataque(armas[a]);
+        ultimoAtaque = new Ataque(armas[a], partida.getAlmacenDeAtaques());
     }
     
 }

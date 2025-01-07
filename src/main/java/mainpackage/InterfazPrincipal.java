@@ -123,6 +123,7 @@ public class InterfazPrincipal extends JFrame{
             while (supervivienteActual.getAcciones() > 0) {
                 // Wait for the player to perform actions
                 // This can be handled by the UI event listeners
+                panelMenuJugador.actualizarLabels();
             }
             // Actualizar para el siguiente jugador
             SwingUtilities.invokeLater(() -> {
@@ -156,16 +157,33 @@ public class InterfazPrincipal extends JFrame{
                     boton.setForeground(Color.WHITE);
                 } else if (elementoSeleccionado != null) {
                     // Verificar si el movimiento es a una casilla adyacente 
-                     if (Math.abs(elementoSeleccionado.x - x) <= 1 && Math.abs(elementoSeleccionado.y - y) <= 1) {                    
+                     if (Math.abs(elementoSeleccionado.x - x) <= 1 && Math.abs(elementoSeleccionado.y - y) <= 1) {                  
                         // Mover el superviviente a la nueva casilla y marcarla como ocupada
+//                        System.out.println("Antes de cambiar en InterfazPrincipal(ES): Superviviente: " + tablero.getCasilla(elementoSeleccionado.x, elementoSeleccionado.y).getContadorSupervivientes() +
+//                                "Zombis: " + tablero.getCasilla(elementoSeleccionado.x, elementoSeleccionado.y).getContadorZombis());
+//                        System.out.println("Antes de cambiar en InterfazPrincipal(EO): Superviviente: " + tablero.getCasilla(x, y).getContadorSupervivientes() +
+//                                "Zombis: " + tablero.getCasilla(x, y).getContadorZombis());
+//                        
+//                        tablero.getCasilla(elementoSeleccionado.x, elementoSeleccionado.y).removeSuperviviente(supervivienteActual);
+//                        tablero.getCasilla(x,y).addSuperviviente(supervivienteActual);
+//                        partida.moverSuperviviente(elementoSeleccionado.x,elementoSeleccionado.y,x,y);
+//                        System.out.println("Despues de cambiar en InterfazPrincipal(ES): Superviviente: " + tablero.getCasilla(elementoSeleccionado.x, elementoSeleccionado.y).getContadorSupervivientes() +
+//                                "Zombis: " + tablero.getCasilla(elementoSeleccionado.x, elementoSeleccionado.y).getContadorZombis());
+//                        System.out.println("Despues de cambiar en InterfazPrincipal(EO): Superviviente: " + tablero.getCasilla(x, y).getContadorSupervivientes() +
+//                                "Zombis: " + tablero.getCasilla(x, y).getContadorZombis());
+
                         supervivienteActual.setSeleccion(Entidad.accion.MOVER);
                         supervivienteActual.activar(0, x, y);
                         tablero.posicionesOcupadas[x][y] = true;
                         botones[elementoSeleccionado.x][elementoSeleccionado.y].setBackground(Color.LIGHT_GRAY);
                         botones[elementoSeleccionado.x][elementoSeleccionado.y].setForeground(Color.BLACK);
-//                        System.out.println("Despues de llamar en InterfazPrincipal: Superviviente: " + tablero.getCasilla(elementoSeleccionado.x, elementoSeleccionado.y).getContadorSupervivientes() +
-//                                "Zombis: " + tablero.getCasilla(elementoSeleccionado.x, elementoSeleccionado.y).getContadorZombis());
-
+                        System.out.println("Despues de llamar en InterfazPrincipal(CO): Superviviente: " + tablero.getCasilla(elementoSeleccionado.x, elementoSeleccionado.y).getContadorSupervivientes() +
+                                "Zombis: " + tablero.getCasilla(elementoSeleccionado.x, elementoSeleccionado.y).getContadorZombis());
+                        System.out.println("Origen: x: " + elementoSeleccionado.x + ", y: " + elementoSeleccionado.y);
+                        System.out.println("Despues de llamar en InterfazPrincipal(CD): Superviviente: " + tablero.getCasilla(x, y).getContadorSupervivientes() +
+                                "Zombis: " + tablero.getCasilla(x, y).getContadorZombis());
+                        System.out.println("Destino: x: " + x + ", y: " + y);
+                        
                         tablero.posicionesOcupadas[x][y] = true;
                         botones[elementoSeleccionado.x][elementoSeleccionado.y].setBackground(Color.LIGHT_GRAY);
                         botones[elementoSeleccionado.x][elementoSeleccionado.y].setForeground(Color.BLACK);
@@ -203,7 +221,6 @@ public class InterfazPrincipal extends JFrame{
 
                         panelMenuJugador.activacionBotones(true);
                         panelMenuJugador.movimientoActivado = false;
-//                        movimientoActivado = false;
                     }
                 } else{
                     System.out.println("Movimiento activado: " + panelMenuJugador.movimientoActivado);
@@ -211,5 +228,10 @@ public class InterfazPrincipal extends JFrame{
                 }
             }
         }
-    }    
+    }
+    
+    public static void main(String args[]){ 
+        Juego juego = new Juego();
+        juego.iniciarPartida();
+    }
 }

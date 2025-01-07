@@ -1,8 +1,8 @@
 package mainpackage;
 
 public class Toxico extends Zombi {
-    public Toxico(Tablero t, Casilla c, String subtipoZ) {
-        super(t, c, subtipoZ);
+    public Toxico(Casilla c, String subtipoZ, Partida partida) {
+        super(c, subtipoZ,partida);
     }
 
     @Override

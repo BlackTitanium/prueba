@@ -7,16 +7,18 @@ import java.util.Random;
 public class Casilla implements Serializable{
 
     private int x, y, contadorZombis, contadorSupervivientes;
-    public static ArrayList<Zombi> zombis;
-    public static ArrayList<Superviviente> supervivientes;
+    public ArrayList<Zombi> zombis;
+    public ArrayList<Superviviente> supervivientes;
     private static Random random = new Random();
     private boolean buscada = false;
 
     public Casilla(int a, int b){
+        zombis = new ArrayList<>();
+        supervivientes = new ArrayList<>();
         x = a; y = b;
     }
 
-    public static void inicializarArrayList(){
+    public void inicializarArrayList(){
         zombis = new ArrayList<>();
         supervivientes = new ArrayList<>();
     }
