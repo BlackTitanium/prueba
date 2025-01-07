@@ -106,7 +106,7 @@ public class InterfazPrincipal extends JFrame{
     public void reiniciarTablero() {
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
-                botones[i][j].setText("");
+                botones[i][j].setText("<html></html>");
                 botones[i][j].setBackground(Color.LIGHT_GRAY);
                 botones[i][j].setForeground(Color.BLACK);
                 tablero.reiniciarTablero();
