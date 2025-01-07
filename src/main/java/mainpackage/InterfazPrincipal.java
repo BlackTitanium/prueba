@@ -126,10 +126,8 @@ public class InterfazPrincipal extends JFrame{
                 panelMenuJugador.actualizarLabels();
             }
             // Actualizar para el siguiente jugador
-            SwingUtilities.invokeLater(() -> {
-                panelMenuJugador.actualizarLabels();
-                panelMenuJugador.activacionBotones(true);
-            });
+            panelMenuJugador.actualizarLabels();
+            panelMenuJugador.activacionBotones(true);
         }
         // After all players have taken their turns, handle the zombie phase
         partida.faseZombie();
