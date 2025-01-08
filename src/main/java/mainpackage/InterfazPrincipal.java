@@ -266,6 +266,7 @@ public class InterfazPrincipal extends JFrame{
                     String nombre = aux.toString();
                     String textoBotonOrigenFinal = textoBotonOrigen.replace(nombre,""); // Le quito el nombre del jugador
                     if(origen.getContadorZombis() > 0){ // Si hay zombis
+                        supervivienteActual.lessAcciones(origen.getContadorZombis()); // Restamos 1 accion por zombi
                         for(int i = 0; i<origen.getContadorZombis();i++){
                             Zombi zombi = origen.getZombi(i);
                             String txtBotonDeLosZombis = zombi.getZombiParaBoton();

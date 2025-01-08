@@ -98,6 +98,14 @@ public class Superviviente extends Entidad implements Serializable{
         acciones++;
     }
 
+    public void lessAcciones(){
+        acciones--;
+    }
+
+    public void lessAcciones(int n){
+        acciones = acciones - n;
+    }
+
     public Ataque getUltimoAtaque() {
         return ultimoAtaque;
     }
