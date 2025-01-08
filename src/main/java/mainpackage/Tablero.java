@@ -1,6 +1,7 @@
 package mainpackage;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Tablero implements Serializable{
@@ -24,6 +25,8 @@ public class Tablero implements Serializable{
                 posicionesBuscadas[i][j] = false;
             }
         }
+        posicionesOcupadas[0][0] = true; // Inicio Jugadores
+        posicionesOcupadas[9][9] = true; // Meta
     }
     
 //    public void mostrar(){
@@ -70,5 +73,33 @@ public class Tablero implements Serializable{
             }
         }
         return objetivo;
+    }
+
+    public ArrayList<Casilla> elegirObjetivoSuperviviente(Arma arma, int xCentro, int yCentro){
+        Casilla temp = null;
+        int alcance = arma.getAlcance();
+        ArrayList<Casilla> casillasEnRango = new ArrayList<>();
+        if (alcance == 0){
+            casillasEnRango.add(mapa[xCentro][yCentro]);
+            return casillasEnRango;
+        }else{
+            for(int i = -alcance; i <= alcance; i++){
+                for(int j = -alcance; j <= alcance; j++){
+                    if(i != 0 || j != 0){
+                        int x = xCentro + i;
+                        int y = yCentro + j;
+                        // Verificar que los índices estén dentro de los límites válidos
+                        if (x >= 0 && x < mapa.length && y >= 0 && y < mapa[0].length){
+                            temp = mapa[x][y];
+                            if (temp != null){
+                                casillasEnRango.add(temp);
+                            }
+                        }
+                    }
+                }
+            }
+            return casillasEnRango;
+        }
+        
     }
 }

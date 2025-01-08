@@ -69,7 +69,7 @@ public class Partida implements Serializable{
 
     public void introducirSupervivientes(String[] nombres){
         for (String nombre : nombres) {
-            supervivientes.add(new Superviviente(nombre, null, tablero, this));
+            supervivientes.add(new Superviviente(nombre, null, this));
         }
     }
 
@@ -96,7 +96,7 @@ public class Partida implements Serializable{
         for(int i = 0; i<interfazPrincipal.nJugadores; i++){
             Arma arma = new Arma();
             Provision provision = new Provision();
-            Superviviente s = new Superviviente(nombres[i], casillaInicial, tablero, this);
+            Superviviente s = new Superviviente(nombres[i], casillaInicial, this);
             s.setArma(arma, 0);
             s.setArmaActiva(0);
             s.setInventario(provision, 0);
@@ -135,8 +135,8 @@ public class Partida implements Serializable{
                 supervivienteActual.activar(ranura, x, y);
                 break;
             case Entidad.accion.ATACAR: //Atacar
-                    int alcanceTemp = supervivienteActual.getArmas()[ranura].getAlcance();
-                    ArrayList<Casilla> objetivo = supervivienteActual.elegirObjetivo(supervivienteActual.getArmas()[ranura]);
+                    //int alcanceTemp = supervivienteActual.getArmas()[ranura].getAlcance();
+                    //ArrayList<Casilla> objetivo = supervivienteActual.elegirObjetivo(supervivienteActual.getArmas()[ranura]);
                     // Hacemos las casillas
                     Casilla casillaActual = supervivienteActual.getCasillaActual();
                     Casilla casillaObjetivo = tablero.getCasilla(x, y);
@@ -148,20 +148,26 @@ public class Partida implements Serializable{
                     Arma armaSeleccionada = supervivienteActual.getArmas()[ranura];
                     // Intento a 0
                     int intento = 0;
-                    // Mientras haya zombis en la casilla y haya exitos y el superviviente este vivo
-                    while((intento < casillaObjetivo.getContadorZombis() || nExitos > 0)){
+                    // Mientras haya zombis en la casilla y haya exitos
+                    System.out.println("En activarSuperviviente Atacar: Numero de zombis en la casilla: " + casillaObjetivo.getContadorZombis() + 
+                                        " Numero de exitos: " + nExitos);
+                    while((intento < casillaObjetivo.getContadorZombis() && nExitos > 0)){
                         try {
+                            Zombi zombi = casillaObjetivo.getZombi(intento);
+                            System.out.println("En activarSuperviviente Atacar: Zombi(intento): " + zombi.getIdentificador());
                             // Reaccion del zombi
-                            casillaObjetivo.getZombi(intento).reaccion(armaSeleccionada);
-                            if(casillaObjetivo.getZombi(intento).getEstadoActual() == Zombi.estado.MUERTO){ // EL zombi a muerto
+                            zombi.reaccion(armaSeleccionada);
+                            if(zombi.getEstadoActual() == Zombi.estado.MUERTO){ // EL zombi a muerto
                                 // Añadir el zombi a la lista de zombis asesinados
-                                supervivienteActual.añadirZombiAsesinado(casillaObjetivo.getZombi(intento).infoZombi());
-                                // Quitar el zombi de la casilla
-                                casillaObjetivo.removeEntidad(casillaObjetivo.getZombi(intento));
+                                supervivienteActual.añadirZombiAsesinado(zombi.infoZombi());
                                 // Quitar el zombi de la lista
-                                zombis.remove(casillaObjetivo.getZombi(intento));
+                                zombis.remove(zombi);
+                                // Quitar el zombi de la casilla
+                                casillaObjetivo.removeZombi(zombi);
                                 // Borramos el zombi en la interfaz
                                 interfazPrincipal.actualizarCasillas(casillaObjetivo, casillaObjetivo);
+                                // Actualizar el panel de menu de jugador
+                                interfazPrincipal.panelMenuJugador.actualizarLabels();
                                 // Como ha matado a un zombi se resta un exito
                                 nExitos--;
                             }
@@ -188,7 +194,7 @@ public class Partida implements Serializable{
                 case Entidad.accion.NADA: //Nada
                     break;
         }
-        accionTerminada();
+        //accionTerminada();
     }
 
     public void supervivienteMuerto(){
@@ -254,7 +260,7 @@ public class Partida implements Serializable{
                 break;
         }
         // Añadir al tablero
-        tablero.getCasilla(x, y).addEntidad(z);
+        tablero.getCasilla(x, y).addZombi(z);
         // Mostrar el Zombi y su tipo en el Tablero(interfaz)
         interfazPrincipal.botones[x][y].setText(z.getZombiParaBoton());
         // Añadir al arrayList
@@ -282,7 +288,7 @@ public class Partida implements Serializable{
                 }
             }
             //faseZombie();
-            //faseApariciónZombi();
+            faseApariciónZombi();
             avanzarTurno();
         } 
     }

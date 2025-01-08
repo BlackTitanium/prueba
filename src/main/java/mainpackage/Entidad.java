@@ -12,12 +12,13 @@ public abstract class Entidad implements Serializable{
     public Entidad(Partida p, Casilla c){
         partida = p;
         tableroActual = partida.getTablero();
-        casillaActual = tableroActual.getCasilla(c.getX(), c.getY());
+        casillaActual = c;
         setPosicion(c.getX(), c.getY());
     }
 
     public void setCasillaActual(Casilla c){
         casillaActual = c;
+        setPosicion(c.getX(), c.getY());
     }
 
     public Casilla getCasillaActual(){
@@ -36,12 +37,8 @@ public abstract class Entidad implements Serializable{
         posicion[0] = x;
         posicion[1] = y;
         Casilla casillaAnterior = casillaActual;
-        casillaActual = tableroActual.getCasilla(posicion[0], posicion[1]);
+        casillaActual = tableroActual.getCasilla(x, y);
         casillaAnterior.removeEntidad(this);
         casillaActual.addEntidad(this);
     }
-
-    /*  atacar() y activar() no van a ser implementados en esta clase, ya que los Zombis
-        no reciben un argumento en los metodos y los Supervivientes si.
-    */
 }

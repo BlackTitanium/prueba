@@ -61,19 +61,6 @@ public class Casilla implements Serializable{
     public Zombi getZombi(int a){
         return zombis.get(a);
     }
-
-    @Override
-
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null || obj.getClass() != this.getClass()) {
-            return false;
-        }
-        Casilla casilla = (Casilla) obj;
-        return this.x == casilla.x && this.y == casilla.y;
-    }
     
     public void removeSuperviviente(Superviviente s) {
         if (supervivientes.remove(s)) { // remove(s) busca y elimina el superviviente "s" en "supervivientes" y devuelve "true" si lo logra
@@ -103,9 +90,20 @@ public class Casilla implements Serializable{
         }
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || obj.getClass() != this.getClass()) {
+            return false;
+        }
+        Casilla casilla = (Casilla) obj;
+        return this.x == casilla.x && this.y == casilla.y;
+    }
+
     public Equipo buscar(){
         int a = random.nextInt(2);
-        int b = random.nextInt(3);
         if (buscada == true){
             return null;
         }

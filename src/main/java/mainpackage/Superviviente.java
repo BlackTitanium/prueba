@@ -73,14 +73,14 @@ public class Superviviente extends Entidad implements Serializable{
         this.estadoActual = estadoActual;
     }
 
-    public Superviviente(String nombre, Casilla c, Tablero t, Partida p){
+    public Superviviente(String nombre, Casilla c, Partida p){
         super(p, c);
         this.partida = p;
         this.nombre = nombre;
         this.contadorZombis = 0;
         this.mordeduras = 0;
         this.estadoActual = estado.VIVO;
-        this.casillaActual = c;
+        //this.casillaActual = c;
         this.zombisAsesinados = new ArrayList<>();
     }
 
@@ -158,26 +158,6 @@ public class Superviviente extends Entidad implements Serializable{
         } else {
             throw new IllegalArgumentException("No es una provision");
         }
-    }
-
-    public ArrayList<Casilla> elegirObjetivo(Arma arma){
-        Casilla temp = null;
-        int alcance = arma.getAlcance();
-        if (alcance == 0){
-            return null;
-        }
-        ArrayList<Casilla> casillasEnRango = new ArrayList<>();
-        for(int i = -alcance; i <= alcance; i++){
-            for(int j = -alcance; j <= alcance; j++){
-                if(i != 0 || j != 0){
-                    temp = tableroActual.getCasilla(posicion[0] + i, posicion[1] + j);
-                    if(temp != null){
-                        casillasEnRango.add(temp);
-                    }
-                }
-            }
-        }
-        return casillasEnRango;
     }
     
     public void atacar(int a) {

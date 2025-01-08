@@ -88,6 +88,10 @@ public class Zombi extends Entidad implements Serializable{
         return estadoActual;
     }
 
+    public int getIdentificador(){
+        return identificador;
+    }
+
     public void activar(){
         for (int i=0; i<activaciones; i++){
             if(casillaActual.getContadorSupervivientes()!=0){

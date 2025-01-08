@@ -21,7 +21,7 @@ import javax.swing.JPanel;
 public class InterfazPrincipal extends JFrame{
     private static final int SIZE = 10;  // Tamaño del tablero 10x10
     public JButton[][] botones = new JButton[SIZE][SIZE];   
-    private Point elementoSeleccionado = null;  // Guarda la posición del elemento seleccionado
+    public Point elementoSeleccionado = null;  // Guarda la posición del elemento seleccionado
     public boolean accionRealizada = false;
     
     public CardLayout cardLayout;
@@ -89,13 +89,6 @@ public class InterfazPrincipal extends JFrame{
         panelMenuJugador.activacionBotones(true);
     }
     
-    public void supervivienteMuere(){
-        Superviviente supervivienteActual = partida.getSupervivienteActual();
-        Casilla casillaMuerte = supervivienteActual.casillaActual;
-        String texto = botones[casillaMuerte.getX()][casillaMuerte.getY()].getText();
-        texto = texto.replace(supervivienteActual.getNombre(), texto);
-    }
-    
     // Inicializar el tablero con Casillas y Botones
     public void inicializarTablero() {
         for (int i = 0; i < SIZE; i++) {
@@ -158,11 +151,10 @@ public class InterfazPrincipal extends JFrame{
             }else{
                 actualizarCasillas(tablero.getCasilla(x, y), tablero.getCasilla(x,y));
             }
-        } else if(!panelMenuJugador.movimientoActivado){
-            JOptionPane.showMessageDialog(this,"No puede moverse en este momento");
-        }else if(panelMenuJugador.atacarActivado){
+        }
+        if(panelMenuJugador.atacarActivado){
             if(supervivienteActual.getArmaActiva() != null){
-                atacar(botones[x][y], x, y);
+                atacar(boton, x, y);
                 if(elementoSeleccionado != null){
                     actualizarCasillas(tablero.getCasilla(elementoSeleccionado.x, elementoSeleccionado.y), tablero.getCasilla(x,y));
                 }else{
@@ -170,11 +162,7 @@ public class InterfazPrincipal extends JFrame{
                 }
             } else{
                 JOptionPane.showMessageDialog(this,"Debes seleccionar un arma");
-                panelMenuJugador.activacionBotones(true);
             }
-        }else if(!panelMenuJugador.atacarActivado){
-            JOptionPane.showMessageDialog(this,"No puede atacar en este momento");
-            panelMenuJugador.activacionBotones(true);
         }
     }
 
@@ -194,6 +182,7 @@ public class InterfazPrincipal extends JFrame{
                 for (int k = 0; k < casillas[i].getContadorZombis(); k++){
                     String zombiTemp = casillas[i].getZombi(k).getZombiParaBoton(); 
                     sb2.append(zombiTemp);      
+                    sb2.append("<br>");
                 }
 
             }
@@ -252,34 +241,45 @@ public class InterfazPrincipal extends JFrame{
                     tablero.posicionesOcupadas[x][y] = true;
                     botones[elementoSeleccionado.x][elementoSeleccionado.y].setBackground(Color.LIGHT_GRAY);
                     botones[elementoSeleccionado.x][elementoSeleccionado.y].setForeground(Color.BLACK);
-                    tablero.posicionesOcupadas[x][y] = true;
-                    botones[elementoSeleccionado.x][elementoSeleccionado.y].setBackground(Color.LIGHT_GRAY);
-                    botones[elementoSeleccionado.x][elementoSeleccionado.y].setForeground(Color.BLACK);
-
-                    // Coger el texto del nuevo boton y añadirle el superviviente
+                    
+                    // Actualizar casillas
+                    int xOrigen = elementoSeleccionado.x;
+                    int yOrigen = elementoSeleccionado.y;
+                    Casilla origen = tablero.getCasilla(xOrigen, yOrigen);
+                    int xDestino = x;
+                    int yDestino = y;
+                    Casilla destino = tablero.getCasilla(xDestino, yDestino);
+                    
                     StringBuilder sb = new StringBuilder();
                     String textoBotonDestino = botones[x][y].getText();
                     textoBotonDestino = textoBotonDestino.replace("</html>", ""); // Quitamos el cierre de HTML
-                    sb.append(textoBotonDestino);
-                    sb.append(partida.getSupervivienteActual().getNombre());
-                    sb.append("<br>"); // Salto de linea en HTML
-                    sb.append("</html>"); // Colocamos el cierre HTML
-                    botones[x][y].setText(sb.toString());
-
-                    // Quitamos del boton el nombre del superviviente
+                    sb.append(textoBotonDestino); // Le añado el texto ya existente en el boton destino al sb
+                    sb.append(partida.getSupervivienteActual().getNombre()); // Le añado al boton destino el jugador
+                    sb.append("<br>");
                     String textoBotonOrigen = botones[elementoSeleccionado.x][elementoSeleccionado.y].getText();
-                    textoBotonOrigen = textoBotonOrigen.replace(supervivienteActual.getNombre() + "<br>","");
-                    if(tablero.getCasilla(elementoSeleccionado.x, elementoSeleccionado.y).getContadorSupervivientes() == 0){
-                        if(tablero.getCasilla(elementoSeleccionado.x, elementoSeleccionado.y).getContadorZombis() == 0){
-                            // Marcamos la casilla como vacia
-                            tablero.posicionesOcupadas[elementoSeleccionado.x][elementoSeleccionado.y] = false;
-                            botones[elementoSeleccionado.x][elementoSeleccionado.y].setText("<html></html>"); // Vacio
-                        } else{
-                            botones[elementoSeleccionado.x][elementoSeleccionado.y].setText(textoBotonOrigen);
+                    StringBuilder aux = new StringBuilder();
+                    aux.append(supervivienteActual.getNombre()).append("<br>");
+                    String nombre = aux.toString();
+                    System.out.println("El nombre: " + nombre);
+                    String textoBotonOrigenFinal = textoBotonOrigen.replace(nombre,""); // Le quito el nombre del jugador
+                    System.out.println("Texto Boton Origen Final(Con zombis, sin nombre): " + textoBotonOrigenFinal); 
+                    if(origen.getContadorZombis() > 0){ // Si hay zombis
+                        for(int i = 0; i<origen.getContadorZombis();i++){
+                            Zombi zombi = origen.getZombi(i);
+                            String txtBotonDeLosZombis = zombi.getZombiParaBoton();
+                            txtBotonDeLosZombis = txtBotonDeLosZombis.replace("<html>", ""); // Le quito lo del html
+                            txtBotonDeLosZombis = txtBotonDeLosZombis.replace("</html>", "");
+                            sb.append(txtBotonDeLosZombis); // Lo añado al sb (Ya va con <br>)
+                            textoBotonOrigenFinal = textoBotonOrigenFinal.replace(txtBotonDeLosZombis,""); // Le quito el zombi al boton origen junto al <br>
+                            zombi.mover(x, y); // Mueve al zombi
                         }
-                    } else{
-                        botones[elementoSeleccionado.x][elementoSeleccionado.y].setText(textoBotonOrigen);
                     }
+                    sb.append("</html>"); // Ponemos el cierre de nuevo
+                    botones[x][y].setText(sb.toString()); // Añado el texto al boton destino
+                    System.out.println("Texto Boton Origen Final(Antes de ponerlo en boton): " + textoBotonOrigenFinal); 
+                    botones[elementoSeleccionado.x][elementoSeleccionado.y].setText(textoBotonOrigenFinal);
+                    
+                    partida.accionTerminada();
                     elementoSeleccionado = null;
                     panelMenuJugador.movimientoActivado = false;
                     panelMenuJugador.activacionBotones(true);
@@ -289,36 +289,83 @@ public class InterfazPrincipal extends JFrame{
             JOptionPane.showMessageDialog(this,"No puede moverse en este momento");
         }
     }
-
-    public void atacar(JButton boton, int x, int y){
-        if(panelMenuJugador.atacarActivado){
-            Superviviente supervivienteActual = partida.getSupervivienteActual();
-            ArrayList<Casilla> casillasAlcance = supervivienteActual.elegirObjetivo(supervivienteActual.getArmaActiva());
-            for (int i = 0; i < casillasAlcance.size(); i++){
-                botones[casillasAlcance.get(i).getX()][casillasAlcance.get(i).getY()].setBackground(Color.RED);
-                botones[casillasAlcance.get(i).getX()][casillasAlcance.get(i).getY()].setForeground(Color.WHITE);
+    
+    public void autoSeleccionElementoAtacar(){
+        Superviviente supervivienteActual = partida.getSupervivienteActual();
+        Casilla casillaActual = supervivienteActual.getCasillaActual();
+        int xActual = casillaActual.getX();
+        int yActual = casillaActual.getY();
+        elementoSeleccionado = new Point(xActual, yActual);
+        botones[xActual][yActual].setBackground(Color.DARK_GRAY);
+        botones[xActual][yActual].setForeground(Color.WHITE);
+        System.out.println("En autoSeleccion: X actual: " + xActual + ", Y actual: " + yActual);
+        ArrayList<Casilla> casillasAlcance = tablero.elegirObjetivoSuperviviente(supervivienteActual.getArmaActiva(), xActual, yActual);
+        for (int i = 0; i < casillasAlcance.size(); i++){
+            botones[casillasAlcance.get(i).getX()][casillasAlcance.get(i).getY()].setBackground(Color.RED);
+            botones[casillasAlcance.get(i).getX()][casillasAlcance.get(i).getY()].setForeground(Color.WHITE);
+        }
+        boolean hayZombis = false;
+        int contador = 0;
+        for (int i = 0; i < casillasAlcance.size(); i++){
+            contador = casillasAlcance.get(i).getContadorZombis();
+            if(contador>0){
+                hayZombis = true;
+                break;
             }
-            if(elementoSeleccionado == null && boton.getText().contains(supervivienteActual.getNombre())){
-                elementoSeleccionado = new Point(x, y);
-                boton.setBackground(Color.DARK_GRAY);
-                boton.setForeground(Color.WHITE);
-            } else if(elementoSeleccionado != null){
-                if(tablero.getCasilla(x,y).getContadorZombis() > 0){
-                    // Atacar al zombi
-                    partida.activarSuperviviente(panelMenuJugador.armaElegida, x, y);
-                    // En caso de que haya zombis muertos ya se encarga partida
-                    // Restablecer valores
-                    elementoSeleccionado = null;
-                    panelMenuJugador.atacarActivado = false;
-                    panelMenuJugador.activacionBotones(true);
-                }else{
-                    JOptionPane.showMessageDialog(this,"No hay zombis en la casilla seleccionada");
-                }
-            }
+        }
+        if(casillaActual.getContadorZombis() > 0){
+            hayZombis = true;
+        }
+        if(!hayZombis){
+            JOptionPane.showMessageDialog(this,"No hay zombis al alcance");
+            elementoSeleccionado = null;
+            panelMenuJugador.atacarActivado = false;
+            panelMenuJugador.activacionBotones(true);
             for (int i = 0; i < casillasAlcance.size(); i++){
                 botones[casillasAlcance.get(i).getX()][casillasAlcance.get(i).getY()].setBackground(Color.LIGHT_GRAY);
                 botones[casillasAlcance.get(i).getX()][casillasAlcance.get(i).getY()].setForeground(Color.BLACK);
             }
+        }
+    }
+    
+    public void atacar(JButton boton, int x, int y){
+        if(panelMenuJugador.atacarActivado){
+            Superviviente supervivienteActual = partida.getSupervivienteActual();
+            int xActual = supervivienteActual.getCasillaActual().getX();
+            int yActual = supervivienteActual.getCasillaActual().getY();
+            System.out.println("En atacar: X actual: " + xActual + ", Y actual: " + yActual);
+            //ArrayList<Casilla> casillasAlcance = supervivienteActual.elegirObjetivo(supervivienteActual.getArmaActiva(),tablero,xActual,yActual);
+            ArrayList<Casilla> casillasAlcance = tablero.elegirObjetivoSuperviviente(supervivienteActual.getArmaActiva(), xActual, yActual);
+//            if(elementoSeleccionado == null && boton.getText().contains(supervivienteActual.getNombre())){
+//                elementoSeleccionado = new Point(x, y);
+//                boton.setBackground(Color.DARK_GRAY);
+//                boton.setForeground(Color.WHITE);
+//                for (int i = 0; i < casillasAlcance.size(); i++){
+//                    botones[casillasAlcance.get(i).getX()][casillasAlcance.get(i).getY()].setBackground(Color.RED);
+//                    botones[casillasAlcance.get(i).getX()][casillasAlcance.get(i).getY()].setForeground(Color.WHITE);
+//                }
+//            } else if(elementoSeleccionado != null){
+            if(elementoSeleccionado != null){
+                if(tablero.getCasilla(x,y).getContadorZombis() > 0){
+                    System.out.println("Coordenadas objetivo: x: " + x + ", y: " + y);
+                    // Atacar al zombi
+                    partida.activarSuperviviente(panelMenuJugador.armaElegida, x, y);
+                    // En caso de que haya zombis muertos ya se encarga partida
+                    // Restablecer valores
+                    partida.accionTerminada();
+                    elementoSeleccionado = null;
+                    panelMenuJugador.atacarActivado = false;
+                    panelMenuJugador.activacionBotones(true);
+                    for (int i = 0; i < casillasAlcance.size(); i++){
+                        botones[casillasAlcance.get(i).getX()][casillasAlcance.get(i).getY()].setBackground(Color.LIGHT_GRAY);
+                        botones[casillasAlcance.get(i).getX()][casillasAlcance.get(i).getY()].setForeground(Color.BLACK);
+                    }
+                }else{
+                    JOptionPane.showMessageDialog(this,"No hay zombis en la casilla seleccionada");
+                }
+            }
+        }else{
+            JOptionPane.showMessageDialog(this,"No puede atacar en este momento");
         }
     }
          

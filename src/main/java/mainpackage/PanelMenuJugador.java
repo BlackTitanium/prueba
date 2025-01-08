@@ -3,6 +3,7 @@ package mainpackage;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -236,10 +237,12 @@ public class PanelMenuJugador extends JPanel{
         botonArma1.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                armaElegida = 0;
-                partida.getSupervivienteActual().setArmaActiva(0);
-                partida.getSupervivienteActual().setSeleccion(Entidad.accion.ATACAR);
                 atacarActivado = true;
+                armaElegida = 0;
+                Superviviente supervivienteActual = partida.getSupervivienteActual();
+                supervivienteActual.setArmaActiva(0);
+                supervivienteActual.setSeleccion(Entidad.accion.ATACAR);
+                interfazPrincipal.autoSeleccionElementoAtacar();
             }
         });
         botonArma2.addActionListener(new ActionListener(){
