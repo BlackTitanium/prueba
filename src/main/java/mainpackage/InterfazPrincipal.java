@@ -88,7 +88,6 @@ public class InterfazPrincipal extends JFrame{
     
     public void actualizacionGeneralPanelMenuJugador(){
         panelMenuJugador.actualizarLabels();
-        panelMenuJugador.activacionBotones(true);
     }
     
     public void mostrarMensajeDeDerrota(){
