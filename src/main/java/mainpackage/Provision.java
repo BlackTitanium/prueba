@@ -60,6 +60,7 @@ public class Provision extends Equipo implements Serializable{
         return random.nextInt(3) + 1;
     }
     
+    @Override
     public String getNombre() {
         return nombre;
     }
@@ -74,7 +75,7 @@ public class Provision extends Equipo implements Serializable{
 
     @Override
     public String toString() {
-       return ("Nombre: " + nombre + "Valor energético: " + valorEnergetico + " kCal" +  "Caducidad: " + caducidad) ;
+       return ("Nombre: " + nombre + ", Valor energético: " + valorEnergetico + ", kCal" +  ", Caducidad: " + caducidad) ;
     }
     private String generarFecha(){
         int dia=(int)(Math.random()*31)+1;

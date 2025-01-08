@@ -47,6 +47,10 @@ public class Superviviente extends Entidad implements Serializable{
         return armas;
     }
 
+    public Arma getArmas(int a){
+        return armas[a];
+    }
+
     public void setArmaActiva(int ranura) {
         this.armaActiva = armas[ranura];
     }
@@ -64,6 +68,10 @@ public class Superviviente extends Entidad implements Serializable{
     }
     public Equipo[] getInventario() {
         return inventario;
+    }
+
+    public Equipo getInventario(int a){
+        return inventario[a];
     }
     public void setInventario(Equipo e, int a){
         this.inventario[a] = e;
@@ -118,12 +126,12 @@ public class Superviviente extends Entidad implements Serializable{
         this.acciones = a;
     }
 
-    public void buscar(int a){
-        inventario[a] = casillaActual.buscar();
+    public void buscar(int a, Equipo equipo){
+        this.setInventario(equipo, a);
         acciones--;
     }
 
-    public void activar(int ranura, int x, int y) {
+    public void activar(int ranura, int x, int y, Equipo e) {
         if (estadoActual == estado.MUERTO) {
             acciones = 0;
         }  else {
@@ -133,8 +141,8 @@ public class Superviviente extends Entidad implements Serializable{
             } else if(seleccion==accion.ATACAR){
                 atacar(ranura);
 
-            } else {
-                buscar(ranura);
+            } else if(seleccion==accion.BUSCAR){
+                buscar(ranura, e);
             }
         }
     }
@@ -201,10 +209,15 @@ public class Superviviente extends Entidad implements Serializable{
     }
 
     public String mostrarHistorialZombisAsesinados(){
-        StringBuilder sb = new StringBuilder();
-        for(String zombi : zombisAsesinados){
-            sb.append(zombi);
+        if(zombisAsesinados.isEmpty()){
+            return nombre + " no ha asesinado a ningún zombi todavía\n";
+        }else{
+            StringBuilder sb = new StringBuilder();
+            for(String zombi : zombisAsesinados){
+                sb.append(zombi);
+            }
+            return sb.toString();
         }
-        return sb.toString();
     }
+        
 }

@@ -29,10 +29,14 @@ public class AlmacenDeAtaques implements Serializable{
     }
 
     public String mostrarHistorialAtaquesInterfaz(){
-        StringBuilder sb = new StringBuilder();
-        for(String ataque : historialAtaques){
-            sb.append(ataque);
-        }
-        return sb.toString();
+        if(historialAtaques.isEmpty()){
+            return "No hay ataques registrados todavía\n";
+        }else{
+            StringBuilder sb = new StringBuilder();
+            for(String ataque : historialAtaques){
+                sb.append(ataque);
+            }
+            return sb.toString();
+        }        
     }
 }

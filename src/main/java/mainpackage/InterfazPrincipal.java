@@ -25,7 +25,7 @@ public class InterfazPrincipal extends JFrame{
     public boolean accionRealizada = false;
     
     public CardLayout cardLayout;
-    public JPanel panelTablero, panelDerechoPrincipal, panelBotonesPermanentes;
+    public JPanel panelTablero, panelDerechoPrincipal;
     
     PanelInicio panelInicio;
     PanelMenuJugador panelMenuJugador;
@@ -182,7 +182,29 @@ public class InterfazPrincipal extends JFrame{
             elegirZombiInterfazPrincipal(boton, x, y);
         }
     }
-
+    
+    public void faseZombiInterfaz(){
+        panelMenuJugador.actualizarLabels();
+        panelMenuJugador.activacionBotones(false);
+    }
+    
+    public void moverZombi(Casilla origen, Casilla destino, String textoBotonZombi){
+        int xOrigen = origen.getX();
+        int yOrigen = origen.getY();
+        int xDestino = destino.getX();
+        int yDestino = destino.getY();
+        StringBuilder sbDestino = new StringBuilder();
+        String textoDestino = botones[xDestino][yDestino].getText();
+        textoDestino = textoDestino.replace("</html>", "");
+        sbDestino.append(textoDestino);
+        sbDestino.append(textoBotonZombi);
+        botones[xDestino][yDestino].setText(sbDestino.toString());
+        
+        String textoOrigen = botones[xOrigen][yOrigen].getText();
+        textoOrigen = textoOrigen.replace(textoBotonZombi, "");
+        botones[xOrigen][yOrigen].setText(textoOrigen);
+    }
+    
     public void actualizarCasillas(Casilla origen, Casilla destino){
         Casilla[] casillas = {origen, destino};
         for (int i = 0; i < 2; i++){
@@ -253,7 +275,7 @@ public class InterfazPrincipal extends JFrame{
                 // Verificar si el movimiento es a una casilla adyacente 
                 if (Math.abs(elementoSeleccionado.x - x) <= 1 && Math.abs(elementoSeleccionado.y - y) <= 1) {                  
                     // Mover el superviviente a la nueva casilla y marcarla como ocupada
-                    partida.activarSuperviviente(0, x, y);
+                    partida.activarSuperviviente(0, x, y,null);
 
                     tablero.posicionesOcupadas[x][y] = true;
                     botones[elementoSeleccionado.x][elementoSeleccionado.y].setBackground(Color.LIGHT_GRAY);
@@ -357,19 +379,22 @@ public class InterfazPrincipal extends JFrame{
                 if(tablero.getCasilla(x,y).getContadorZombis() > 0){
                     System.out.println("Coordenadas objetivo: x: " + x + ", y: " + y);
                     // Atacar al zombi
-                    partida.activarSuperviviente(panelMenuJugador.armaElegida, x, y);
+                    partida.activarSuperviviente(panelMenuJugador.armaElegida, x, y, null);
                     // En caso de que haya zombis muertos ya se encarga partida
-                    // Restablecer valores
-                    partida.accionTerminada();
-                    elementoSeleccionado = null;
-                    panelMenuJugador.atacarActivado = false;
-                    panelMenuJugador.activacionBotones(true);
+                    System.out.println("Aqui1");
+                    // Restablecer casillas
                     botones[elementoSeleccionado.x][elementoSeleccionado.y].setBackground(Color.LIGHT_GRAY);
                     botones[elementoSeleccionado.x][elementoSeleccionado.y].setForeground(Color.BLACK);
                     for (int i = 0; i < casillasAlcance.size(); i++){
                         botones[casillasAlcance.get(i).getX()][casillasAlcance.get(i).getY()].setBackground(Color.LIGHT_GRAY);
                         botones[casillasAlcance.get(i).getX()][casillasAlcance.get(i).getY()].setForeground(Color.BLACK);
                     }
+                    System.out.println("Aqui1");
+                    // Restablecer valores
+                    partida.accionTerminada();
+                    elementoSeleccionado = null;
+                    panelMenuJugador.atacarActivado = false;
+                    panelMenuJugador.activacionBotones(true);
                 }else{
                     JOptionPane.showMessageDialog(this,"No hay zombis en la casilla seleccionada");
                 }
@@ -387,9 +412,6 @@ public class InterfazPrincipal extends JFrame{
             int xOrigen = elementoSeleccionado.x;
             int yOrigen = elementoSeleccionado.y;
             Casilla origen = tablero.getCasilla(xOrigen, yOrigen);
-            int xDestino = x;
-            int yDestino = y;
-            Casilla destino = tablero.getCasilla(xDestino, yDestino);
             if(origen.getContadorZombis() != 0){
                 for(int i = 0; i < origen.getContadorZombis(); i++){
                     StringBuilder sb = new StringBuilder();
@@ -403,13 +425,14 @@ public class InterfazPrincipal extends JFrame{
                     sb.append(" ?");
                     boolean respuesta = mostrarMensajeSiNo(sb.toString());
                     if(respuesta){
-                        zombiSeleccionado = zombi;
+                        panelHistoriales.textArea.setText(zombi.mostrarHistorialSupervivientesAtacados());
                         break;
                     }
                 }
                 boton.setBackground(Color.LIGHT_GRAY);
                 boton.setForeground(Color.BLACK);
                 elementoSeleccionado = null;
+                panelHistoriales.seleccionarZombi = false;
             }else{
                 JOptionPane.showMessageDialog(this,"No hay zombis en esta casilla");
                 boton.setBackground(Color.LIGHT_GRAY);

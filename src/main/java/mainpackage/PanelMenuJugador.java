@@ -21,8 +21,10 @@ public class PanelMenuJugador extends JPanel{
     public JPanel panelInventario;
     
     public boolean movimientoActivado = false;
-    public boolean atacarActivado = false;
+    public boolean atacarActivado = false, atacarBotonesActivado = false;
+    public boolean buscandoActivado = false;
     
+    private Equipo equipoBuscado;
     private Partida partida;
     private InterfazPrincipal interfazPrincipal;    
 
@@ -200,15 +202,31 @@ public class PanelMenuJugador extends JPanel{
         botonBuscar.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                partida.getSupervivienteActual().setSeleccion(Entidad.accion.BUSCAR);
-                activacionBotones(false);
-                activacionInventario(true);
+                Superviviente supervivienteActual = partida.getSupervivienteActual();
+                supervivienteActual.setSeleccion(Entidad.accion.BUSCAR);
+                equipoBuscado = supervivienteActual.getCasillaActual().buscar(interfazPrincipal);
+                StringBuilder sb = new StringBuilder();
+                sb.append("Has encontrado:").append("\n");
+                sb.append(equipoBuscado.toString()).append("\n");
+                sb.append("¿Quieres quedartelo?").append("\n");
+                boolean resultado = interfazPrincipal.mostrarMensajeSiNo(sb.toString());
+                if(resultado){
+                    buscandoActivado = true;
+                    StringBuilder aux = new StringBuilder();
+                    aux.append("Selecciona la ranura de inventario donde guardarlo").append("\n");
+                    aux.append("(Si la ranura esta ocupada se borrara su contenido)").append("\n");
+                    interfazPrincipal.mostrarMensaje(aux.toString());
+                    System.out.println("El equipo encontrado es: " + equipoBuscado.toString());
+                    activacionBotones(false);
+                    activacionInventario(true);
+                }                
             }
         });
         
         botonAtacar.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
+                atacarBotonesActivado = true;
                 activacionBotones(false);
                 activacionArmas(true);
             }
@@ -237,54 +255,94 @@ public class PanelMenuJugador extends JPanel{
         botonArma1.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                atacarActivado = true;
-                armaElegida = 0;
-                Superviviente supervivienteActual = partida.getSupervivienteActual();
-                supervivienteActual.setArmaActiva(0);
-                supervivienteActual.setSeleccion(Entidad.accion.ATACAR);
-                interfazPrincipal.autoSeleccionElementoAtacar();
+                if(atacarBotonesActivado){
+                    atacarActivado = true;
+                    armaElegida = 0;
+                    Superviviente supervivienteActual = partida.getSupervivienteActual();
+                    supervivienteActual.setArmaActiva(0);
+                    supervivienteActual.setSeleccion(Entidad.accion.ATACAR);
+                    interfazPrincipal.autoSeleccionElementoAtacar();
+                }
+                
             }
         });
         botonArma2.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                armaElegida = 1;
-                partida.getSupervivienteActual().setArmaActiva(1);
-                partida.getSupervivienteActual().setSeleccion(Entidad.accion.ATACAR);
-                atacarActivado = true;
+                if(atacarBotonesActivado){
+                    atacarActivado = true;
+                    armaElegida = 1;
+                    Superviviente supervivienteActual = partida.getSupervivienteActual();
+                    supervivienteActual.setArmaActiva(1);
+                    supervivienteActual.setSeleccion(Entidad.accion.ATACAR);
+                    interfazPrincipal.autoSeleccionElementoAtacar();
+                }
             }
         });
         botonInv1.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                ranuraElegida = 1;
-                partida.activarSuperviviente(ranuraElegida, 0, 0);
-                activacionBotones(true);
-                actualizarLabels();
+                ranuraElegida = 0;
+                if(buscandoActivado){
+                    partida.activarSuperviviente(0, 0, 0, equipoBuscado);
+                    equipoBuscado = null;
+                    buscandoActivado = false;
+                    actualizarLabels();
+                    activacionBotones(true);
+                }
             }
         });
         botonInv2.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                ranuraElegida = 2;
+                ranuraElegida = 1;
+                if(buscandoActivado){
+                    partida.activarSuperviviente(1, 0, 0, equipoBuscado);
+                    System.out.println("El equipo está en la ranura 2 y es: " + partida.getSupervivienteActual().getInventario(1).toString());
+                    equipoBuscado = null;
+                    buscandoActivado = false;
+                    actualizarLabels();
+                    activacionBotones(true);
+                }
             }
         });
         botonInv3.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                ranuraElegida = 3;
+                ranuraElegida = 2;
+                if(buscandoActivado){
+                    partida.activarSuperviviente(2, 0, 0, equipoBuscado);
+                    equipoBuscado = null;
+                    buscandoActivado = false;
+                    actualizarLabels();
+                    activacionBotones(true);
+                }
             }
         });
         botonInv4.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                ranuraElegida = 4;
+                ranuraElegida = 3;
+                if(buscandoActivado){
+                    partida.activarSuperviviente(3, 0, 0, equipoBuscado);
+                    equipoBuscado = null;
+                    buscandoActivado = false;
+                    actualizarLabels();
+                    activacionBotones(true);
+                }
             }
         });
         botonInv5.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                ranuraElegida = 5;
+                ranuraElegida = 4;
+                if(buscandoActivado){
+                    partida.activarSuperviviente(4, 0, 0, equipoBuscado);
+                    equipoBuscado = null;
+                    buscandoActivado = false;
+                    actualizarLabels();
+                    activacionBotones(true);
+                }
             }
         });
     }
@@ -322,50 +380,50 @@ public class PanelMenuJugador extends JPanel{
         contZombis.setText("Numero de zombis asesinados: " + partida.getSupervivienteActual().getContadorZombis());
         mordeduras.setText("Mordeduras : " + partida.getSupervivienteActual().getMordeduras() + "/2");
         try {
-            botonArma1.setText(partida.getSupervivienteActual().getArmas()[0].getNombre());
-            botonArma1.setToolTipText(partida.getSupervivienteActual().getArmas()[0].toString());
+            botonArma1.setText(partida.getSupervivienteActual().getArmas(0).getNombre());
+            botonArma1.setToolTipText(partida.getSupervivienteActual().getArmas(0).toString());
         } catch (NullPointerException e) {
             botonArma1.setText("Arma 1: Vacío");
             botonArma1.setToolTipText("");
         }
         try {
-            botonArma2.setText(partida.getSupervivienteActual().getArmas()[1].getNombre());
-            botonArma2.setToolTipText(partida.getSupervivienteActual().getArmas()[1].toString());
+            botonArma2.setText(partida.getSupervivienteActual().getArmas(1).getNombre());
+            botonArma2.setToolTipText(partida.getSupervivienteActual().getArmas(1).toString());
         } catch (NullPointerException e) {
             botonArma2.setText("Arma 2: Vacío");
             botonArma2.setToolTipText("");
         }
         try {
-            botonInv1.setText(partida.getSupervivienteActual().getInventario()[0].getNombre());
-            botonInv1.setToolTipText(partida.getSupervivienteActual().getInventario()[0].toString());
+            botonInv1.setText(partida.getSupervivienteActual().getInventario(0).getNombre());
+            botonInv1.setToolTipText(partida.getSupervivienteActual().getInventario(0).toString());
         } catch (NullPointerException e) {
             botonInv1.setText("Inventario 1: Vacío");
             botonInv1.setToolTipText("");
         }
         try {
-            botonInv2.setText(partida.getSupervivienteActual().getInventario()[1].getNombre());
-            botonInv2.setToolTipText(partida.getSupervivienteActual().getInventario()[1].toString());
+            botonInv2.setText(partida.getSupervivienteActual().getInventario(1).getNombre());
+            botonInv2.setToolTipText(partida.getSupervivienteActual().getInventario(1).toString());
         } catch (NullPointerException e) {
             botonInv2.setText("Inventario 2: Vacío");
             botonInv2.setToolTipText("");
         }
         try {
-            botonInv3.setText(partida.getSupervivienteActual().getInventario()[2].getNombre());
-            botonInv3.setToolTipText(partida.getSupervivienteActual().getInventario()[2].toString());
+            botonInv3.setText(partida.getSupervivienteActual().getInventario(2).getNombre());
+            botonInv3.setToolTipText(partida.getSupervivienteActual().getInventario(2).toString());
         } catch (NullPointerException e) {
             botonInv3.setText("Inventario 3: Vacío");
             botonInv3.setToolTipText("");
         }
         try {
-            botonInv4.setText(partida.getSupervivienteActual().getInventario()[3].getNombre());
-            botonInv4.setToolTipText(partida.getSupervivienteActual().getInventario()[3].toString());
+            botonInv4.setText(partida.getSupervivienteActual().getInventario(3).getNombre());
+            botonInv4.setToolTipText(partida.getSupervivienteActual().getInventario(3).toString());
         } catch (NullPointerException e) {
             botonInv4.setText("Inventario 4: Vacío");
             botonInv4.setToolTipText("");
         }
         try {
-            botonInv5.setText(partida.getSupervivienteActual().getInventario()[4].getNombre());
-            botonInv5.setToolTipText(partida.getSupervivienteActual().getInventario()[4].toString());
+            botonInv5.setText(partida.getSupervivienteActual().getInventario(4).getNombre());
+            botonInv5.setToolTipText(partida.getSupervivienteActual().getInventario(4).toString());
         } catch (NullPointerException e) {
             botonInv5.setText("Inventario 5: Vacío");
             botonInv5.setToolTipText("");

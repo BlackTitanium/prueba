@@ -133,11 +133,11 @@ public class Partida implements Serializable{
         });
     }
 
-    public void activarSuperviviente(int ranura, int x, int y){
+    public void activarSuperviviente(int ranura, int x, int y, Equipo equipo){
         switch(supervivienteActual.getSeleccion()){
             case Entidad.accion.MOVER:
                 //Interfaz dara el input para el movimiento; int casillaObjetivo = [0-8]
-                supervivienteActual.activar(ranura, x, y);
+                supervivienteActual.activar(ranura, x, y, equipo);
                 break;
             case Entidad.accion.ATACAR: //Atacar
                     //int alcanceTemp = supervivienteActual.getArmas()[ranura].getAlcance();
@@ -146,7 +146,7 @@ public class Partida implements Serializable{
                     Casilla casillaActual = supervivienteActual.getCasillaActual();
                     Casilla casillaObjetivo = tablero.getCasilla(x, y);
                     // Activamos el superviviente y recogemos el ataque y su numero de exitos
-                    supervivienteActual.activar(ranura,casillaActual.getX(),casillaActual.getY());
+                    supervivienteActual.activar(ranura,casillaActual.getX(),casillaActual.getY(), equipo);
                     Ataque ataque = supervivienteActual.getUltimoAtaque();
                     int nExitos = ataque.getNumExitos(); // Cogemos el numero de exitos
                     // Hacemos el arma seleccionada
@@ -181,6 +181,7 @@ public class Partida implements Serializable{
                             }
                         } catch (IllegalArgumentException e) {
                             if ("Alcance".equals(e.getMessage())) { // Si es Berserker
+                                System.out.println("En activarSuperviviente Atacar: Berserker");
                                 supervivienteActual.addAcciones(); // Recupera la accion perdida en activar
                             }
                         }
@@ -189,7 +190,7 @@ public class Partida implements Serializable{
                     break;
                 case Entidad.accion.BUSCAR: //Buscar
                     // Input de interfaz para elegir el slot del inventario
-                    supervivienteActual.activar(ranura,0,0);
+                    supervivienteActual.activar(ranura,0,0, equipo);
                 case Entidad.accion.INVENTARIO: //Elegir arma o usar provision
                     int objetoInventario = ranura;
                     int ranuraObjetivo = x;
@@ -197,9 +198,9 @@ public class Partida implements Serializable{
                     supervivienteActual.elegirArma(objetoInventario, ranuraObjetivo);
                     supervivienteActual.setAcciones(supervivienteActual.getAcciones()+1);
                 case Entidad.accion.NADA: //Nada
+                    supervivienteActual.setAcciones(0);
                     break;
         }
-        //accionTerminada();
     }
 
     public void supervivienteMuerto(){
@@ -235,10 +236,8 @@ public class Partida implements Serializable{
         }        
     }
 
-    public void faseZombie(){
-        for (int i = 0; i < zombis.size(); i++){
-            zombis.get(i).activar();
-        }
+    public void faseZombie(Zombi z){
+        z.setActivaciones(); // Pone las activacionesAux del Zombi en su numero de activaciones
     }
 
     public void faseApariciónZombi(){
@@ -292,7 +291,28 @@ public class Partida implements Serializable{
                     interfazPrincipal.accionRealizada = false;
                 }
             }
-            faseZombie();
+            if(supervivienteActual.getAcciones() < 0){
+                supervivienteActual.setAcciones(0);
+            }
+            interfazPrincipal.faseZombiInterfaz();
+            //faseZombie();
+            System.out.println("Fase Zombie");
+            for (int i = 0; i < zombis.size(); i++){
+                faseZombie(zombis.get(i));
+                while(zombis.get(i).getActivaciones() > 0){
+                    synchronized (monitor) {
+                        // Esperar a que el jugador seleccione una acción
+                        while (!interfazPrincipal.accionRealizada) {
+                            try {
+                                zombis.get(i).activar();
+                                monitor.wait();
+                            } catch (InterruptedException e) {
+                            }
+                        }
+                        interfazPrincipal.accionRealizada = false;
+                    }
+                }
+            }
             faseApariciónZombi();
             avanzarTurno();
         } 

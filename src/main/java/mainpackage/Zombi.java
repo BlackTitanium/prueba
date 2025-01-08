@@ -6,7 +6,7 @@ import java.util.Random;
 
 public class Zombi extends Entidad implements Serializable{
     public static String[] tiposZombi = {"CAMINANTE", "CORREDOR", "ABOMINACION"};
-    protected int activaciones, aguante;
+    protected int activaciones, activacionesAux, aguante;
     protected String tipo;
     protected String subtipo;
     protected int identificador;
@@ -49,14 +49,17 @@ public class Zombi extends Entidad implements Serializable{
         switch(tipo){
             case "CAMINANTE":
                 activaciones = 1;
+                activacionesAux = 1;
                 aguante = 1;
                 break;
             case "CORREDOR":
                 activaciones = 2;
+                activacionesAux = 2;
                 aguante = 1;
                 break;
             case "ABOMINACION":
                 activaciones = 1;
+                activacionesAux = 1;
                 aguante = 3;
                 break;
         }
@@ -92,18 +95,35 @@ public class Zombi extends Entidad implements Serializable{
         return identificador;
     }
 
+    public int getActivaciones(){
+        return activacionesAux;
+    }
+
+    public void setActivaciones(){
+        this.activacionesAux = activaciones;
+    }
+
     public void activar(){
         for (int i=0; i<activaciones; i++){
             if(casillaActual.getContadorSupervivientes()!=0){
                 atacar(casillaActual.getSuperviviente(0));
+
             } else {
                 if(Math.abs(casillaActual.getX()-tableroActual.objetivoZombi(casillaActual).getX())>Math.abs(casillaActual.getY()-tableroActual.objetivoZombi(casillaActual).getY())){
+                    System.out.println("Zombi " + this.getZombiParaBoton() +" se mueve a la casilla " + casillaActual.getX() + ", " + (casillaActual.getY()+1));
+                    Casilla destino = partida.getTablero().getCasilla(casillaActual.getX()+1,casillaActual.getY());
+                    partida.getInterfazPrincipal().moverZombi(casillaActual, destino, this.getZombiParaBoton());
                     mover(casillaActual.getX()+1,casillaActual.getY());
                 } else{
+                    System.out.println("Zombi " + this.getZombiParaBoton() + " se mueve a la casilla " + casillaActual.getX() + ", " + (casillaActual.getY()+1));
+                    Casilla destino = partida.getTablero().getCasilla(casillaActual.getX(),casillaActual.getY()+1);
+                    partida.getInterfazPrincipal().moverZombi(casillaActual, destino, this.getZombiParaBoton());
                     mover(casillaActual.getX(),casillaActual.getY()+1);
                 }
             }
+            activacionesAux--;
         }
+        partida.accionTerminada();
     }
 
 //    public void reaccion(Arma arma, int a){
@@ -187,10 +207,14 @@ public class Zombi extends Entidad implements Serializable{
     }
 
     public String mostrarHistorialSupervivientesAtacados(){
-        StringBuilder sb = new StringBuilder();
-        for(String superviviente : supervivientesAtacados){
-            sb.append(superviviente);
-        }
-        return sb.toString();
+        if(supervivientesAtacados.isEmpty()){
+            return "No ha atacado a ningún superviviente todavía\n";
+        }else{
+            StringBuilder sb = new StringBuilder();
+            for(String superviviente : supervivientesAtacados){
+                sb.append(superviviente);
+            }
+            return sb.toString();
+        }        
     }
 }

@@ -83,6 +83,7 @@ public class Arma extends Equipo{
         return random.nextInt(4) + 1;
     }
 
+    @Override
     public String getNombre(){
         return nombre;
     }

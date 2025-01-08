@@ -102,9 +102,10 @@ public class Casilla implements Serializable{
         return this.x == casilla.x && this.y == casilla.y;
     }
 
-    public Equipo buscar(){
+    public Equipo buscar(InterfazPrincipal interfazPrincipal){
         int a = random.nextInt(2);
         if (buscada == true){
+            interfazPrincipal.mostrarMensaje("Ya has buscado en esta casilla");
             return null;
         }
         if (a == 0){

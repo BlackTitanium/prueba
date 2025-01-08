@@ -6,7 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class PanelHistoriales extends JPanel{
-    private JTextArea textArea;
+    public JTextArea textArea;
     private JScrollPane scrollPane;
     private JButton botonHistorialAtaques, botonHistorialSuperviviente, botonHistorialZombi, botonVolver;
     
@@ -65,7 +65,6 @@ public class PanelHistoriales extends JPanel{
         botonVolver.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                interfazPrincipal.zombiSeleccionado = null;
                 textArea.setText("");
                 interfazPrincipal.cardLayout.show(interfazPrincipal.panelDerechoPrincipal, "PanelMenuJugador");
             }
@@ -82,7 +81,8 @@ public class PanelHistoriales extends JPanel{
         botonHistorialZombi.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                textArea.setText(almacen.mostrarHistorialAtaquesInterfaz());
+                JOptionPane.showMessageDialog(interfazPrincipal,"Selecciona la casilla del zombi del que quieres saber el historial");
+                seleccionarZombi = true;
             }
         });
         
@@ -92,10 +92,5 @@ public class PanelHistoriales extends JPanel{
                 textArea.setText(partida.getSupervivienteActual().mostrarHistorialZombisAsesinados());
             }
         });
-    }
-    
-    public void elegirZombi(){
-        Zombi elegido = interfazPrincipal.zombiSeleccionado;
-        textArea.setText(elegido.mostrarHistorialSupervivientesAtacados());
     }
 }
