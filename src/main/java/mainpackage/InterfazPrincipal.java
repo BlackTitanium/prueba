@@ -185,6 +185,9 @@ public class InterfazPrincipal extends JFrame{
     public void faseZombiInterfaz(){
         panelMenuJugador.actualizarLabels();
         panelMenuJugador.activacionBotones(false);
+        panelMenuJugador.botonAtacar.setEnabled(false);
+        panelMenuJugador.botonInventario.setEnabled(false);
+        panelMenuJugador.botonNada.setEnabled(false);
     }
     
     public void moverZombi(Casilla origen, Casilla destino, String textoBotonZombi){

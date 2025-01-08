@@ -14,7 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class PanelMenuJugador extends JPanel{
-    private JButton botonMoverse, botonBuscar, botonAtacar, botonInventario, botonNada;
+    public JButton botonMoverse, botonBuscar, botonAtacar, botonInventario, botonNada;
     private JButton botonArma1, botonArma2, botonInv1, botonInv2, botonInv3, botonInv4, botonInv5;
     private JButton botonAlmacenDeAtaques, botonAdmin;
     private JLabel turnoDe, numAcciones, contZombis, mordeduras;
@@ -202,6 +202,7 @@ public class PanelMenuJugador extends JPanel{
         botonBuscar.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
+                equipoBuscado = null;
                 Superviviente supervivienteActual = partida.getSupervivienteActual();
                 supervivienteActual.setSeleccion(Entidad.accion.BUSCAR);
                 equipoBuscado = supervivienteActual.getCasillaActual().buscar(interfazPrincipal);
@@ -244,6 +245,7 @@ public class PanelMenuJugador extends JPanel{
             @Override
             public void actionPerformed(ActionEvent e) {
                 partida.getSupervivienteActual().setSeleccion(Entidad.accion.NADA);
+                partida.activarSuperviviente(0, 0, 0, null);
             }
         });
         botonAlmacenDeAtaques.addActionListener(new ActionListener(){
@@ -289,6 +291,7 @@ public class PanelMenuJugador extends JPanel{
                     buscandoActivado = false;
                     actualizarLabels();
                     activacionBotones(true);
+                    partida.accionTerminada();
                 }
             }
         });
@@ -303,6 +306,7 @@ public class PanelMenuJugador extends JPanel{
                     buscandoActivado = false;
                     actualizarLabels();
                     activacionBotones(true);
+                    partida.accionTerminada();
                 }
             }
         });
@@ -316,6 +320,7 @@ public class PanelMenuJugador extends JPanel{
                     buscandoActivado = false;
                     actualizarLabels();
                     activacionBotones(true);
+                    partida.accionTerminada();
                 }
             }
         });
@@ -329,6 +334,7 @@ public class PanelMenuJugador extends JPanel{
                     buscandoActivado = false;
                     actualizarLabels();
                     activacionBotones(true);
+                    partida.accionTerminada();
                 }
             }
         });
@@ -342,6 +348,7 @@ public class PanelMenuJugador extends JPanel{
                     buscandoActivado = false;
                     actualizarLabels();
                     activacionBotones(true);
+                    partida.accionTerminada();
                 }
             }
         });

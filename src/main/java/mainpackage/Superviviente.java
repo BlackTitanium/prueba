@@ -130,6 +130,7 @@ public class Superviviente extends Entidad implements Serializable{
     public void buscar(int a, Equipo equipo){
         System.out.println("Se añade EN BUSCAR al inventario de " + this.nombre + ": ranura: " + a + ", y es: equipo: " + equipo.toString());
         this.setInventario(equipo, a);
+        partida.getInterfazPrincipal().panelMenuJugador.actualizarLabels();
         acciones--;
     }
 
@@ -145,6 +146,8 @@ public class Superviviente extends Entidad implements Serializable{
 
             } else if(seleccion==accion.BUSCAR){
                 buscar(ranura, e);
+            } else if(seleccion==accion.NADA){
+                this.setAcciones(0);
             }
         }
     }
