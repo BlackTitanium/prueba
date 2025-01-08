@@ -177,7 +177,11 @@ public class Superviviente extends Entidad implements Serializable{
             }
         }
         sb.append("\nArmas activas: ");
-        sb.append(armas[0].getNombre()).append(" y ").append(armas[1].getNombre()).append("\n");
+        if(armas[1] == null){
+            sb.append(armas[0].getNombre()).append("\n");
+        }else{
+            sb.append(armas[0].getNombre()).append(" y ").append(armas[1].getNombre()).append("\n");
+        }        
         sb.append("Contador de zombis: ").append(contadorZombis).append("\n");
         sb.append("Tipo de ataque recibido: ");
         return sb.toString();
