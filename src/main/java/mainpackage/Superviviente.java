@@ -74,6 +74,7 @@ public class Superviviente extends Entidad implements Serializable{
         return inventario[a];
     }
     public void setInventario(Equipo e, int a){
+        System.out.println("Se añade al inventario de " + this.nombre + ": ranura: " + a + ", y es: equipo: " + e.toString());
         this.inventario[a] = e;
     }
 
@@ -127,6 +128,7 @@ public class Superviviente extends Entidad implements Serializable{
     }
 
     public void buscar(int a, Equipo equipo){
+        System.out.println("Se añade EN BUSCAR al inventario de " + this.nombre + ": ranura: " + a + ", y es: equipo: " + equipo.toString());
         this.setInventario(equipo, a);
         acciones--;
     }
