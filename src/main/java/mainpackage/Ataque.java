@@ -37,7 +37,7 @@ public class Ataque implements Serializable{
         }
         sb.append("\n");
 
-        sb.append("Exitos obtenidos: ").append(numExitos).append("\n");
+        sb.append("Exitos obtenidos: ").append(numExitos).append("\n").append("\n");
 
         resultado = sb.toString();
 

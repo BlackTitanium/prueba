@@ -39,13 +39,13 @@ public class Toxico extends Zombi {
             if(this.estadoActual == estado.MUERTO){
                 StringBuilder sb = new StringBuilder();
                 sb.append(s.infoSuperviviente());
-                sb.append("herida").append("\n");
+                sb.append("herida").append("\n").append("\n");
                 añadirSupervivienteAtacado(sb.toString());
             }
         }
         StringBuilder sb = new StringBuilder();
         sb.append(s.infoSuperviviente());
-        sb.append("mordedura").append("\n");
+        sb.append("mordedura").append("\n").append("\n");
         añadirSupervivienteAtacado(sb.toString());
     }
 }

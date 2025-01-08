@@ -292,7 +292,7 @@ public class Partida implements Serializable{
                     interfazPrincipal.accionRealizada = false;
                 }
             }
-            //faseZombie();
+            faseZombie();
             faseApariciónZombi();
             avanzarTurno();
         } 

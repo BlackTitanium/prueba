@@ -131,7 +131,7 @@ public class Zombi extends Entidad implements Serializable{
         }
         StringBuilder sb = new StringBuilder();
         sb.append(s.infoSuperviviente());
-        sb.append("mordedura").append("\n");
+        sb.append("mordedura").append("\n").append("\n");
         añadirSupervivienteAtacado(sb.toString());
     }
 
@@ -178,10 +178,19 @@ public class Zombi extends Entidad implements Serializable{
             sb.append("Inmune a ataques a distancia\n");
             sb.append("(desde casillas diferentes a las que se encuentre el zombi)\n");
         }
+        sb.append("\n");
         return sb.toString();
     }
 
     public void añadirSupervivienteAtacado(String infoSupervivienteAtacado){
         supervivientesAtacados.add(infoSupervivienteAtacado);
+    }
+
+    public String mostrarHistorialSupervivientesAtacados(){
+        StringBuilder sb = new StringBuilder();
+        for(String superviviente : supervivientesAtacados){
+            sb.append(superviviente);
+        }
+        return sb.toString();
     }
 }

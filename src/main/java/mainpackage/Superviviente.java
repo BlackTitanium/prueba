@@ -199,4 +199,12 @@ public class Superviviente extends Entidad implements Serializable{
     public void añadirZombiAsesinado(String infoZombiAsesinado){
         zombisAsesinados.add(infoZombiAsesinado);
     }
+
+    public String mostrarHistorialZombisAsesinados(){
+        StringBuilder sb = new StringBuilder();
+        for(String zombi : zombisAsesinados){
+            sb.append(zombi);
+        }
+        return sb.toString();
+    }
 }

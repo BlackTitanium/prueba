@@ -36,6 +36,8 @@ public class InterfazPrincipal extends JFrame{
     
     public Partida partida;
     private Tablero tablero;
+    
+    public Zombi zombiSeleccionado;
                 
     public InterfazPrincipal(Partida partida){
         this.partida = partida;
@@ -95,6 +97,14 @@ public class InterfazPrincipal extends JFrame{
     
     public void mostrarMensaje(String mensaje){
         JOptionPane.showMessageDialog(this,mensaje);
+    }
+    
+    public boolean mostrarMensajeSiNo(String mensaje){
+        int respuesta = InterfazDeSINo.mostrarConfirmacion(mensaje);
+        if (respuesta == JOptionPane.YES_OPTION) {
+            return true;
+        }
+        return false;
     }
     
     // Inicializar el tablero con Casillas y Botones
@@ -167,6 +177,9 @@ public class InterfazPrincipal extends JFrame{
             } else{
                 JOptionPane.showMessageDialog(this,"Debes seleccionar un arma");
             }
+        }
+        if(panelHistoriales.seleccionarZombi){
+            elegirZombiInterfazPrincipal(boton, x, y);
         }
     }
 
@@ -280,6 +293,9 @@ public class InterfazPrincipal extends JFrame{
                     sb.append("</html>"); // Ponemos el cierre de nuevo
                     botones[x][y].setText(sb.toString()); // Añado el texto al boton destino
                     botones[elementoSeleccionado.x][elementoSeleccionado.y].setText(textoBotonOrigenFinal);
+                    if(origen.getContadorZombis() == 0 && origen.getContadorSupervivientes() == 0){
+                        tablero.posicionesOcupadas[elementoSeleccionado.x][elementoSeleccionado.y] = false;
+                    }
                     
                     partida.accionTerminada();
                     elementoSeleccionado = null;
@@ -348,6 +364,8 @@ public class InterfazPrincipal extends JFrame{
                     elementoSeleccionado = null;
                     panelMenuJugador.atacarActivado = false;
                     panelMenuJugador.activacionBotones(true);
+                    botones[elementoSeleccionado.x][elementoSeleccionado.y].setBackground(Color.LIGHT_GRAY);
+                    botones[elementoSeleccionado.x][elementoSeleccionado.y].setForeground(Color.BLACK);
                     for (int i = 0; i < casillasAlcance.size(); i++){
                         botones[casillasAlcance.get(i).getX()][casillasAlcance.get(i).getY()].setBackground(Color.LIGHT_GRAY);
                         botones[casillasAlcance.get(i).getX()][casillasAlcance.get(i).getY()].setForeground(Color.BLACK);
@@ -361,6 +379,44 @@ public class InterfazPrincipal extends JFrame{
         }
     }
          
+    public void elegirZombiInterfazPrincipal(JButton boton, int x, int y){
+        if(elementoSeleccionado == null){
+            elementoSeleccionado = new Point(x,y);
+            boton.setBackground(Color.DARK_GRAY);
+            boton.setForeground(Color.WHITE);
+            int xOrigen = elementoSeleccionado.x;
+            int yOrigen = elementoSeleccionado.y;
+            Casilla origen = tablero.getCasilla(xOrigen, yOrigen);
+            int xDestino = x;
+            int yDestino = y;
+            Casilla destino = tablero.getCasilla(xDestino, yDestino);
+            if(origen.getContadorZombis() != 0){
+                for(int i = 0; i < origen.getContadorZombis(); i++){
+                    StringBuilder sb = new StringBuilder();
+                    sb.append("¿Quieres acceder al historial del zombi ");
+                    Zombi zombi = origen.getZombi(i);
+                    String txtBotonDeLosZombis = zombi.getZombiParaBoton();
+                    txtBotonDeLosZombis = txtBotonDeLosZombis.replace("<html>", "");
+                    txtBotonDeLosZombis = txtBotonDeLosZombis.replace("<br>", "");
+                    txtBotonDeLosZombis = txtBotonDeLosZombis.replace("</html>", "");
+                    sb.append(txtBotonDeLosZombis);
+                    sb.append(" ?");
+                    boolean respuesta = mostrarMensajeSiNo(sb.toString());
+                    if(respuesta){
+                        zombiSeleccionado = zombi;
+                        break;
+                    }
+                }
+                boton.setBackground(Color.LIGHT_GRAY);
+                boton.setForeground(Color.BLACK);
+                elementoSeleccionado = null;
+            }else{
+                JOptionPane.showMessageDialog(this,"No hay zombis en esta casilla");
+                boton.setBackground(Color.LIGHT_GRAY);
+                boton.setForeground(Color.BLACK);
+            }
+        }
+    }
     
     public static void main(String args[]){ 
         Juego juego = new Juego();
