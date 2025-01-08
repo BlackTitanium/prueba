@@ -69,6 +69,7 @@ public class InterfazPrincipal extends JFrame{
         // Añadir paneles al JFrame
         add(panelTablero, BorderLayout.CENTER);  // Tablero en el centro (ocupa la izquierda)
         add(panelDerechoPrincipal, BorderLayout.EAST);    // Panel de control a la derecha
+        inicializarTablero();
         setVisible(true);
     }
     
@@ -84,6 +85,11 @@ public class InterfazPrincipal extends JFrame{
         panelDerechoPrincipal.repaint();
     }
     
+    public void actualizacionGeneralPanelMenuJugador(){
+        panelMenuJugador.actualizarLabels();
+        panelMenuJugador.activacionBotones(true);
+    }
+    
     // Inicializar el tablero con Casillas y Botones
     public void inicializarTablero() {
         for (int i = 0; i < SIZE; i++) {
@@ -94,39 +100,48 @@ public class InterfazPrincipal extends JFrame{
                 botones[i][j].setForeground(Color.BLACK);
                 botones[i][j].setFont(new Font("Arial",0,10));
                 botones[i][j].setText("<html></html>");
+                panelTablero.add(botones[i][j]);
+            }
+        }
+    }
+    
+    public void activarActionListener(){
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
                 int I = i, J = j;
                 botones[i][j].addActionListener(new ActionListener(){
                     @Override
                     public void actionPerformed(ActionEvent e){
-                        Superviviente supervivienteActual = partida.getSupervivienteActual();
-                        if(panelMenuJugador.movimientoActivado){
-                            moverElemento(botones[I][J], I, J);
-                            actualizarCasillas(tablero.getCasilla(botones[I][J].getX(), botones[I][J].getY()), tablero.getCasilla(I,J));
-                            supervivienteActual.setAcciones(supervivienteActual.getAcciones()-1);
-                            panelMenuJugador.actualizarLabels();
-                            if(supervivienteActual.getAcciones() == 0){
-                                panelMenuJugador.activacionBotones(false);
-                                partida.avanzarTurno();
-                            }
-                        } else if(panelMenuJugador.atacarActivado){
-                            if(armaActiva != null){
-                                atacar(botones[I][J], I, J);
-                                actualizarCasillas(tablero.getCasilla(botones[I][J].getX(), botones[I][J].getY()), tablero.getCasilla(I,J));
-                            } else{
-                                JOptionPane.showMessageDialog(null,"No puede atacar en este momento");
-                                panelMenuJugador.activacionBotones(true);
-                            }
-                        } else{
-                            JOptionPane.showMessageDialog(null,"No puede moverse en este momento");
-                        }
-                        if(supervivienteActual.getAcciones() == 0){
-                            panelMenuJugador.activacionBotones(false);
-                            partida.avanzarTurno();
-                        }
+                        accionBotonesTablero(botones[I][J],I,J);
                     }
                 });
-                panelTablero.add(botones[i][j]);
             }
+        }
+    }
+    
+    public void accionBotonesTablero(JButton boton, int x, int y){
+        Superviviente supervivienteActual = partida.getSupervivienteActual();
+        if(panelMenuJugador.movimientoActivado){
+            moverElemento(boton, x, y);
+            if(elementoSeleccionado != null){
+                actualizarCasillas(tablero.getCasilla(elementoSeleccionado.x, elementoSeleccionado.y), tablero.getCasilla(x,y));
+            }else{
+                actualizarCasillas(tablero.getCasilla(x, y), tablero.getCasilla(x,y));
+            }
+        } else if(panelMenuJugador.atacarActivado){
+            if(armaActiva != null){
+                atacar(botones[x][y], x, y);
+                if(elementoSeleccionado != null){
+                    actualizarCasillas(tablero.getCasilla(elementoSeleccionado.x, elementoSeleccionado.y), tablero.getCasilla(x,y));
+                }else{
+                    actualizarCasillas(tablero.getCasilla(x, y), tablero.getCasilla(x,y));
+                }
+            } else{
+                JOptionPane.showMessageDialog(null,"No puede atacar en este momento");
+                panelMenuJugador.activacionBotones(true);
+            }
+        } else{
+            JOptionPane.showMessageDialog(null,"No puede moverse en este momento");
         }
     }
     

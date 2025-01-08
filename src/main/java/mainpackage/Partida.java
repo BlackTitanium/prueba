@@ -17,6 +17,8 @@ public class Partida implements Serializable{
     private AlmacenDeAtaques almacen;
     private InterfazPrincipal interfazPrincipal;
     private static int idZombiCont = 1;
+    public boolean victoria = false;
+    private final Object monitor = new Object();
 
     public InterfazPrincipal getInterfazPrincipal(){
         return interfazPrincipal;
@@ -30,7 +32,12 @@ public class Partida implements Serializable{
         if (supervivientes == null || supervivientes.isEmpty()) {
             throw new IllegalStateException("No hay supervivientes en la lista.");
         }
-        return supervivientes.get(turnoActual);
+        int turnoSuperviviente = getTurnoSupervivienteActual();
+        return supervivientes.get(turnoSuperviviente);
+    }
+
+    public int getTurnoSupervivienteActual(){
+        return turnoActual % supervivientes.size();
     }
     
     public Superviviente getSupervivienteIndice(int indice) {
@@ -56,7 +63,7 @@ public class Partida implements Serializable{
     }
     
     public void avanzarTurno() {
-        turnoActual = (turnoActual + 1) % supervivientes.size();
+        turnoActual++;
     }
 
     public void introducirSupervivientes(String[] nombres){
@@ -80,8 +87,8 @@ public class Partida implements Serializable{
 
     public void colocarElementosIniciales(String[] nombres){
         supervivientes = new ArrayList<Superviviente>(interfazPrincipal.nJugadores);
+        zombis = new ArrayList<>();
         Casilla casillaInicial = new Casilla(0,0);
-        interfazPrincipal.inicializarTablero();
         
         StringBuilder sb1 = new StringBuilder();
         sb1.append("<html>"); // Inicio con HTML
@@ -107,9 +114,12 @@ public class Partida implements Serializable{
         }
         
         // Cambiar el panel derecho
+        interfazPrincipal.activarActionListener();
         interfazPrincipal.inicializarPaneles();
         interfazPrincipal.cardLayout.show(interfazPrincipal.panelDerechoPrincipal, "PanelMenuJugador");
-        gestorTurnos();
+        SwingUtilities.invokeLater(() -> {
+            new Thread(() -> {gestorTurnos();}).start();
+        });
     }
 
     public void activarSuperviviente(int ranura, int x, int y){
@@ -124,33 +134,48 @@ public class Partida implements Serializable{
                     Ataque ataque = supervivienteActual.getUltimoAtaque();
                     ArrayList<Casilla> objetivo = supervivienteActual.elegirObjetivo(supervivienteActual.getArmas()[ranura]);
                     Casilla casillaObjetivo = tablero.getCasilla(x, y);
+                    Casilla casillaActual = supervivienteActual.getCasillaActual();
+                    int nExitos = ataque.getNumExitos();
                     if(objetivo == null){
                         int intento = 0;
-                        while(intento < supervivienteActual.getCasillaActual().getContadorZombis()){
+                        while(intento < casillaActual.getContadorZombis() || nExitos > 0){
                             try {
-                                supervivienteActual.getCasillaActual().getZombi(intento).reaccion(supervivienteActual.getArmas()[ranura], ataque.numExitos(almacen));
+                                int vivoOmuerto = casillaActual.getZombi(intento).reaccion(supervivienteActual.getArmas()[ranura]);
+                                if(vivoOmuerto == 1 || vivoOmuerto == 2){ // EL zombi a muerto (Si es 2 es porque era toxico y ademas estaba en la casilla con un sueprviviente)
+                                    supervivienteActual.añadirZombiAsesinado(casillaActual.getZombi(intento).infoZombi());
+                                    casillaActual.removeEntidad(casillaActual.getZombi(intento));
+                                    zombis.remove(casillaActual.getZombi(intento));
+                                    interfazPrincipal.botones[x][y].setText("<html></html>");
+                                    nExitos--;
+                                }
                             } catch (IllegalArgumentException e) {
                                 if ("Alcance".equals(e.getMessage())) { //Si es Berserker
                                     supervivienteActual.addAcciones(); // Devuelve la accion para seguir intentando
-                                    intento++; // Siguiente zombi
                                 }
                             }
-                        
+                            intento++; // Siguiente zombi
                         }
                     } else {
                      // Asociar de alguna forma las opciones disponibles objetivo con un input y la interfaz
                     // Las casillas objetivo estan en la List<Casilla> objetivo
                     // Guardar en casillaObjetivo la casilla seleccionada
                     int intento = 0;
-                    while(intento < casillaObjetivo.getContadorZombis()){
+                    while(intento < casillaObjetivo.getContadorZombis() || nExitos > 0){
                         try {
-                            casillaObjetivo.getZombi(intento).reaccion(supervivienteActual.getArmas()[ranura], ataque.numExitos(almacen));
+                            int vivoOmuerto = casillaActual.getZombi(intento).reaccion(supervivienteActual.getArmas()[ranura]);
+                            if(vivoOmuerto == 1 || vivoOmuerto == 2){ // EL zombi a muerto (Si es 2 ademas era toxico)
+                                supervivienteActual.añadirZombiAsesinado(casillaActual.getZombi(intento).infoZombi());
+                                casillaActual.removeEntidad(casillaActual.getZombi(intento));
+                                zombis.remove(casillaActual.getZombi(intento));
+                                interfazPrincipal.botones[x][y].setText("<html></html>");
+                                nExitos--;
+                            }
                         } catch (IllegalArgumentException e) {
                             if ("Alcance".equals(e.getMessage())) { //Si es Berserker
                                 supervivienteActual.addAcciones(); // Devuelve la accion para seguir intentando
-                                intento++; // Siguiente zombi
                             }
                         }
+                        intento++; // Siguiente zombi
                     }
                 }  
 
@@ -166,6 +191,7 @@ public class Partida implements Serializable{
                 case Entidad.accion.NADA: //Nada
                     break;
         }
+        accionRealizada();
         // NS SI PONERLO AQUÍ O EN EL GESTOR DE TURNOS AL FINAL, ES PARA QUE SE ACTUALIZEN LAS ACCIONES EN LA INTERFAZ
         //interfazPrincipal.panelMenuJugador.actualizarLabels();
     }
@@ -173,7 +199,7 @@ public class Partida implements Serializable{
         supervivienteActual = this.getSupervivienteActual();
         inventarioActual = supervivienteActual.getInventario();
         supervivienteActual.setAcciones(3);
-        System.out.println("Acciones restantes: " + supervivienteActual.getAcciones());
+        System.out.println("Acciones restantes: " + supervivienteActual.getAcciones() + " de " + supervivienteActual.getNombre());
     }
 
     public void faseZombie(){
@@ -209,11 +235,62 @@ public class Partida implements Serializable{
         tablero.getCasilla(x, y).addEntidad(z);
         // Mostrar el Zombi y su tipo en el Tablero(interfaz)
         interfazPrincipal.botones[x][y].setText(z.getZombiParaBoton());
+        // Añadir al arrayList
+        zombis.add(z);
         // Incrementar el contador de zombis
         idZombiCont++;
     }
 
-    public Partida(){
+    public void gestorTurnos(){
+        setTurnoActual(0);
+        //for (int i = 0; i < getSupervivientes().size(); i++) {
+        while(!victoria){
+            faseSuperviviente();
+            Superviviente supervivienteActual = getSupervivienteActual();
+//            SwingUtilities.invokeLater(() -> {
+//                // Actualizar para el siguiente jugador
+//                interfazPrincipal.panelMenuJugador.actualizarLabels();
+//                interfazPrincipal.panelMenuJugador.activacionBotones(true);
+//            });
+            interfazPrincipal.actualizacionGeneralPanelMenuJugador();
+            while (supervivienteActual.getAcciones() > 0) {
+                // Mostrar el panel de control del jugador
+                //interfazPrincipal.cardLayout.show(interfazPrincipal.panelDerechoPrincipal, "PanelMenuJugador");
+                //interfazPrincipal.panelMenuJugador.activacionBotones(true);
+                interfazPrincipal.actualizacionGeneralPanelMenuJugador();
+                synchronized (monitor) {
+                    // Esperar a que el jugador seleccione una acción
+                    while (!interfazPrincipal.accionRealizada) {
+                        try {
+                            monitor.wait();
+                        } catch (InterruptedException e) {
+                        }
+                    }
+                    interfazPrincipal.accionRealizada = false;
+                }
+//                SwingUtilities.invokeLater(() -> {
+//                    // Actualizar para el siguiente jugador
+//                    interfazPrincipal.panelMenuJugador.actualizarLabels();
+//                    interfazPrincipal.panelMenuJugador.activacionBotones(true);
+//                });
+                interfazPrincipal.actualizacionGeneralPanelMenuJugador();
+            }
+            //faseZombie();
+            //faseApariciónZombi();
+            avanzarTurno();
+        } 
+    }
+
+
+    public void accionRealizada(){
+        synchronized (monitor) {
+            interfazPrincipal.actualizacionGeneralPanelMenuJugador();
+            interfazPrincipal.accionRealizada = true;
+            monitor.notifyAll();
+        }
+    }
+
+    public void iniciarPartida(){
         tablero = new Tablero(this);
         almacen =  new AlmacenDeAtaques();
 
@@ -221,36 +298,8 @@ public class Partida implements Serializable{
         interfazPrincipal = new InterfazPrincipal(this);
     }
 
-    public void gestorTurnos(){
-            for (int i = 0; i < getSupervivientes().size(); i++) {
-                setTurnoActual(i);
-                faseSuperviviente();
-                Superviviente supervivienteActual = getSupervivienteActual();
-                while (supervivienteActual.getAcciones() > 0) {
-                    // Mostrar el panel de control del jugador
-                    interfazPrincipal.cardLayout.show(interfazPrincipal.panelDerechoPrincipal, "PanelMenuJugador");
-                    interfazPrincipal.panelMenuJugador.activacionBotones(true);
-                    // Esperar a que el jugador seleccione una acción
-                    while (!interfazPrincipal.accionRealizada) {
-                        try {
-                            this.wait(1000);
-                        } catch (InterruptedException e) {
-                        }
-                    }
-                    SwingUtilities.invokeLater(() -> {
-                    interfazPrincipal.accionRealizada = false;
-                // Actualizar para el siguiente jugador
-                    interfazPrincipal.panelMenuJugador.actualizarLabels();
-                    interfazPrincipal.panelMenuJugador.activacionBotones(true);
-                    avanzarTurno();
-                });
-                }
-                faseZombie();
-                faseApariciónZombi();
-        } 
-    }
-
-    public void gestionarTurno(){
-        
+    public Partida(){
+        Thread hiloPrincipal = new Thread(this::iniciarPartida);
+        hiloPrincipal.start();
     }
 }

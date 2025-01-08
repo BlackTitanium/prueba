@@ -18,4 +18,18 @@ public class Toxico extends Zombi {
             }
         }
     }
+
+    @Override
+    public int reaccion(Arma arma){
+        int vivoOmuerto = super.reaccion(arma);
+        
+        if(vivoOmuerto == 1){
+            if(casillaActual.getContadorSupervivientes()!=0){
+                casillaActual.getSuperviviente(0).addMordeduras();
+                return vivoOmuerto + 1; // Devuelve 2 porque hay mordedura
+            }
+            return vivoOmuerto; // Devuelve 1 porque muere pero no muerde
+        }
+        return vivoOmuerto; // Devuelve 0 porque no muere
+    }
 }

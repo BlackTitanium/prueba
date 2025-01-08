@@ -1,8 +1,8 @@
 package mainpackage;
 
 import java.io.Serializable;
-import java.util.Random;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Zombi extends Entidad implements Serializable{
     public static String[] tiposZombi = {"CAMINANTE", "CORREDOR", "ABOMINACION"};
@@ -104,6 +104,15 @@ public class Zombi extends Entidad implements Serializable{
         }
         
     }
+
+    public int reaccion(Arma arma){
+        if(arma.getPotencia() >= aguante){
+            casillaActual.removeEntidad(this);
+            return 1; // Ha muerto
+        }
+        return 0; // No ha muerto
+    }
+
     public void atacar(Superviviente s){
         s.addMordeduras();
         if(s.getMordeduras() == 2){
