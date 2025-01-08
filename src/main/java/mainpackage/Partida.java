@@ -243,21 +243,11 @@ public class Partida implements Serializable{
 
     public void gestorTurnos(){
         setTurnoActual(0);
-        //for (int i = 0; i < getSupervivientes().size(); i++) {
         while(!victoria){
             faseSuperviviente();
             Superviviente supervivienteActual = getSupervivienteActual();
-//            SwingUtilities.invokeLater(() -> {
-//                // Actualizar para el siguiente jugador
-//                interfazPrincipal.panelMenuJugador.actualizarLabels();
-//                interfazPrincipal.panelMenuJugador.activacionBotones(true);
-//            });
             interfazPrincipal.actualizacionGeneralPanelMenuJugador();
             while (supervivienteActual.getAcciones() > 0) {
-                // Mostrar el panel de control del jugador
-                //interfazPrincipal.cardLayout.show(interfazPrincipal.panelDerechoPrincipal, "PanelMenuJugador");
-                //interfazPrincipal.panelMenuJugador.activacionBotones(true);
-                interfazPrincipal.actualizacionGeneralPanelMenuJugador();
                 synchronized (monitor) {
                     // Esperar a que el jugador seleccione una acción
                     while (!interfazPrincipal.accionRealizada) {
@@ -268,12 +258,6 @@ public class Partida implements Serializable{
                     }
                     interfazPrincipal.accionRealizada = false;
                 }
-//                SwingUtilities.invokeLater(() -> {
-//                    // Actualizar para el siguiente jugador
-//                    interfazPrincipal.panelMenuJugador.actualizarLabels();
-//                    interfazPrincipal.panelMenuJugador.activacionBotones(true);
-//                });
-                interfazPrincipal.actualizacionGeneralPanelMenuJugador();
             }
             //faseZombie();
             //faseApariciónZombi();

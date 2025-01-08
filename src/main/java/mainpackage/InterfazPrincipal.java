@@ -103,6 +103,14 @@ public class InterfazPrincipal extends JFrame{
                 panelTablero.add(botones[i][j]);
             }
         }
+        StringBuilder sb = new StringBuilder();
+        String aux = botones[9][9].getText();
+        aux = aux.replace("</html>", "");
+        sb.append(aux);
+        sb.append("Meta");
+        sb.append("<br>");
+        sb.append("</html>");
+        botones[9][9].setText(sb.toString());
     }
     
     public void activarActionListener(){
