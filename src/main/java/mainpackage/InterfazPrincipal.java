@@ -190,6 +190,14 @@ public class InterfazPrincipal extends JFrame{
         panelMenuJugador.botonNada.setEnabled(false);
     }
     
+    public void matarZombi(Casilla casilla, String textoBotonZombi){
+        int x = casilla.getX();
+        int y = casilla.getY();
+        String textoBoton = botones[x][y].getText();
+        textoBoton = textoBoton.replace(textoBotonZombi, "");
+        botones[x][y].setText(textoBoton);
+    }
+    
     public void moverZombi(Casilla origen, Casilla destino, String textoBotonZombi){
         int xOrigen = origen.getX();
         int yOrigen = origen.getY();
@@ -383,7 +391,6 @@ public class InterfazPrincipal extends JFrame{
                     // Atacar al zombi
                     partida.activarSuperviviente(panelMenuJugador.armaElegida, x, y, null);
                     // En caso de que haya zombis muertos ya se encarga partida
-                    System.out.println("Aqui1");
                     // Restablecer casillas
                     botones[elementoSeleccionado.x][elementoSeleccionado.y].setBackground(Color.LIGHT_GRAY);
                     botones[elementoSeleccionado.x][elementoSeleccionado.y].setForeground(Color.BLACK);
@@ -391,7 +398,6 @@ public class InterfazPrincipal extends JFrame{
                         botones[casillasAlcance.get(i).getX()][casillasAlcance.get(i).getY()].setBackground(Color.LIGHT_GRAY);
                         botones[casillasAlcance.get(i).getX()][casillasAlcance.get(i).getY()].setForeground(Color.BLACK);
                     }
-                    System.out.println("Aqui1");
                     // Restablecer valores
                     partida.accionTerminada();
                     elementoSeleccionado = null;

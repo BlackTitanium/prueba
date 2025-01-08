@@ -170,7 +170,7 @@ public class Partida implements Serializable{
                                 // Quitar el zombi de la casilla
                                 casillaObjetivo.removeZombi(zombi);
                                 // Borramos el zombi en la interfaz
-                                interfazPrincipal.actualizarCasillas(casillaObjetivo, casillaObjetivo);
+                                interfazPrincipal.matarZombi(casillaObjetivo, zombi.getZombiParaBoton());
                                 // Actualizar el panel de menu de jugador
                                 interfazPrincipal.panelMenuJugador.actualizarLabels();
                                 // Como ha matado a un zombi se resta un exito
