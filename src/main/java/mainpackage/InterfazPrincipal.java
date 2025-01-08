@@ -260,9 +260,7 @@ public class InterfazPrincipal extends JFrame{
                     StringBuilder aux = new StringBuilder();
                     aux.append(supervivienteActual.getNombre()).append("<br>");
                     String nombre = aux.toString();
-                    System.out.println("El nombre: " + nombre);
                     String textoBotonOrigenFinal = textoBotonOrigen.replace(nombre,""); // Le quito el nombre del jugador
-                    System.out.println("Texto Boton Origen Final(Con zombis, sin nombre): " + textoBotonOrigenFinal); 
                     if(origen.getContadorZombis() > 0){ // Si hay zombis
                         for(int i = 0; i<origen.getContadorZombis();i++){
                             Zombi zombi = origen.getZombi(i);
@@ -276,7 +274,6 @@ public class InterfazPrincipal extends JFrame{
                     }
                     sb.append("</html>"); // Ponemos el cierre de nuevo
                     botones[x][y].setText(sb.toString()); // Añado el texto al boton destino
-                    System.out.println("Texto Boton Origen Final(Antes de ponerlo en boton): " + textoBotonOrigenFinal); 
                     botones[elementoSeleccionado.x][elementoSeleccionado.y].setText(textoBotonOrigenFinal);
                     
                     partida.accionTerminada();
