@@ -9,27 +9,44 @@ public class Toxico extends Zombi {
         super(c, subtipoZ,partida,id,tipo);
     }
 
+//    @Override
+//    public void reaccion(Arma arma, int a){
+//        super.reaccion(arma, a);
+//        if(aguante == 0){
+//            if(casillaActual.getContadorSupervivientes()!=0){
+//                casillaActual.getSuperviviente(0).addMordeduras();
+//            }
+//        }
+//    }
+
     @Override
-    public void reaccion(Arma arma, int a){
-        super.reaccion(arma, a);
-        if(aguante == 0){
+    public void reaccion(Arma arma){
+        if(arma.getPotencia() >= aguante){
             if(casillaActual.getContadorSupervivientes()!=0){
-                casillaActual.getSuperviviente(0).addMordeduras();
+                atacar(casillaActual.getSuperviviente(0)); // Como se ha muerto y hay un superviviente en su casilla lo ataca
             }
-        }
+            this.estadoActual = estado.MUERTO;
+        }else{
+            this.estadoActual = estado.VIVO;
+        }        
     }
 
     @Override
-    public int reaccion(Arma arma){
-        int vivoOmuerto = super.reaccion(arma);
-        
-        if(vivoOmuerto == 1){
-            if(casillaActual.getContadorSupervivientes()!=0){
-                casillaActual.getSuperviviente(0).addMordeduras();
-                return vivoOmuerto + 1; // Devuelve 2 porque hay mordedura
+    public void atacar(Superviviente s){
+        s.addMordeduras();
+        if(s.getMordeduras() == 2){
+            casillaActual.removeEntidad(s);
+            s.setEstado(Superviviente.estado.MUERTO);
+            if(this.estadoActual == estado.MUERTO){
+                StringBuilder sb = new StringBuilder();
+                sb.append(s.infoSuperviviente());
+                sb.append("herida").append("\n");
+                añadirSupervivienteAtacado(sb.toString());
             }
-            return vivoOmuerto; // Devuelve 1 porque muere pero no muerde
         }
-        return vivoOmuerto; // Devuelve 0 porque no muere
+        StringBuilder sb = new StringBuilder();
+        sb.append(s.infoSuperviviente());
+        sb.append("mordedura").append("\n");
+        añadirSupervivienteAtacado(sb.toString());
     }
 }

@@ -7,6 +7,7 @@ public class Tablero implements Serializable{
     private Casilla mapa[][];
     private Random random = new Random();
     public boolean[][] posicionesOcupadas = new boolean[10][10];
+    public boolean[][] posicionesBuscadas = new boolean[10][10];
 
     private Partida partida;
 
@@ -19,7 +20,8 @@ public class Tablero implements Serializable{
         mapa = new Casilla[10][10];
         for (int i=0; i<10; i++){
             for(int j=0; j<10; j++){
-                    mapa[i][j] = new Casilla(i, j);
+                mapa[i][j] = new Casilla(i, j);
+                posicionesBuscadas[i][j] = false;
             }
         }
     }
@@ -52,18 +54,21 @@ public class Tablero implements Serializable{
         }
     }
 
-    public Casilla objetivoZombi(Casilla c){
+    // Devuelve la casilla del Superviviente más cercano al Zombi que llama al método
+    public Casilla objetivoZombi(Casilla casillaActualZombi) {
         Casilla objetivo = null;
-        for (int j=0; j<10; j++){
-                    for(int k=0; k<10; k++){
-                        if(mapa[j][k].getContadorSupervivientes()!=0){
-                            if(Math.sqrt(Math.pow((c.getX()-mapa[j][k].getX()),2)-Math.pow((c.getY()-mapa[j][k].getY()),2))<
-                                Math.sqrt(Math.pow((c.getX()-objetivo.getX()),2)-Math.pow((c.getY()-objetivo.getY()),2))){
-                                    objetivo = mapa[j][k];
-                                }
-                        }
+        double distanciaMinima = Double.MAX_VALUE;
+        for (int j = 0; j < 10; j++) {
+            for (int k = 0; k < 10; k++) {
+                if (mapa[j][k].getContadorSupervivientes() != 0) {
+                    double distancia = Math.sqrt(Math.pow((casillaActualZombi.getX() - mapa[j][k].getX()), 2) + Math.pow((casillaActualZombi.getY() - mapa[j][k].getY()), 2));
+                    if (distancia < distanciaMinima) {
+                        distanciaMinima = distancia;
+                        objetivo = mapa[j][k];
                     }
                 }
+            }
+        }
         return objetivo;
     }
 }

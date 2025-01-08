@@ -10,12 +10,15 @@ public class Zombi extends Entidad implements Serializable{
     protected String tipo;
     protected String subtipo;
     protected int identificador;
-    private Partida partida;
-    private ArrayList<String> supervivientesAtacados;
+    protected Partida partida;
+    protected ArrayList<String> supervivientesAtacados;
+    public enum estado {VIVO, MUERTO};
+    protected estado estadoActual;
 
     public Zombi(Casilla c, String subtipoZ, Partida partida, int id){
         super(partida, c);
         this.identificador = id;
+        this.estadoActual = estado.VIVO;
         this.partida = partida;
         String tipos = aparicionZombi();
         this.tipo = tipos;
@@ -40,6 +43,7 @@ public class Zombi extends Entidad implements Serializable{
     public Zombi(Casilla c, String subtipoZ, Partida partida, int id, String tipos){
         super(partida, c);
         this.identificador = id;
+        this.estadoActual = estado.VIVO;
         this.partida = partida;
         this.tipo = tipos;
         switch(tipo){
@@ -80,6 +84,10 @@ public class Zombi extends Entidad implements Serializable{
         return tipos;
     }
 
+    public estado getEstadoActual() {
+        return estadoActual;
+    }
+
     public void activar(){
         for (int i=0; i<activaciones; i++){
             if(casillaActual.getContadorSupervivientes()!=0){
@@ -94,23 +102,22 @@ public class Zombi extends Entidad implements Serializable{
         }
     }
 
-    public void reaccion(Arma arma, int a){
-        for (int i=0; i<a; i++){
-            aguante--;
-            if( aguante == 0){
-                casillaActual.removeEntidad(this);
-                break;
-            }
-        }
-        
-    }
+//    public void reaccion(Arma arma, int a){
+//        for (int i=0; i<a; i++){
+//            aguante--;
+//            if( aguante == 0){
+//                casillaActual.removeEntidad(this);
+//                break;
+//            }
+//        } 
+//    }
 
-    public int reaccion(Arma arma){
+    public void reaccion(Arma arma){
         if(arma.getPotencia() >= aguante){
-            casillaActual.removeEntidad(this);
-            return 1; // Ha muerto
-        }
-        return 0; // No ha muerto
+            this.estadoActual = estado.MUERTO; // Ha muerto
+        }else{
+            this.estadoActual = estado.VIVO; // No ha muerto
+        }        
     }
 
     public void atacar(Superviviente s){
@@ -119,6 +126,10 @@ public class Zombi extends Entidad implements Serializable{
             casillaActual.removeEntidad(s);
             s.setEstado(Superviviente.estado.MUERTO);
         }
+        StringBuilder sb = new StringBuilder();
+        sb.append(s.infoSuperviviente());
+        sb.append("mordedura").append("\n");
+        añadirSupervivienteAtacado(sb.toString());
     }
 
     public String getZombiParaBoton(){
@@ -168,9 +179,6 @@ public class Zombi extends Entidad implements Serializable{
     }
 
     public void añadirSupervivienteAtacado(String infoSupervivienteAtacado){
-        StringBuilder sb = new StringBuilder();
-        sb.append(infoSupervivienteAtacado);
-        sb.append("mordedura/herida").append("\n"); // ESTO HAY QUE MODIFICARLO
-        supervivientesAtacados.add(sb.toString());
+        supervivientesAtacados.add(infoSupervivienteAtacado);
     }
 }

@@ -93,7 +93,11 @@ public class Partida implements Serializable{
         StringBuilder sb1 = new StringBuilder();
         sb1.append("<html>"); // Inicio con HTML
         for(int i = 0; i<interfazPrincipal.nJugadores; i++){
+            Arma arma = new Arma();
+            Provision provision = new Provision();
             Superviviente s = new Superviviente(nombres[i], casillaInicial, tablero, this);
+            s.setArma(arma, 0);
+            s.setInventario(provision, 0);
             casillaInicial.addEntidad(s);
             supervivientes.add(s);
             sb1.append(s.getNombre());
@@ -130,23 +134,23 @@ public class Partida implements Serializable{
                 break;
             case Entidad.accion.ATACAR: //Atacar
                     int alcanceTemp = supervivienteActual.getArmas()[ranura].getAlcance();
-                    supervivienteActual.activar(ranura,0,0); 
+                    Casilla casillaActual = supervivienteActual.getCasillaActual();
+                    supervivienteActual.activar(ranura,casillaActual.getX(),casillaActual.getY()); 
                     Ataque ataque = supervivienteActual.getUltimoAtaque();
                     ArrayList<Casilla> objetivo = supervivienteActual.elegirObjetivo(supervivienteActual.getArmas()[ranura]);
                     Casilla casillaObjetivo = tablero.getCasilla(x, y);
-                    Casilla casillaActual = supervivienteActual.getCasillaActual();
                     int nExitos = ataque.getNumExitos();
-                    if(objetivo == null){
+                    if(objetivo == null){   
                         int intento = 0;
-                        while(intento < casillaActual.getContadorZombis() || nExitos > 0){
+                        while((intento < casillaActual.getContadorZombis() || nExitos > 0) && supervivienteActual.getEstadoActual() == Superviviente.estado.VIVO){
                             try {
-                                int vivoOmuerto = casillaActual.getZombi(intento).reaccion(supervivienteActual.getArmas()[ranura]);
-                                if(vivoOmuerto == 1 || vivoOmuerto == 2){ // EL zombi a muerto (Si es 2 es porque era toxico y ademas estaba en la casilla con un sueprviviente)
-                                    supervivienteActual.añadirZombiAsesinado(casillaActual.getZombi(intento).infoZombi());
-                                    casillaActual.removeEntidad(casillaActual.getZombi(intento));
-                                    zombis.remove(casillaActual.getZombi(intento));
-                                    interfazPrincipal.botones[x][y].setText("<html></html>");
-                                    nExitos--;
+                                casillaActual.getZombi(intento).reaccion(supervivienteActual.getArmas()[ranura]);
+                                if(casillaActual.getZombi(intento).getEstadoActual() == Zombi.estado.MUERTO){ // EL zombi a muerto
+                                    supervivienteActual.añadirZombiAsesinado(casillaActual.getZombi(intento).infoZombi()); // Añadir el zombi a la lista de zombis asesinados
+                                    casillaActual.removeEntidad(casillaActual.getZombi(intento)); // Quitar el zombi de la casilla
+                                    zombis.remove(casillaActual.getZombi(intento)); // Quitar el zombi de la lista
+                                    interfazPrincipal.actualizarCasillas(casillaActual, casillaActual); // Para borrar el zombi en la interfaz
+                                    nExitos--; // Como ha matado a un zombi se resta un exito
                                 }
                             } catch (IllegalArgumentException e) {
                                 if ("Alcance".equals(e.getMessage())) { //Si es Berserker
@@ -160,15 +164,15 @@ public class Partida implements Serializable{
                     // Las casillas objetivo estan en la List<Casilla> objetivo
                     // Guardar en casillaObjetivo la casilla seleccionada
                     int intento = 0;
-                    while(intento < casillaObjetivo.getContadorZombis() || nExitos > 0){
+                    while((intento < casillaActual.getContadorZombis() || nExitos > 0) && supervivienteActual.getEstadoActual() == Superviviente.estado.VIVO){
                         try {
-                            int vivoOmuerto = casillaActual.getZombi(intento).reaccion(supervivienteActual.getArmas()[ranura]);
-                            if(vivoOmuerto == 1 || vivoOmuerto == 2){ // EL zombi a muerto (Si es 2 ademas era toxico)
-                                supervivienteActual.añadirZombiAsesinado(casillaActual.getZombi(intento).infoZombi());
-                                casillaActual.removeEntidad(casillaActual.getZombi(intento));
-                                zombis.remove(casillaActual.getZombi(intento));
-                                interfazPrincipal.botones[x][y].setText("<html></html>");
-                                nExitos--;
+                            casillaActual.getZombi(intento).reaccion(supervivienteActual.getArmas()[ranura]);
+                            if(casillaActual.getZombi(intento).getEstadoActual() == Zombi.estado.MUERTO){ // EL zombi a muerto
+                                supervivienteActual.añadirZombiAsesinado(casillaActual.getZombi(intento).infoZombi()); // Añadir el zombi a la lista de zombis asesinados
+                                casillaActual.removeEntidad(casillaActual.getZombi(intento)); // Quitar el zombi de la casilla
+                                zombis.remove(casillaActual.getZombi(intento)); // Quitar el zombi de la lista
+                                interfazPrincipal.actualizarCasillas(casillaActual, casillaActual); // Para borrar el zombi en la interfaz
+                                nExitos--; // Como ha matado a un zombi se resta un exito
                             }
                         } catch (IllegalArgumentException e) {
                             if ("Alcance".equals(e.getMessage())) { //Si es Berserker
@@ -191,7 +195,7 @@ public class Partida implements Serializable{
                 case Entidad.accion.NADA: //Nada
                     break;
         }
-        accionRealizada();
+        accionTerminada();
         // NS SI PONERLO AQUÍ O EN EL GESTOR DE TURNOS AL FINAL, ES PARA QUE SE ACTUALIZEN LAS ACCIONES EN LA INTERFAZ
         //interfazPrincipal.panelMenuJugador.actualizarLabels();
     }
@@ -266,7 +270,7 @@ public class Partida implements Serializable{
     }
 
 
-    public void accionRealizada(){
+    public void accionTerminada(){
         synchronized (monitor) {
             interfazPrincipal.actualizacionGeneralPanelMenuJugador();
             interfazPrincipal.accionRealizada = true;

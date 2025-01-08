@@ -15,18 +15,25 @@ public class Arma extends Equipo{
                 exito = 3;
                 break;
             case 2:
+                nombre = "Escopeta";
+                potencia = 5;
+                dados = 1;
+                alcance = 1;
+                exito = 4;
+                break;
+            case 3:
                 nombre = "Pistola";
                 potencia = 1;
                 dados = 2;
                 alcance = 2;
                 exito= 2;
                 break;
-            case 3:
-                nombre = "Escopeta";
-                potencia = 5;
-                dados = 1;
-                alcance = 1;
-                exito = 4;
+            case 4:
+                nombre = "Francotirador";
+                potencia = 4;
+                dados = 2;
+                alcance = 3;
+                exito = 3;
                 break;
             default:
             System.out.println("Tipo de arma no válida");
@@ -44,18 +51,25 @@ public class Arma extends Equipo{
                 exito = 3;
                 break;
             case 2:
+                nombre = "Escopeta";
+                potencia = 5;
+                dados = 1;
+                alcance = 1;
+                exito = 4;
+                break;
+            case 3:
                 nombre = "Pistola";
                 potencia = 1;
                 dados = 2;
                 alcance = 2;
                 exito= 2;
                 break;
-            case 3:
-                nombre = "Escopeta";
-                potencia = 5;
-                dados = 1;
-                alcance = 1;
-                exito = 4;
+            case 4:
+                nombre = "Francotirador";
+                potencia = 4;
+                dados = 2;
+                alcance = 3;
+                exito = 3;
                 break;
             default:
             System.out.println("Tipo de arma no válida");
@@ -65,8 +79,8 @@ public class Arma extends Equipo{
 
     public int generarTipoArma(){
         Random random = new Random();
-        // Generar un número aleatorio entre 1, 2 y 3
-        return random.nextInt(3) + 1;
+        // Generar un número aleatorio entre 1, 2, 3 y 4
+        return random.nextInt(4) + 1;
     }
 
     public String getNombre(){

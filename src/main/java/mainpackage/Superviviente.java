@@ -41,7 +41,10 @@ public class Superviviente extends Entidad implements Serializable{
     public Arma[] getArmas() {
         return armas;
     }
-   
+    
+    public void setArma(Arma a, int b){
+        this.armas[b] = a;
+    }
 
     public estado getEstadoActual() {
         return estadoActual;
@@ -70,10 +73,6 @@ public class Superviviente extends Entidad implements Serializable{
 
     public void addMordeduras(){
         mordeduras++;
-        if (mordeduras == 2){
-            estadoActual = estado.MUERTO;
-            casillaActual.removeSuperviviente(this);
-        }
     }
 
     public void lessMordeduras(){

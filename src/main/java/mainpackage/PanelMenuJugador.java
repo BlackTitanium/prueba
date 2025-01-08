@@ -13,8 +13,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class PanelMenuJugador extends JPanel{
-    private JButton botonMoverse, botonBuscar, botonAtacar, botonElegirArma, botonNada, botonAlmacenDeAtaques, botonArma1, botonArma2, botonInv1, botonInv2, botonInv3, botonInv4, botonInv5;
+    private JButton botonMoverse, botonBuscar, botonAtacar, botonInventario, botonNada;
+    private JButton botonArma1, botonArma2, botonInv1, botonInv2, botonInv3, botonInv4, botonInv5;
+    private JButton botonAlmacenDeAtaques, botonAdmin;
     private JLabel turnoDe, numAcciones, contZombis, mordeduras;
+    public JPanel panelInventario;
     
     public boolean movimientoActivado = false;
     public boolean atacarActivado = false;
@@ -22,7 +25,7 @@ public class PanelMenuJugador extends JPanel{
     private Partida partida;
     private InterfazPrincipal interfazPrincipal;    
 
-    private int ranuraElegida;
+    public int ranuraElegida;
     
     // TAMAÑO 400 * 745 (Ancho, Alto)
     public PanelMenuJugador(Partida Partida, InterfazPrincipal interfazprincipal){
@@ -97,12 +100,12 @@ public class PanelMenuJugador extends JPanel{
         botonAtacar.setForeground(Color.BLACK);
         add(botonAtacar);
         
-        botonElegirArma = new JButton("Elegir Arma");
-        botonElegirArma.setBounds(230,235,120,30);
-        botonElegirArma.setBackground(Color.LIGHT_GRAY);
-        botonElegirArma.setFont(new Font("Arial", 1, 14));
-        botonElegirArma.setForeground(Color.BLACK);
-        add(botonElegirArma);
+        botonInventario = new JButton("Inventario");
+        botonInventario.setBounds(230,235,120,30);
+        botonInventario.setBackground(Color.LIGHT_GRAY);
+        botonInventario.setFont(new Font("Arial", 1, 14));
+        botonInventario.setForeground(Color.BLACK);
+        add(botonInventario);
         
         botonNada = new JButton("Nada");
         botonNada.setBounds(140,295,120,30);
@@ -110,62 +113,75 @@ public class PanelMenuJugador extends JPanel{
         botonNada.setFont(new Font("Arial", 1, 14));
         botonNada.setForeground(Color.BLACK);
         add(botonNada);
+        
+        panelInventario = new JPanel();
+        panelInventario.setBounds(70, 355, 280, 220);
+        panelInventario.setLayout(null);
 
         botonArma1 = new JButton("Arma 1");
-        botonArma1.setBounds(70,355,120,30);
+        botonArma1.setBounds(0,0,120,30); // 70, 355
         botonArma1.setBackground(Color.LIGHT_GRAY);
         botonArma1.setFont(new Font("Arial", 1, 14));
         botonArma1.setForeground(Color.BLACK);
-        add(botonArma1);
+        panelInventario.add(botonArma1);
 
         botonArma2 = new JButton("Arma 2");
-        botonArma2.setBounds(230,355,120,30);
+        botonArma2.setBounds(160,0,120,30);
         botonArma2.setBackground(Color.LIGHT_GRAY);
         botonArma2.setFont(new Font("Arial", 1, 14));
         botonArma2.setForeground(Color.BLACK);
-        add(botonArma2);
+        panelInventario.add(botonArma2);
 
         botonInv1 = new JButton("Inventario 1");
-        botonInv1.setBounds(70,415,120,30);
+        botonInv1.setBounds(0,60,120,30);
         botonInv1.setBackground(Color.LIGHT_GRAY);
         botonInv1.setFont(new Font("Arial", 1, 14));
         botonInv1.setForeground(Color.BLACK);
-        add(botonInv1);
+        panelInventario.add(botonInv1);
 
         botonInv2 = new JButton("Inventario 2");
-        botonInv2.setBounds(230,415,120,30);
+        botonInv2.setBounds(160,60,120,30);
         botonInv2.setBackground(Color.LIGHT_GRAY);
         botonInv2.setFont(new Font("Arial", 1, 14));
         botonInv2.setForeground(Color.BLACK);
-        add(botonInv2);
+        panelInventario.add(botonInv2);
 
         botonInv3 = new JButton("Inventario 3");
-        botonInv3.setBounds(70,475,120,30);
+        botonInv3.setBounds(0,120,120,30);
         botonInv3.setBackground(Color.LIGHT_GRAY);
         botonInv3.setFont(new Font("Arial", 1, 14));
         botonInv3.setForeground(Color.BLACK);
-        add(botonInv3);
+        panelInventario.add(botonInv3);
 
         botonInv4 = new JButton("Inventario 4");
-        botonInv4.setBounds(230,475,120,30);
+        botonInv4.setBounds(160,120,120,30);
         botonInv4.setBackground(Color.LIGHT_GRAY);
         botonInv4.setFont(new Font("Arial", 1, 14));
         botonInv4.setForeground(Color.BLACK);
-        add(botonInv4);
+        panelInventario.add(botonInv4);
 
         botonInv5 = new JButton("Inventario 5");
-        botonInv5.setBounds(150,535,120,30);
+        botonInv5.setBounds(80,180,120,30);
         botonInv5.setBackground(Color.LIGHT_GRAY);
         botonInv5.setFont(new Font("Arial", 1, 14));
         botonInv5.setForeground(Color.BLACK);
-        add(botonInv5);
+        panelInventario.add(botonInv5);
         
-        botonAlmacenDeAtaques = new JButton("Historial Ataques");
-        botonAlmacenDeAtaques.setBounds(70,650,155,30);
+        add(panelInventario);
+        
+        botonAlmacenDeAtaques = new JButton("Historiales");
+        botonAlmacenDeAtaques.setBounds(20,650,155,30);
         botonAlmacenDeAtaques.setBackground(Color.LIGHT_GRAY);
         botonAlmacenDeAtaques.setFont(new Font("Arial", 1, 14));
         botonAlmacenDeAtaques.setForeground(Color.BLACK);
         add(botonAlmacenDeAtaques);
+        
+        botonAdmin = new JButton("Modo Administrador");
+        botonAdmin.setBounds(200,650,180,30);
+        botonAdmin.setBackground(Color.LIGHT_GRAY);
+        botonAdmin.setFont(new Font("Arial", 1, 14));
+        botonAdmin.setForeground(Color.BLACK);
+        add(botonAdmin);
 
         activacionBotones(true);
         actualizarLabels();
@@ -199,9 +215,10 @@ public class PanelMenuJugador extends JPanel{
             }
         });
         
-        botonElegirArma.addActionListener(new ActionListener(){
+        botonInventario.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
+                activacionInventario(true);
                 partida.getSupervivienteActual().setSeleccion(Entidad.accion.INVENTARIO);
             }
         });
@@ -212,33 +229,24 @@ public class PanelMenuJugador extends JPanel{
                 partida.getSupervivienteActual().setSeleccion(Entidad.accion.NADA);
             }
         });
-
+        botonAlmacenDeAtaques.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                interfazPrincipal.cardLayout.show(interfazPrincipal.panelDerechoPrincipal,"PanelHistoriales");
+            }
+        });
         botonArma1.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
                 interfazPrincipal.armaActiva = partida.getSupervivienteActual().getArmas()[0];
-                activacionArmas(false);
-                activacionInventario(true);
-            }
-        });
-        botonAlmacenDeAtaques.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                interfazPrincipal.cardLayout.show(interfazPrincipal.panelDerechoPrincipal,"PanelAlmacenDeAtaques");
-            }
-        });
-        botonArma1.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ranuraElegida = 1;
-                partida.activarSuperviviente(ranuraElegida, 0, 0);
-                activacionBotones(true);
+                ranuraElegida = 0;
             }
         });
         botonArma2.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                ranuraElegida = 2;
+                interfazPrincipal.armaActiva = partida.getSupervivienteActual().getArmas()[0];
+                ranuraElegida = 1;
             }
         });
         botonInv1.addActionListener(new ActionListener(){
@@ -280,7 +288,7 @@ public class PanelMenuJugador extends JPanel{
         botonMoverse.setEnabled(enabled);
         botonBuscar.setEnabled(enabled);
         botonAtacar.setEnabled(enabled);
-        botonElegirArma.setEnabled(enabled);
+        botonInventario.setEnabled(enabled);
         botonNada.setEnabled(enabled);
         botonArma1.setEnabled(false);
         botonArma2.setEnabled(false);
@@ -307,7 +315,7 @@ public class PanelMenuJugador extends JPanel{
         turnoDe.setText("Turno de: " + partida.getSupervivienteActual().getNombre());
         numAcciones.setText("Acciones: " + partida.getSupervivienteActual().getAcciones());
         contZombis.setText("Numero de zombis asesinados: " + partida.getSupervivienteActual().getContadorZombis());
-        mordeduras.setText("Mordeduras : " + partida.getSupervivienteActual().getMordeduras());
+        mordeduras.setText("Mordeduras : " + partida.getSupervivienteActual().getMordeduras() + "/2");
         try {
             botonArma1.setText(partida.getSupervivienteActual().getArmas()[0].getNombre());
             botonArma1.setToolTipText(partida.getSupervivienteActual().getArmas()[0].toString());
