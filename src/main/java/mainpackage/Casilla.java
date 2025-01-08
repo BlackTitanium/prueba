@@ -111,10 +111,10 @@ public class Casilla implements Serializable{
         }
         if (a == 0){
             buscada = true;
-            return new Arma(b+1);
+            return new Arma();
         }else{
             buscada = true;
-            return new Provision(b+1);
+            return new Provision();
         }
     }
 }

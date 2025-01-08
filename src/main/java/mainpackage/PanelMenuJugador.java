@@ -1,15 +1,11 @@
 package mainpackage;
 
-import java.awt.*;
-import java.awt.Color;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.event.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.*;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -25,6 +21,8 @@ public class PanelMenuJugador extends JPanel{
     
     private Partida partida;
     private InterfazPrincipal interfazPrincipal;    
+
+    private int ranuraElegida;
     
     // TAMAÑO 400 * 745 (Ancho, Alto)
     public PanelMenuJugador(Partida Partida, InterfazPrincipal interfazprincipal){
@@ -186,6 +184,8 @@ public class PanelMenuJugador extends JPanel{
             @Override
             public void actionPerformed(ActionEvent e) {
                 partida.getSupervivienteActual().setSeleccion(Entidad.accion.BUSCAR);
+                activacionBotones(false);
+                activacionInventario(true);
             }
         });
         
@@ -225,6 +225,53 @@ public class PanelMenuJugador extends JPanel{
             @Override
             public void actionPerformed(ActionEvent e) {
                 interfazPrincipal.cardLayout.show(interfazPrincipal.panelDerechoPrincipal,"PanelAlmacenDeAtaques");
+            }
+        });
+        botonArma1.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ranuraElegida = 1;
+                partida.activarSuperviviente(ranuraElegida, 0, 0);
+                activacionBotones(true);
+            }
+        });
+        botonArma2.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ranuraElegida = 2;
+            }
+        });
+        botonInv1.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ranuraElegida = 1;
+                partida.activarSuperviviente(ranuraElegida, 0, 0);
+                activacionBotones(true);
+                actualizarLabels();
+            }
+        });
+        botonInv2.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ranuraElegida = 2;
+            }
+        });
+        botonInv3.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ranuraElegida = 3;
+            }
+        });
+        botonInv4.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ranuraElegida = 4;
+            }
+        });
+        botonInv5.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ranuraElegida = 5;
             }
         });
     }
