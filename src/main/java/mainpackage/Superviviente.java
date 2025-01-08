@@ -8,6 +8,7 @@ public class Superviviente extends Entidad implements Serializable{
     private int contadorZombis, mordeduras, acciones = 3;
     private accion seleccion; //Mover o atacar
     private Arma[] armas = new Arma[2];
+    private Arma armaActiva;
     public enum estado {VIVO, MUERTO};
     private estado estadoActual;
     private Equipo[] inventario = new Equipo[5]; 
@@ -38,8 +39,20 @@ public class Superviviente extends Entidad implements Serializable{
         return nombre;
     }
 
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
     public Arma[] getArmas() {
         return armas;
+    }
+
+    public void setArmaActiva(int ranura) {
+        this.armaActiva = armas[ranura];
+    }
+
+    public Arma getArmaActiva() {
+        return armaActiva;
     }
     
     public void setArma(Arma a, int b){

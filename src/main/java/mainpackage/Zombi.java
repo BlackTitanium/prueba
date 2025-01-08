@@ -123,7 +123,6 @@ public class Zombi extends Entidad implements Serializable{
     public void atacar(Superviviente s){
         s.addMordeduras();
         if(s.getMordeduras() == 2){
-            casillaActual.removeEntidad(s);
             s.setEstado(Superviviente.estado.MUERTO);
         }
         StringBuilder sb = new StringBuilder();

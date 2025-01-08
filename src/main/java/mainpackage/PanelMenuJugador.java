@@ -25,7 +25,7 @@ public class PanelMenuJugador extends JPanel{
     private Partida partida;
     private InterfazPrincipal interfazPrincipal;    
 
-    public int ranuraElegida;
+    public int ranuraElegida, armaElegida;
     
     // TAMAÑO 400 * 745 (Ancho, Alto)
     public PanelMenuJugador(Partida Partida, InterfazPrincipal interfazprincipal){
@@ -208,10 +208,8 @@ public class PanelMenuJugador extends JPanel{
         botonAtacar.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                atacarActivado = true;
                 activacionBotones(false);
-                activacionArmas(atacarActivado);
-                partida.getSupervivienteActual().setSeleccion(Entidad.accion.ATACAR);
+                activacionArmas(true);
             }
         });
         
@@ -238,15 +236,19 @@ public class PanelMenuJugador extends JPanel{
         botonArma1.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                interfazPrincipal.armaActiva = partida.getSupervivienteActual().getArmas()[0];
-                ranuraElegida = 0;
+                armaElegida = 0;
+                partida.getSupervivienteActual().setArmaActiva(0);
+                partida.getSupervivienteActual().setSeleccion(Entidad.accion.ATACAR);
+                atacarActivado = true;
             }
         });
         botonArma2.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                interfazPrincipal.armaActiva = partida.getSupervivienteActual().getArmas()[0];
-                ranuraElegida = 1;
+                armaElegida = 1;
+                partida.getSupervivienteActual().setArmaActiva(1);
+                partida.getSupervivienteActual().setSeleccion(Entidad.accion.ATACAR);
+                atacarActivado = true;
             }
         });
         botonInv1.addActionListener(new ActionListener(){

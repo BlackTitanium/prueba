@@ -18,6 +18,7 @@ public class Partida implements Serializable{
     private InterfazPrincipal interfazPrincipal;
     private static int idZombiCont = 1;
     public boolean victoria = false;
+    public boolean derrota = false;
     private final Object monitor = new Object();
 
     public InterfazPrincipal getInterfazPrincipal(){
@@ -97,6 +98,7 @@ public class Partida implements Serializable{
             Provision provision = new Provision();
             Superviviente s = new Superviviente(nombres[i], casillaInicial, tablero, this);
             s.setArma(arma, 0);
+            s.setArmaActiva(0);
             s.setInventario(provision, 0);
             casillaInicial.addEntidad(s);
             supervivientes.add(s);
@@ -134,55 +136,46 @@ public class Partida implements Serializable{
                 break;
             case Entidad.accion.ATACAR: //Atacar
                     int alcanceTemp = supervivienteActual.getArmas()[ranura].getAlcance();
-                    Casilla casillaActual = supervivienteActual.getCasillaActual();
-                    supervivienteActual.activar(ranura,casillaActual.getX(),casillaActual.getY()); 
-                    Ataque ataque = supervivienteActual.getUltimoAtaque();
                     ArrayList<Casilla> objetivo = supervivienteActual.elegirObjetivo(supervivienteActual.getArmas()[ranura]);
+                    // Hacemos las casillas
+                    Casilla casillaActual = supervivienteActual.getCasillaActual();
                     Casilla casillaObjetivo = tablero.getCasilla(x, y);
-                    int nExitos = ataque.getNumExitos();
-                    if(objetivo == null){   
-                        int intento = 0;
-                        while((intento < casillaActual.getContadorZombis() || nExitos > 0) && supervivienteActual.getEstadoActual() == Superviviente.estado.VIVO){
-                            try {
-                                casillaActual.getZombi(intento).reaccion(supervivienteActual.getArmas()[ranura]);
-                                if(casillaActual.getZombi(intento).getEstadoActual() == Zombi.estado.MUERTO){ // EL zombi a muerto
-                                    supervivienteActual.añadirZombiAsesinado(casillaActual.getZombi(intento).infoZombi()); // Añadir el zombi a la lista de zombis asesinados
-                                    casillaActual.removeEntidad(casillaActual.getZombi(intento)); // Quitar el zombi de la casilla
-                                    zombis.remove(casillaActual.getZombi(intento)); // Quitar el zombi de la lista
-                                    interfazPrincipal.actualizarCasillas(casillaActual, casillaActual); // Para borrar el zombi en la interfaz
-                                    nExitos--; // Como ha matado a un zombi se resta un exito
-                                }
-                            } catch (IllegalArgumentException e) {
-                                if ("Alcance".equals(e.getMessage())) { //Si es Berserker
-                                    supervivienteActual.addAcciones(); // Devuelve la accion para seguir intentando
-                                }
-                            }
-                            intento++; // Siguiente zombi
-                        }
-                    } else {
-                     // Asociar de alguna forma las opciones disponibles objetivo con un input y la interfaz
-                    // Las casillas objetivo estan en la List<Casilla> objetivo
-                    // Guardar en casillaObjetivo la casilla seleccionada
+                    // Activamos el superviviente y recogemos el ataque y su numero de exitos
+                    supervivienteActual.activar(ranura,casillaActual.getX(),casillaActual.getY());
+                    Ataque ataque = supervivienteActual.getUltimoAtaque();
+                    int nExitos = ataque.getNumExitos(); // Cogemos el numero de exitos
+                    // Hacemos el arma seleccionada
+                    Arma armaSeleccionada = supervivienteActual.getArmas()[ranura];
+                    // Intento a 0
                     int intento = 0;
-                    while((intento < casillaActual.getContadorZombis() || nExitos > 0) && supervivienteActual.getEstadoActual() == Superviviente.estado.VIVO){
+                    // Mientras haya zombis en la casilla y haya exitos y el superviviente este vivo
+                    while((intento < casillaObjetivo.getContadorZombis() || nExitos > 0)){
                         try {
-                            casillaActual.getZombi(intento).reaccion(supervivienteActual.getArmas()[ranura]);
-                            if(casillaActual.getZombi(intento).getEstadoActual() == Zombi.estado.MUERTO){ // EL zombi a muerto
-                                supervivienteActual.añadirZombiAsesinado(casillaActual.getZombi(intento).infoZombi()); // Añadir el zombi a la lista de zombis asesinados
-                                casillaActual.removeEntidad(casillaActual.getZombi(intento)); // Quitar el zombi de la casilla
-                                zombis.remove(casillaActual.getZombi(intento)); // Quitar el zombi de la lista
-                                interfazPrincipal.actualizarCasillas(casillaActual, casillaActual); // Para borrar el zombi en la interfaz
-                                nExitos--; // Como ha matado a un zombi se resta un exito
+                            // Reaccion del zombi
+                            casillaObjetivo.getZombi(intento).reaccion(armaSeleccionada);
+                            if(casillaObjetivo.getZombi(intento).getEstadoActual() == Zombi.estado.MUERTO){ // EL zombi a muerto
+                                // Añadir el zombi a la lista de zombis asesinados
+                                supervivienteActual.añadirZombiAsesinado(casillaObjetivo.getZombi(intento).infoZombi());
+                                // Quitar el zombi de la casilla
+                                casillaObjetivo.removeEntidad(casillaObjetivo.getZombi(intento));
+                                // Quitar el zombi de la lista
+                                zombis.remove(casillaObjetivo.getZombi(intento));
+                                // Borramos el zombi en la interfaz
+                                interfazPrincipal.actualizarCasillas(casillaObjetivo, casillaObjetivo);
+                                // Como ha matado a un zombi se resta un exito
+                                nExitos--;
+                            }
+                            if(supervivienteActual.getEstadoActual() == Superviviente.estado.MUERTO){ // El superviviente a muerto
+                                supervivienteMuerto();
                             }
                         } catch (IllegalArgumentException e) {
-                            if ("Alcance".equals(e.getMessage())) { //Si es Berserker
-                                supervivienteActual.addAcciones(); // Devuelve la accion para seguir intentando
+                            if ("Alcance".equals(e.getMessage())) { // Si es Berserker
+                                supervivienteActual.addAcciones(); // Recupera la accion perdida en activar
                             }
                         }
                         intento++; // Siguiente zombi
                     }
-                }  
-
+                    break;
                 case Entidad.accion.BUSCAR: //Buscar
                     // Input de interfaz para elegir el slot del inventario
                     supervivienteActual.activar(ranura,0,0);
@@ -196,14 +189,39 @@ public class Partida implements Serializable{
                     break;
         }
         accionTerminada();
-        // NS SI PONERLO AQUÍ O EN EL GESTOR DE TURNOS AL FINAL, ES PARA QUE SE ACTUALIZEN LAS ACCIONES EN LA INTERFAZ
-        //interfazPrincipal.panelMenuJugador.actualizarLabels();
     }
+
+    public void supervivienteMuerto(){
+        // Cambiar el nombre del superviviente a nombre☠
+        String nombre = supervivienteActual.getNombre();
+        StringBuilder sb = new StringBuilder();
+        sb.append("<html>");
+        sb.append("<span style='color:red;'>"); // Color rojo
+        sb.append(nombre).append("☠"); // Nombre del superviviente + ☠
+        sb.append("</span>"); // Cerrar el color
+        sb.append("</html>");
+        supervivienteActual.setNombre(sb.toString());
+        // Quitar las acciones del superviviente
+        supervivienteActual.setAcciones(0);
+        // Quitar el superviviente de la interfaz
+        interfazPrincipal.actualizarCasillas(supervivienteActual.getCasillaActual(), supervivienteActual.getCasillaActual());
+        // Quitar el superviviente de la lista
+        supervivientes.remove(supervivienteActual);
+        // Si no quedan supervivientes
+        if(supervivientes.isEmpty()){
+            derrota = true;
+            // Mostrar mensaje de derrota
+            interfazPrincipal.mostrarMensajeDeDerrota();
+        }
+    }
+
     public void faseSuperviviente(){ //eleccion viene del input de la interfaz
-        supervivienteActual = this.getSupervivienteActual();
-        inventarioActual = supervivienteActual.getInventario();
-        supervivienteActual.setAcciones(3);
-        System.out.println("Acciones restantes: " + supervivienteActual.getAcciones() + " de " + supervivienteActual.getNombre());
+        if(supervivienteActual.getEstadoActual() != Superviviente.estado.MUERTO){
+            supervivienteActual = this.getSupervivienteActual();
+            inventarioActual = supervivienteActual.getInventario();
+            supervivienteActual.setAcciones(3);
+            System.out.println("Acciones restantes: " + supervivienteActual.getAcciones() + " de " + supervivienteActual.getNombre());
+        }        
     }
 
     public void faseZombie(){
@@ -247,7 +265,7 @@ public class Partida implements Serializable{
 
     public void gestorTurnos(){
         setTurnoActual(0);
-        while(!victoria){
+        while(!victoria && !derrota){
             faseSuperviviente();
             Superviviente supervivienteActual = getSupervivienteActual();
             interfazPrincipal.actualizacionGeneralPanelMenuJugador();

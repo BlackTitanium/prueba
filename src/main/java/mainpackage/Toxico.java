@@ -35,7 +35,6 @@ public class Toxico extends Zombi {
     public void atacar(Superviviente s){
         s.addMordeduras();
         if(s.getMordeduras() == 2){
-            casillaActual.removeEntidad(s);
             s.setEstado(Superviviente.estado.MUERTO);
             if(this.estadoActual == estado.MUERTO){
                 StringBuilder sb = new StringBuilder();

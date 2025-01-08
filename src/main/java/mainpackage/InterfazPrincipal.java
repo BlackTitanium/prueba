@@ -26,7 +26,6 @@ public class InterfazPrincipal extends JFrame{
     
     public CardLayout cardLayout;
     public JPanel panelTablero, panelDerechoPrincipal, panelBotonesPermanentes;
-    public Arma armaActiva;
     
     PanelInicio panelInicio;
     PanelMenuJugador panelMenuJugador;
@@ -90,6 +89,13 @@ public class InterfazPrincipal extends JFrame{
         panelMenuJugador.activacionBotones(true);
     }
     
+    public void supervivienteMuere(){
+        Superviviente supervivienteActual = partida.getSupervivienteActual();
+        Casilla casillaMuerte = supervivienteActual.casillaActual;
+        String texto = botones[casillaMuerte.getX()][casillaMuerte.getY()].getText();
+        texto = texto.replace(supervivienteActual.getNombre(), texto);
+    }
+    
     // Inicializar el tablero con Casillas y Botones
     public void inicializarTablero() {
         for (int i = 0; i < SIZE; i++) {
@@ -105,6 +111,21 @@ public class InterfazPrincipal extends JFrame{
         }
     }
     
+    public void reiniciarTablero() {
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                botones[i][j].setText("<html></html>");
+                botones[i][j].setBackground(Color.LIGHT_GRAY);
+                botones[i][j].setForeground(Color.BLACK);
+                tablero.reiniciarTablero();
+            }
+        }
+    }
+    
+    public void mostrarMensajeDeDerrota(){
+        JOptionPane.showMessageDialog(this,"Has perdido");
+    }
+
     public void activarActionListener(){
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
@@ -140,7 +161,7 @@ public class InterfazPrincipal extends JFrame{
         } else if(!panelMenuJugador.movimientoActivado){
             JOptionPane.showMessageDialog(this,"No puede moverse en este momento");
         }else if(panelMenuJugador.atacarActivado){
-            if(armaActiva != null){
+            if(supervivienteActual.getArmaActiva() != null){
                 atacar(botones[x][y], x, y);
                 if(elementoSeleccionado != null){
                     actualizarCasillas(tablero.getCasilla(elementoSeleccionado.x, elementoSeleccionado.y), tablero.getCasilla(x,y));
@@ -154,17 +175,6 @@ public class InterfazPrincipal extends JFrame{
         }else if(!panelMenuJugador.atacarActivado){
             JOptionPane.showMessageDialog(this,"No puede atacar en este momento");
             panelMenuJugador.activacionBotones(true);
-        }
-    }
-    
-    public void reiniciarTablero() {
-        for (int i = 0; i < SIZE; i++) {
-            for (int j = 0; j < SIZE; j++) {
-                botones[i][j].setText("<html></html>");
-                botones[i][j].setBackground(Color.LIGHT_GRAY);
-                botones[i][j].setForeground(Color.BLACK);
-                tablero.reiniciarTablero();
-            }
         }
     }
 
@@ -283,7 +293,7 @@ public class InterfazPrincipal extends JFrame{
     public void atacar(JButton boton, int x, int y){
         if(panelMenuJugador.atacarActivado){
             Superviviente supervivienteActual = partida.getSupervivienteActual();
-            ArrayList<Casilla> casillasAlcance = supervivienteActual.elegirObjetivo(armaActiva);
+            ArrayList<Casilla> casillasAlcance = supervivienteActual.elegirObjetivo(supervivienteActual.getArmaActiva());
             for (int i = 0; i < casillasAlcance.size(); i++){
                 botones[casillasAlcance.get(i).getX()][casillasAlcance.get(i).getY()].setBackground(Color.RED);
                 botones[casillasAlcance.get(i).getX()][casillasAlcance.get(i).getY()].setForeground(Color.WHITE);
@@ -295,7 +305,7 @@ public class InterfazPrincipal extends JFrame{
             } else if(elementoSeleccionado != null){
                 if(tablero.getCasilla(x,y).getContadorZombis() > 0){
                     // Atacar al zombi
-                    partida.activarSuperviviente(panelMenuJugador.ranuraElegida, x, y);
+                    partida.activarSuperviviente(panelMenuJugador.armaElegida, x, y);
                     // En caso de que haya zombis muertos ya se encarga partida
                     // Restablecer valores
                     elementoSeleccionado = null;
