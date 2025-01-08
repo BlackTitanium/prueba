@@ -59,6 +59,11 @@ public class Partida implements Serializable{
     public AlmacenDeAtaques getAlmacenDeAtaques(){
         return almacen;
     }
+
+    public void mostrarUltimoAtaque(){
+        interfazPrincipal.mostrarMensaje(almacen.getUltimoAtaqueAñadido());
+    }
+
     public int getTurnoActual(){
         return turnoActual;
     }

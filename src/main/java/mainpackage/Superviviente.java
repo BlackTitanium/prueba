@@ -163,6 +163,7 @@ public class Superviviente extends Entidad implements Serializable{
     public void atacar(int a) {
         acciones--;
         ultimoAtaque = new Ataque(armas[a], partida.getAlmacenDeAtaques());
+        partida.mostrarUltimoAtaque();
     }
     
     public String infoSuperviviente(){

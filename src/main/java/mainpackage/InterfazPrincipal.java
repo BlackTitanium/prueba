@@ -89,6 +89,14 @@ public class InterfazPrincipal extends JFrame{
         panelMenuJugador.activacionBotones(true);
     }
     
+    public void mostrarMensajeDeDerrota(){
+        JOptionPane.showMessageDialog(this,"Has perdido");
+    }
+    
+    public void mostrarMensaje(String mensaje){
+        JOptionPane.showMessageDialog(this,mensaje);
+    }
+    
     // Inicializar el tablero con Casillas y Botones
     public void inicializarTablero() {
         for (int i = 0; i < SIZE; i++) {
@@ -113,10 +121,6 @@ public class InterfazPrincipal extends JFrame{
                 tablero.reiniciarTablero();
             }
         }
-    }
-    
-    public void mostrarMensajeDeDerrota(){
-        JOptionPane.showMessageDialog(this,"Has perdido");
     }
 
     public void activarActionListener(){
@@ -331,17 +335,7 @@ public class InterfazPrincipal extends JFrame{
             int xActual = supervivienteActual.getCasillaActual().getX();
             int yActual = supervivienteActual.getCasillaActual().getY();
             System.out.println("En atacar: X actual: " + xActual + ", Y actual: " + yActual);
-            //ArrayList<Casilla> casillasAlcance = supervivienteActual.elegirObjetivo(supervivienteActual.getArmaActiva(),tablero,xActual,yActual);
             ArrayList<Casilla> casillasAlcance = tablero.elegirObjetivoSuperviviente(supervivienteActual.getArmaActiva(), xActual, yActual);
-//            if(elementoSeleccionado == null && boton.getText().contains(supervivienteActual.getNombre())){
-//                elementoSeleccionado = new Point(x, y);
-//                boton.setBackground(Color.DARK_GRAY);
-//                boton.setForeground(Color.WHITE);
-//                for (int i = 0; i < casillasAlcance.size(); i++){
-//                    botones[casillasAlcance.get(i).getX()][casillasAlcance.get(i).getY()].setBackground(Color.RED);
-//                    botones[casillasAlcance.get(i).getX()][casillasAlcance.get(i).getY()].setForeground(Color.WHITE);
-//                }
-//            } else if(elementoSeleccionado != null){
             if(elementoSeleccionado != null){
                 if(tablero.getCasilla(x,y).getContadorZombis() > 0){
                     System.out.println("Coordenadas objetivo: x: " + x + ", y: " + y);

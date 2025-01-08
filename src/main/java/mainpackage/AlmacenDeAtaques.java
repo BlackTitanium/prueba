@@ -10,6 +10,10 @@ public class AlmacenDeAtaques implements Serializable{
         historialAtaques = new ArrayList<>();
     }
 
+    public String getUltimoAtaqueAñadido(){
+        return historialAtaques.get(historialAtaques.size()-1);
+    }
+
     public void guardarAtaque(String ataque){
         historialAtaques.add(ataque);
     }
