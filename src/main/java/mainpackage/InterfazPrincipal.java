@@ -376,7 +376,7 @@ public class InterfazPrincipal extends JFrame implements Serializable {
                     elementoSeleccionado = null;
                     panelMenuJugador.movimientoActivado = false;
                     panelMenuJugador.activacionBotones(true);
-                    panelMenuJugador.gestionPanelIntercambio(false, 0);
+                    panelMenuJugador.gestionPanelIntercambio(true, 2);
                 }            
             }
         } else{
@@ -414,6 +414,7 @@ public class InterfazPrincipal extends JFrame implements Serializable {
             JOptionPane.showMessageDialog(this,"No hay zombis al alcance");
             elementoSeleccionado = null;
             panelMenuJugador.atacarActivado = false;
+            panelMenuJugador.atacarBotonesActivado = false;
             panelMenuJugador.activacionBotones(true);
             for (int i = 0; i < casillasAlcance.size(); i++){
                 botones[casillasAlcance.get(i).getX()][casillasAlcance.get(i).getY()].setBackground(Color.LIGHT_GRAY);
@@ -450,12 +451,15 @@ public class InterfazPrincipal extends JFrame implements Serializable {
                     partida.accionTerminada();
                     elementoSeleccionado = null;
                     panelMenuJugador.atacarActivado = false;
+                    panelMenuJugador.atacarBotonesActivado = false;
                     panelMenuJugador.activacionBotones(true);
+                    panelMenuJugador.gestionPanelIntercambio(true, 2);
                 }else{
                     JOptionPane.showMessageDialog(this,"No hay zombis en la casilla seleccionada");
                 }
             }
         }else{
+            panelMenuJugador.atacarBotonesActivado = false;
             JOptionPane.showMessageDialog(this,"No puede atacar en este momento");
         }
     }

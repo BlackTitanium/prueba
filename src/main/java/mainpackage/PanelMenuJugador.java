@@ -56,7 +56,7 @@ public class PanelMenuJugador extends JPanel{
         
         JPanel panelLabelsVertical1 = new JPanel();
         panelLabelsVertical1.setLayout(new BoxLayout(panelLabelsVertical1, BoxLayout.Y_AXIS));
-        panelLabelsVertical1.setBounds(15,60,300,70);
+        panelLabelsVertical1.setBounds(15,50,300,90);
         
         JPanel panelLabelsHorizontal1 = new JPanel();
         panelLabelsHorizontal1.setLayout(new FlowLayout(FlowLayout.LEFT, 50, 0)); // FlowLayoaut para una distribución horizontal FlowLayout(alineación, espacioHorizontal, espacioVertical)
@@ -65,27 +65,31 @@ public class PanelMenuJugador extends JPanel{
         turnoDe.setFont(new Font("Arial", 1, 15));
         panelLabelsHorizontal1.add(turnoDe);
         
-        numAcciones = new JLabel();
-        numAcciones.setFont(new Font("Arial", 1, 15));
-        panelLabelsHorizontal1.add(numAcciones);
-        
         JPanel panelLabelsHorizontal2 = new JPanel();
         panelLabelsHorizontal2.setLayout(new FlowLayout(FlowLayout.LEFT, 50, 0));
-        contZombis = new JLabel();
-        contZombis.setFont(new Font("Arial", 1, 15));
-        panelLabelsHorizontal2.add(contZombis);
+        numAcciones = new JLabel();
+        numAcciones.setFont(new Font("Arial", 1, 15));
+        panelLabelsHorizontal2.add(numAcciones);
         
         JPanel panelLabelsHorizontal3 = new JPanel();
         panelLabelsHorizontal3.setLayout(new FlowLayout(FlowLayout.LEFT, 50, 0));
+        contZombis = new JLabel();
+        contZombis.setFont(new Font("Arial", 1, 15));
+        panelLabelsHorizontal3.add(contZombis);
+        
+        JPanel panelLabelsHorizontal4 = new JPanel();
+        panelLabelsHorizontal4.setLayout(new FlowLayout(FlowLayout.LEFT, 50, 0));
         mordeduras = new JLabel();
         mordeduras.setFont(new Font("Arial", 1, 15));
-        panelLabelsHorizontal3.add(mordeduras);
+        panelLabelsHorizontal4.add(mordeduras);
         
         panelLabelsVertical1.add(panelLabelsHorizontal1);
         panelLabelsVertical1.add(Box.createVerticalStrut(5));
         panelLabelsVertical1.add(panelLabelsHorizontal2);
         panelLabelsVertical1.add(Box.createVerticalStrut(5));
         panelLabelsVertical1.add(panelLabelsHorizontal3);
+        panelLabelsVertical1.add(Box.createVerticalStrut(5));
+        panelLabelsVertical1.add(panelLabelsHorizontal4);
         add(panelLabelsVertical1);
         
         JLabel selecOpcion = new JLabel("Selecciona la acción a realizar: ");
@@ -282,6 +286,8 @@ public class PanelMenuJugador extends JPanel{
         botonInv3.setEnabled(false);
         botonInv4.setEnabled(false);
         botonInv5.setEnabled(false);
+        botonMoverObjetos.setEnabled(true);
+        botonUsar.setEnabled(true);
         gestionPanelIntercambio(true,2);
     }
     public void activacionInventario(boolean enabled) {
@@ -367,6 +373,7 @@ public class PanelMenuJugador extends JPanel{
     }
     
     public void accionBotonesArmas(int ranura){
+        System.out.println("Boton arma: ranura: " + ranura + ", atacarBotonesActivado: " + atacarBotonesActivado + ", inventarioMoverActivado: "+ inventarioMoverActivado);
         if(atacarBotonesActivado){
             atacarActivado = true;
             armaElegida = ranura;
@@ -374,8 +381,10 @@ public class PanelMenuJugador extends JPanel{
             supervivienteActual.setArmaActiva(ranura);
             supervivienteActual.setSeleccion(Entidad.accion.ATACAR);
             interfazPrincipal.autoSeleccionElementoAtacar();
+            atacarBotonesActivado = false;
         }
         if(inventarioMoverActivado){
+            atacarBotonesActivado = false;
             logicaInventario(ranura,false); // fals porque es de armas
         }
     }
@@ -398,6 +407,7 @@ public class PanelMenuJugador extends JPanel{
             partida.accionTerminada();
         }
         if(inventarioMoverActivado){ //partida.activarSuperviviente(usarOmover, ranuraObjetoSeleccionado, ranuraObjetivo, null);
+            atacarBotonesActivado = false;
             logicaInventario(ranura,true); // true porque es de inventario
         }
     }
@@ -410,6 +420,7 @@ public class PanelMenuJugador extends JPanel{
                 objetoSeleccionadoDeArma++;
             }            
             primerObjetoDeInventario = enable;
+            inventarioMoverActivado = true;
             System.out.println("Primer boton: ranura: " + ranura + ", objetoSeleccionadoDeInventario: " + objetoSeleccionadoDeInventario +
                     ", objetoSeleccionadoDeArma: " + objetoSeleccionadoDeArma + ", primerObjetoDeInventario: " + primerObjetoDeInventario);
         }else{
@@ -426,7 +437,7 @@ public class PanelMenuJugador extends JPanel{
                     if(objetoSeleccionadoDeInventario > 1){ // Ambos objetos son de inventario
                         // LLAMO A INTERCAMBIARLOS (inventario a inventario)
                         partida.activarSuperviviente(1, botonSeleccionado1, botonSeleccionado2, null);
-                        inventarioMoverActivado = true;
+                        inventarioMoverActivado = false;
                         botonSeleccionado1 = -1;
                         botonSeleccionado2 = -1;
                         primerObjetoDeInventario = false;
@@ -439,7 +450,7 @@ public class PanelMenuJugador extends JPanel{
                         if(primerObjetoDeInventario){ // El primer objeto es de inventario
                             // LLAMO A INTERCAMBIARLOS (inventario a arma)
                             partida.activarSuperviviente(2, botonSeleccionado1, botonSeleccionado2, null);
-                            inventarioMoverActivado = true;
+                            inventarioMoverActivado = false;
                             botonSeleccionado1 = -1;
                             botonSeleccionado2 = -1;
                             primerObjetoDeInventario = false;
@@ -451,7 +462,7 @@ public class PanelMenuJugador extends JPanel{
                         }else{ // El primer objeto es de arma
                             // LLAMO A INTERCAMBIARLOS (arma a inventario)
                             partida.activarSuperviviente(3, botonSeleccionado1, botonSeleccionado2, null);
-                            inventarioMoverActivado = true;
+                            inventarioMoverActivado = false;
                             botonSeleccionado1 = -1;
                             botonSeleccionado2 = -1;
                             primerObjetoDeInventario = false;
@@ -462,46 +473,18 @@ public class PanelMenuJugador extends JPanel{
                             partida.accionTerminada();
                         }
                     }
-                }else if(objetoSeleccionadoDeArma > 0){ // Hay algun objeto de arma
-                    if(objetoSeleccionadoDeArma > 1){ // Ambos objetos son de arma
-                        // LLAMO A INTERCAMBIARLOS (arma a arma)
-                        partida.activarSuperviviente(4, botonSeleccionado1, botonSeleccionado2, null);
-                        inventarioMoverActivado = true;
-                        botonSeleccionado1 = -1;
-                        botonSeleccionado2 = -1;
-                        primerObjetoDeInventario = false;
-                        objetoSeleccionadoDeArma = 0;
-                        objetoSeleccionadoDeInventario = 0;
-                        actualizarLabels();
-                        activacionBotones(true);
-                        partida.accionTerminada();
-                    }else if(objetoSeleccionadoDeInventario > 0){ // Uno de cada
-                        if(primerObjetoDeInventario){ // El primer objeto es de inventario
-                            // LLAMO A INTERCAMBIARLOS (inventario a arma) 
-                            partida.activarSuperviviente(2, botonSeleccionado1, botonSeleccionado2, null);
-                            inventarioMoverActivado = true;
-                            botonSeleccionado1 = -1;
-                            botonSeleccionado2 = -1;
-                            primerObjetoDeInventario = false;
-                            objetoSeleccionadoDeArma = 0;
-                            objetoSeleccionadoDeInventario = 0;
-                            actualizarLabels();
-                            activacionBotones(true);
-                            partida.accionTerminada();
-                        }else{ // El primer objeto es de arma
-                            // LLAMO A INTERCAMBIARLOS (arma a inventario)
-                            partida.activarSuperviviente(3, botonSeleccionado1, botonSeleccionado2, null);
-                            inventarioMoverActivado = true;
-                            botonSeleccionado1 = -1;
-                            botonSeleccionado2 = -1;
-                            primerObjetoDeInventario = false;
-                            objetoSeleccionadoDeArma = 0;
-                            objetoSeleccionadoDeInventario = 0;
-                            actualizarLabels();
-                            activacionBotones(true);
-                            partida.accionTerminada();
-                        }
-                    }
+                }else if(objetoSeleccionadoDeArma > 0){ // Hay algun objeto de arma, y ninguno de inventario
+                    // LLAMO A INTERCAMBIARLOS (arma a arma)
+                    partida.activarSuperviviente(4, botonSeleccionado1, botonSeleccionado2, null);
+                    inventarioMoverActivado = false;
+                    botonSeleccionado1 = -1;
+                    botonSeleccionado2 = -1;
+                    primerObjetoDeInventario = false;
+                    objetoSeleccionadoDeArma = 0;
+                    objetoSeleccionadoDeInventario = 0;
+                    actualizarLabels();
+                    activacionBotones(true);
+                    partida.accionTerminada();
                 }
             }
         }
@@ -526,21 +509,27 @@ public class PanelMenuJugador extends JPanel{
                 Superviviente supervivienteActual = partida.getSupervivienteActual();
                 supervivienteActual.setSeleccion(Entidad.accion.BUSCAR);
                 equipoBuscado = supervivienteActual.getCasillaActual().buscar(interfazPrincipal);
-                StringBuilder sb = new StringBuilder();
-                sb.append("Has encontrado:").append("\n");
-                sb.append(equipoBuscado.toString()).append("\n");
-                sb.append("¿Quieres quedartelo?").append("\n");
-                boolean resultado = interfazPrincipal.mostrarMensajeSiNo(sb.toString());
-                if(resultado){
-                    buscandoActivado = true;
-                    StringBuilder aux = new StringBuilder();
-                    aux.append("Selecciona la ranura de inventario donde guardarlo").append("\n");
-                    aux.append("(Si la ranura esta ocupada se borrara su contenido)").append("\n");
-                    interfazPrincipal.mostrarMensaje(aux.toString());
-                    System.out.println("El equipo encontrado es: " + equipoBuscado.toString());
-                    activacionBotones(false);
-                    activacionInventario(true);
-                }                
+                if(equipoBuscado != null){
+                    StringBuilder sb = new StringBuilder();
+                    sb.append("Has encontrado:").append("\n");
+                    sb.append(equipoBuscado.toString()).append("\n");
+                    sb.append("¿Quieres quedartelo?").append("\n");
+                    boolean resultado = interfazPrincipal.mostrarMensajeSiNo(sb.toString());
+                    if(resultado){
+                        buscandoActivado = true;
+                        StringBuilder aux = new StringBuilder();
+                        aux.append("Selecciona la ranura de inventario donde guardarlo").append("\n");
+                        aux.append("(Si la ranura esta ocupada se borrara su contenido)").append("\n");
+                        interfazPrincipal.mostrarMensaje(aux.toString());
+                        System.out.println("El equipo encontrado es: " + equipoBuscado.toString());
+                        activacionBotones(false);
+                        activacionInventario(true);
+                    }else{
+                        supervivienteActual.lessAcciones();
+                        actualizarLabels();
+                        partida.accionTerminada();
+                    }
+                }
             }
         });
         
@@ -684,6 +673,7 @@ public class PanelMenuJugador extends JPanel{
                         interfazPrincipal.botones[casillasAlcance.get(i).getX()][casillasAlcance.get(i).getY()].setForeground(Color.BLACK);
                     }
                     interfazPrincipal.elementoSeleccionado = null;
+                    atacarBotonesActivado = false;
                     atacarActivado = false;
                     activacionBotones(true);
                     gestionPanelIntercambio(false, 0);
@@ -695,6 +685,13 @@ public class PanelMenuJugador extends JPanel{
             @Override
             public void actionPerformed(ActionEvent e) {
                 inventarioOpcionesActivado = false;
+                inventarioUsarActivado = false;
+                inventarioMoverActivado = false;
+                objetoSeleccionadoDeArma = 0;
+                objetoSeleccionadoDeInventario = 0;
+                primerObjetoDeInventario = false;
+                botonSeleccionado1 = -1;
+                botonSeleccionado2 = -1;
                 activacionBotones(true);
                 gestionPanelIntercambio(true,3);
             }
@@ -710,9 +707,9 @@ public class PanelMenuJugador extends JPanel{
                 }else{
                     inventarioUsarActivado = true;
                     activacionInventario(true);
-                    gestionPanelIntercambio(false, 1);
-                } 
-                               
+                    botonMoverObjetos.setEnabled(false);
+                    botonUsar.setEnabled(false);
+                }                               
             }
         });
         botonMoverObjetos.addActionListener(new ActionListener(){
@@ -726,7 +723,8 @@ public class PanelMenuJugador extends JPanel{
                 objetoSeleccionadoDeInventario = 0;
                 activacionInventario(true);
                 activacionArmas(true);
-                gestionPanelIntercambio(false, 1);
+                botonMoverObjetos.setEnabled(false);
+                botonUsar.setEnabled(false);
             }
         });
         botonGuardarSalir.addActionListener(new ActionListener(){
