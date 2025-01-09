@@ -313,7 +313,11 @@ public class Partida implements Serializable{
                     supervivienteActual.setAcciones(0);
                 }
                 condicionVictoria(); // Se comprueba que no hayan ganado
-                avanzarTurno();
+                if(turnoActual == turnoMaximo-1){
+                    break;
+                }else{
+                    avanzarTurno();
+                }
                 System.out.println("En gestorTurnos FINAL FS: Turno actual: " + turnoActual + ", Superviviente: " + supervivienteActual.getNombre());
             }
             // FASE ACTIVACION ZOMBI
