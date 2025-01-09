@@ -22,6 +22,8 @@ public class Partida implements Serializable{
     public volatile boolean victoria = false;
     public volatile boolean derrota = false;
     private final Object monitorSupervivientes = new Object();
+    private int IDPartida;
+    private AlmacenPartidas almacenPartidas;
 
     public InterfazPrincipal getInterfazPrincipal(){
         return interfazPrincipal;
@@ -362,12 +364,14 @@ public class Partida implements Serializable{
     public void iniciarPartida(){
         tablero = new Tablero(this);
         almacen =  new AlmacenDeAtaques();
-
+        almacenPartidas.addPartida(this);
+        IDPartida = almacenPartidas.getContadorPartidas();
         // LLamamos a la InterfazPrincipal
         interfazPrincipal = new InterfazPrincipal(this);
     }
 
-    public Partida(){
+    public Partida(AlmacenPartidas almacenPartidas){
+        this.almacenPartidas = almacenPartidas;
         Thread hiloPrincipal = new Thread(this::iniciarPartida);
         hiloPrincipal.start();
     }

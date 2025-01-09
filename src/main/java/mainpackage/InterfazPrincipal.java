@@ -9,6 +9,7 @@ import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -18,7 +19,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-public class InterfazPrincipal extends JFrame{
+public class InterfazPrincipal extends JFrame implements Serializable{
     private static final int SIZE = 10;  // Tamaño del tablero 10x10
     public JButton[][] botones = new JButton[SIZE][SIZE];   
     public Point elementoSeleccionado = null;  // Guarda la posición del elemento seleccionado

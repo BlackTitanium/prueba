@@ -1,4 +1,5 @@
 package mainpackage;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Scanner;
 
@@ -6,6 +7,8 @@ public class Juego implements Serializable{
     private Partida partida;
     private static Scanner scanner = new Scanner(System.in);
     private InterfazPrincipal interfazPrincipal;
+    private Serializador serializador = new Serializador();
+    private AlmacenPartidas almacenPartidas;
 
     public static void main(String[] args) {
         Juego juego = new Juego();
@@ -20,7 +23,7 @@ public class Juego implements Serializable{
                 iniciarPartida();
                 break;
             case 2:
-                // Cargar partida
+                cargarPartida();
                 break;
             case 3:
                 // Simulaciones
@@ -36,6 +39,22 @@ public class Juego implements Serializable{
     }
     public void iniciarPartida(){
 //        interfazPrincipal = new InterfazPrincipal();
-        partida = new Partida();
+        partida = new Partida(almacenPartidas);
+    }
+
+    public void cargarPartida(){
+        try {
+            almacenPartidas = Serializador.deserializarAlmacenPartidas("bin/almacenPartidas.ser");
+            System.out.println("Introduce el ID de la partida que quieres cargar");
+            int idPartida = scanner.nextInt();
+            partida = almacenPartidas.getPartida(idPartida);
+            interfazPrincipal = partida.getInterfazPrincipal();
+            interfazPrincipal.setVisible(true);
+        } catch (IOException | ClassNotFoundException e) {
+            almacenPartidas = new AlmacenPartidas();
+            System.out.println("No se ha encontrado ninguna partida guardada");
+            mostrarMenu();
+        }
+        
     }
 }
