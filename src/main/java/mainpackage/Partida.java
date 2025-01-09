@@ -19,7 +19,8 @@ public class Partida implements Serializable{
     private static int idZombiCont = 1;
     public boolean victoria = false;
     public boolean derrota = false;
-    private final Object monitor = new Object();
+    private final Object monitorSupervivientes = new Object();
+    private final Object monitorZombis = new Object();
 
     public InterfazPrincipal getInterfazPrincipal(){
         return interfazPrincipal;
@@ -284,11 +285,11 @@ public class Partida implements Serializable{
             interfazPrincipal.actualizacionGeneralPanelMenuJugador();
             interfazPrincipal.panelMenuJugador.activacionBotones(true);
             while (supervivienteActual.getAcciones() > 0) {
-                synchronized (monitor) {
+                synchronized (monitorSupervivientes) {
                     // Esperar a que el jugador seleccione una acción
                     while (!interfazPrincipal.accionRealizada) {
                         try {
-                            monitor.wait();
+                            monitorSupervivientes.wait();
                         } catch (InterruptedException e) {
                         }
                     }
@@ -302,31 +303,28 @@ public class Partida implements Serializable{
             System.out.println("Fase Zombie");
             for (int i = 0; i < zombis.size(); i++){
                 faseZombie(zombis.get(i));
-                while(zombis.get(i).getActivaciones() > 0){
-                    synchronized (monitor) {
-                        // Esperar a que el jugador seleccione una acción
-                        while (!interfazPrincipal.accionRealizada) {
-                            try {
-                                zombis.get(i).activar();
-                                monitor.wait();
-                            } catch (InterruptedException e) {
-                            }
-                        }
-                        interfazPrincipal.accionRealizada = false;
-                    }
-                }
+                System.out.println("En gestorTurnos: Turno del zombi: " + zombis.get(i).getZombiParaBoton() + ", Acciones: " + zombis.get(i).getActivaciones());
+                zombis.get(i).activar();
             }
             faseApariciónZombi();
             avanzarTurno();
         } 
     }
 
+    public void accionTerminadaZombi(){
+        System.out.println("En accionTerminadaZombi, accionRealizada: " + interfazPrincipal.accionRealizada);
+        synchronized (monitorZombis) {
+            interfazPrincipal.accionRealizada = true;
+            System.out.println("En accionTerminadaZombi, SE NOTIFICA A TODOS, accionRealizada: " + interfazPrincipal.accionRealizada);
+            monitorZombis.notifyAll();
+        }
+    }
 
     public void accionTerminada(){
-        synchronized (monitor) {
+        synchronized (monitorSupervivientes) {
             interfazPrincipal.actualizacionGeneralPanelMenuJugador();
             interfazPrincipal.accionRealizada = true;
-            monitor.notifyAll();
+            monitorSupervivientes.notifyAll();
         }
     }
 

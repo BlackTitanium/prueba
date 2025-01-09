@@ -104,28 +104,34 @@ public class Zombi extends Entidad implements Serializable{
     }
 
     public void activar(){
+        System.out.println("INICIO DE ACTIVAR, Zombi " + this.getZombiParaBoton() + ", nº de activaciones: " + activacionesAux);
         for (int i=0; i<activaciones; i++){
             if(casillaActual.getContadorSupervivientes()!=0){
+                System.out.println("Zombi " + this.getZombiParaBoton() + " ataca a " + casillaActual.getSuperviviente(0).getNombre());
                 atacar(casillaActual.getSuperviviente(0));
-
             } else {
-//                if(Math.abs(casillaActual.getX()-tableroActual.objetivoZombi(casillaActual).getX())>Math.abs(casillaActual.getY()-tableroActual.objetivoZombi(casillaActual).getY())){
-//                    System.out.println("Zombi " + this.getZombiParaBoton() +" se mueve a la casilla " + casillaActual.getX() + ", " + (casillaActual.getY()+1));
-//                    Casilla destino = partida.getTablero().getCasilla(casillaActual.getX()+1,casillaActual.getY());
-//                    partida.getInterfazPrincipal().moverZombi(casillaActual, destino, this.getZombiParaBoton());
-//                    mover(casillaActual.getX()+1,casillaActual.getY());
-//                } else{
-//                    System.out.println("Zombi " + this.getZombiParaBoton() + " se mueve a la casilla " + casillaActual.getX() + ", " + (casillaActual.getY()+1));
-//                    Casilla destino = partida.getTablero().getCasilla(casillaActual.getX(),casillaActual.getY()+1);
-//                    partida.getInterfazPrincipal().moverZombi(casillaActual, destino, this.getZombiParaBoton());
-//                    mover(casillaActual.getX(),casillaActual.getY()+1);
-//                }
-                Casilla casillaAlaQueMoverse = partida.getTablero().calcularMovimientoZombi(casillaActual);
-                mover(casillaAlaQueMoverse.getX(), casillaAlaQueMoverse.getY());
+                Casilla casillaAlaQueMoverse = partida.getTablero().calcularMovimientoZombi(this.casillaActual);
+                int x = casillaAlaQueMoverse.getX();
+                int y = casillaAlaQueMoverse.getY();
+                System.out.println("EN ACTIVAR: Zombi " + this.getZombiParaBoton() + " se mueve a la casilla " + x + ", " + y);
+                mover(x, y);
             }
             activacionesAux--;
         }
-        partida.accionTerminada();
+        System.out.println("FIN DE ACTIVAR, Zombi " + this.getZombiParaBoton() + ", nº de activaciones: " + activacionesAux);
+    }
+
+    @Override
+    public void mover(int x, int y){
+        System.out.println("EN MOVER ANTES: Zombi " + this.getZombiParaBoton() + " se mueve a la casilla " + x + ", " + y);
+        posicion[0] = x;
+        posicion[1] = y;
+        Casilla casillaAnterior = casillaActual;
+        casillaActual = partida.getTablero().getCasilla(x, y);
+        casillaAnterior.removeEntidad(this);
+        casillaActual.addEntidad(this);
+        partida.getInterfazPrincipal().moverZombi(casillaAnterior, casillaActual, this.getZombiParaBoton());
+        System.out.println("EN MOVER DESPUES: Zombi " + this.getZombiParaBoton() + " se mueve a la casilla " + x + ", " + y);
     }
 
 //    public void reaccion(Arma arma, int a){

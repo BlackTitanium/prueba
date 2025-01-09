@@ -191,23 +191,34 @@ public class InterfazPrincipal extends JFrame{
     }
     
     public void matarZombi(Casilla casilla, String textoBotonZombi){
+        System.out.println("En matarZombi. Se va a matar al zombi " + textoBotonZombi);
         int x = casilla.getX();
         int y = casilla.getY();
+        //Quitamos de textoBotonZombi lo de html menos <br>
+        textoBotonZombi = textoBotonZombi.replace("<html>","");
+        textoBotonZombi = textoBotonZombi.replace("</html>","");
+        
         String textoBoton = botones[x][y].getText();
         textoBoton = textoBoton.replace(textoBotonZombi, "");
         botones[x][y].setText(textoBoton);
     }
     
     public void moverZombi(Casilla origen, Casilla destino, String textoBotonZombi){
+        System.out.println("En moverZombi de InterfazPrincipal. Se va a mover al zombi " + textoBotonZombi);
         int xOrigen = origen.getX();
         int yOrigen = origen.getY();
         int xDestino = destino.getX();
         int yDestino = destino.getY();
+        //Quitamos de textoBotonZombi lo de html menos <br>
+        textoBotonZombi = textoBotonZombi.replace("<html>","");
+        textoBotonZombi = textoBotonZombi.replace("</html>","");
+        
         StringBuilder sbDestino = new StringBuilder();
         String textoDestino = botones[xDestino][yDestino].getText();
-        textoDestino = textoDestino.replace("</html>", "");
-        sbDestino.append(textoDestino);
-        sbDestino.append(textoBotonZombi);
+        textoDestino = textoDestino.replace("</html>", ""); // Quitamos cierre de html
+        sbDestino.append(textoDestino); // Se añade el texto del boton destino al sb
+        sbDestino.append(textoBotonZombi); // Se añade el zombi al sb
+        sbDestino.append("</html>"); // Se cierra el html
         botones[xDestino][yDestino].setText(sbDestino.toString());
         
         String textoOrigen = botones[xOrigen][yOrigen].getText();

@@ -75,6 +75,7 @@ public class Tablero implements Serializable{
         return objetivo;
     }
 
+    // Calcula el movimiento del Zombi en base a la posición de los Supervivientes
     public Casilla calcularMovimientoZombi(Casilla casillaActualZombi) {
         Casilla objetivo = objetivoZombi(casillaActualZombi);
         if (objetivo == null) {
