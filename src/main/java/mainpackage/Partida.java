@@ -251,7 +251,7 @@ public class Partida implements Serializable {
         sb.append("</span>"); // Cerrar el color
         // Quitar las acciones del superviviente
         supervivienteActual.setAcciones(0);
-        // Quitar el superviviente de la interfaz
+        // Cambiar el superviviente de la interfaz
         interfazPrincipal.supervivienteMuerto(s.getCasillaActual(), sb.toString());
         // Quitar el superviviente de la lista
         supervivientes.remove(s);
