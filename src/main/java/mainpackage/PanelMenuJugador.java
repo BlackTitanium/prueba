@@ -196,13 +196,6 @@ public class PanelMenuJugador extends JPanel{
         botonAdmin.setFont(new Font("Arial", 1, 14));
         botonAdmin.setForeground(Color.BLACK);
         add(botonAdmin);
-
-        botonGuardarSalir = new JButton("Guardar y Salir");
-        botonGuardarSalir.setBounds(20,600,155,30);
-        botonGuardarSalir.setBackground(Color.LIGHT_GRAY);
-        botonGuardarSalir.setFont(new Font("Arial", 1, 14));
-        botonGuardarSalir.setForeground(Color.BLACK);
-        add(botonGuardarSalir);
         
         cardLayoutMenuJugador = new CardLayout();
         panelIntercambio = new JPanel(cardLayoutMenuJugador);
@@ -210,7 +203,7 @@ public class PanelMenuJugador extends JPanel{
         panelIntercambio.setBounds(0, 575, 400, 40); // 60, , 280
         
         panelInfo = new JPanel();
-        panelInfo.setLayout(null);
+        panelInfo.setLayout(new FlowLayout(FlowLayout.LEFT, 30, 0));
         panelInfo.setBounds(90,80,120,30);
         
         botonInfo = new JButton("Informacion");
@@ -219,6 +212,13 @@ public class PanelMenuJugador extends JPanel{
         botonInfo.setFont(new Font("Arial", 1, 14));
         botonInfo.setForeground(Color.BLACK);
         panelInfo.add(botonInfo);
+        
+        botonGuardarSalir = new JButton("Guardar y Salir");
+        botonGuardarSalir.setBounds(210,0,155,30);
+        botonGuardarSalir.setBackground(Color.LIGHT_GRAY);
+        botonGuardarSalir.setFont(new Font("Arial", 1, 14));
+        botonGuardarSalir.setForeground(Color.BLACK);
+        panelInfo.add(botonGuardarSalir);
         
         panelIntercambio.add(panelInfo,"PanelInfo");
         
