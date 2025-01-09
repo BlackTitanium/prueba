@@ -1,18 +1,20 @@
 package mainpackage;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 
 import javax.swing.SwingUtilities;
 
-public class Partida implements Serializable{
+public class Partida implements Serializable {
+    private static final long serialVersionUID = 1L;
     public ArrayList<Superviviente> supervivientes;
     public int nSupervivientesTotales;
     public ArrayList<Zombi> zombis;
     private int turnoActual = 0;
     private int turnoMaximo;
-//    private Scanner scanner = new Scanner(System.in);
     private Tablero tablero;
     private Equipo[] inventarioActual;
     private Superviviente supervivienteActual;
@@ -21,12 +23,30 @@ public class Partida implements Serializable{
     private static int idZombiCont = 1;
     public volatile boolean victoria = false;
     public volatile boolean derrota = false;
-    private final Object monitorSupervivientes = new Object();
+    private transient Object monitorSupervivientes = new Object(); // Mark as transient if not serializable
     private int IDPartida;
     private AlmacenPartidas almacenPartidas;
 
+    private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
+        ois.defaultReadObject();
+        // Reinitialize the monitorSupervivientes field
+        monitorSupervivientes = new Object();
+    }
+
+    public AlmacenPartidas getAlmacenPartidas(){
+        return almacenPartidas;
+    }
+
     public InterfazPrincipal getInterfazPrincipal(){
         return interfazPrincipal;
+    }
+
+    public void setInterfazPrincipal(InterfazPrincipal interfazPrincipal){
+        this.interfazPrincipal = interfazPrincipal;
+    }
+
+    public void setTablero(Tablero tablero){
+        this.tablero = tablero;
     }
     
     public void setTurnoActual(int turno){
@@ -364,7 +384,9 @@ public class Partida implements Serializable{
     public void iniciarPartida(){
         tablero = new Tablero(this);
         almacen =  new AlmacenDeAtaques();
-        almacenPartidas.addPartida(this);
+        if (almacenPartidas == null) {
+            almacenPartidas = new AlmacenPartidas();
+        }
         IDPartida = almacenPartidas.getContadorPartidas();
         // LLamamos a la InterfazPrincipal
         interfazPrincipal = new InterfazPrincipal(this);
@@ -374,5 +396,11 @@ public class Partida implements Serializable{
         this.almacenPartidas = almacenPartidas;
         Thread hiloPrincipal = new Thread(this::iniciarPartida);
         hiloPrincipal.start();
+    }
+
+    public void reiniciarJuego() {
+        SwingUtilities.invokeLater(() -> {
+            new Thread(this::gestorTurnos).start();
+        });
     }
 }

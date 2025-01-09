@@ -3,7 +3,6 @@ package mainpackage;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -16,7 +15,7 @@ import javax.swing.JPanel;
 public class PanelMenuJugador extends JPanel{
     public JButton botonMoverse, botonBuscar, botonAtacar, botonInventario, botonNada;
     private JButton botonArma1, botonArma2, botonInv1, botonInv2, botonInv3, botonInv4, botonInv5;
-    private JButton botonAlmacenDeAtaques, botonAdmin;
+    private JButton botonAlmacenDeAtaques, botonAdmin, botonGuardarSalir;
     private JLabel turnoDe, numAcciones, contZombis, mordeduras;
     public JPanel panelInventario;
     
@@ -186,6 +185,13 @@ public class PanelMenuJugador extends JPanel{
         botonAdmin.setForeground(Color.BLACK);
         add(botonAdmin);
 
+        botonGuardarSalir = new JButton("Guardar y Salir");
+        botonGuardarSalir.setBounds(20,700,155,30);
+        botonGuardarSalir.setBackground(Color.LIGHT_GRAY);
+        botonGuardarSalir.setFont(new Font("Arial", 1, 14));
+        botonGuardarSalir.setForeground(Color.BLACK);
+        add(botonGuardarSalir);
+
         activacionBotones(true);
         actualizarLabels();
         
@@ -295,6 +301,12 @@ public class PanelMenuJugador extends JPanel{
             @Override
             public void actionPerformed(ActionEvent e) {
                 accionBotonesInventario(4);
+            }
+        });
+        botonGuardarSalir.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                interfazPrincipal.guardarPartida();
             }
         });
     }

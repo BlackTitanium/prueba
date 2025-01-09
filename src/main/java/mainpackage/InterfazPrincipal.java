@@ -1,5 +1,6 @@
 package mainpackage;
 
+import java.io.IOException;
 import java.awt.BorderLayout;
 import java.awt.CardLayout; // Porque estamos haciendo una interfaz gráfica
 import java.awt.Color; // Cuando usamos CheckBox
@@ -9,6 +10,7 @@ import java.awt.GridLayout; // Para usar Casilla
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -19,7 +21,8 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-public class InterfazPrincipal extends JFrame implements Serializable{
+public class InterfazPrincipal extends JFrame implements Serializable {
+    private static final long serialVersionUID = 1L;
     private static final int SIZE = 10;  // Tamaño del tablero 10x10
     public JButton[][] botones = new JButton[SIZE][SIZE];   
     public Point elementoSeleccionado = null;  // Guarda la posición del elemento seleccionado
@@ -36,11 +39,11 @@ public class InterfazPrincipal extends JFrame implements Serializable{
     private String[] nombresZombis = {"Z.Ca.N", "Z.Co.N", "Z.Ab.N", "Z.Ca.B", "Z.Co.B", "Z.Ab.B", "Z.Ca.T", "Z.Co.T", "Z.Ab.T"};
     
     public Partida partida;
-    private Tablero tablero;
+    private transient Tablero tablero; // Mark as transient if not serializable
     
     public Zombi zombiSeleccionado;
           
-    public InterfazPrincipal(Partida partida){
+    public InterfazPrincipal(Partida partida) {
         this.partida = partida;
         tablero = partida.getTablero();
         
@@ -124,6 +127,7 @@ public class InterfazPrincipal extends JFrame implements Serializable{
                 panelTablero.add(botones[i][j]);
             }
         }
+        activarActionListener(); // Ensure action listeners are reinitialized
     }
     
     public void reiniciarTablero() {
@@ -310,12 +314,6 @@ public class InterfazPrincipal extends JFrame implements Serializable{
     public void moverElemento(JButton boton, int x, int y){
         if(panelMenuJugador.movimientoActivado){
             Superviviente supervivienteActual = partida.getSupervivienteActual();
-//            if (elementoSeleccionado == null && boton.getText().contains(supervivienteActual.getNombre())) {
-//                // Selecciona un elemento para mover
-//                elementoSeleccionado = new Point(x, y);
-//                boton.setBackground(Color.DARK_GRAY);  // Resaltar elemento
-//                boton.setForeground(Color.WHITE);
-//            } else if (elementoSeleccionado != null) {
             if(elementoSeleccionado != null){
                 if(x == supervivienteActual.getCasillaActual().getX() && y == supervivienteActual.getCasillaActual().getY()){
                     JOptionPane.showMessageDialog(this,"No puede moverse a la misma casilla");   
@@ -520,6 +518,18 @@ public class InterfazPrincipal extends JFrame implements Serializable{
                 boton.setForeground(Color.BLACK);
             }
         }
+    }
+
+    public void guardarPartida(){
+        partida.getAlmacenPartidas().addPartida(partida);
+        partida.getAlmacenPartidas().addInterfaz(this);
+        try {
+            Serializador.serializarAlmacenPartidas(partida.getAlmacenPartidas(), "bin/almacenpartidas.ser");
+            System.out.println("Partida and Interfaz serialized successfully.");
+        } catch (Exception e) {
+            System.err.println("Error saving game: " + e.getMessage());
+        }
+        System.exit(0);
     }
     
     public static void main(String args[]){ 
