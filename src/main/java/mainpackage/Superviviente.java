@@ -75,7 +75,7 @@ public class Superviviente extends Entidad implements Serializable{
     }
     public void setInventario(Equipo e, int a){
         System.out.println("Se añade al inventario de " + this.nombre + ": ranura: " + a + ", y es: equipo: " + e.toString());
-        this.inventario[a] = e;
+        inventario[a] = e;
     }
 
     public int getNumeroProvisiones() {
@@ -104,6 +104,16 @@ public class Superviviente extends Entidad implements Serializable{
         return contador;
     }
 
+    public int getNumeroArmasActivas(){
+        int contador = 0;
+        for (Arma item : armas) {
+            if (item != null) {
+                contador++;
+            }
+        }
+        return contador;
+    }
+
     public void setEstado(estado estadoActual) {
         this.estadoActual = estadoActual;
     }
@@ -125,6 +135,7 @@ public class Superviviente extends Entidad implements Serializable{
     public void lessMordeduras(){
         if(mordeduras !=0 ){
             mordeduras--;
+            partida.getInterfazPrincipal().panelMenuJugador.actualizarLabels();
         }
     }
 
@@ -175,32 +186,71 @@ public class Superviviente extends Entidad implements Serializable{
         }
     }
 
-    
-    public void mover(int x, int y) {
-        super.mover(x,y);
-        for (int i=0; i<=casillaActual.getContadorZombis(); i++){
+    public void intercambiarObjetos(int ranura1, int ranura2, int tipo){
+        if(tipo == 1){ // Mover objeto de inventario a inventario
+            Equipo aux = inventario[ranura1];
+            inventario[ranura1] = inventario[ranura2];
+            inventario[ranura2] = aux;
             acciones--;
+            partida.getInterfazPrincipal().panelMenuJugador.actualizarLabels();
+        } else if(tipo == 2){ // Mover objeto de inventario a arma
+            if(inventario[ranura1] instanceof Arma){
+                Equipo aux = inventario[ranura1];
+                inventario[ranura1] = armas[ranura2];
+                armas[ranura2] = (Arma) aux;
+                acciones--;
+                partida.getInterfazPrincipal().panelMenuJugador.actualizarLabels();
+            } else {
+                partida.getInterfazPrincipal().mostrarMensaje("En las armas activas solo puede haber armas");
+            }
+        } else if(tipo == 3){ // Mover objeto de arma a inventario
+            if(getNumeroArmasActivas() > 1){
+                if(inventario[ranura2] instanceof Provision){
+                    partida.getInterfazPrincipal().mostrarMensaje("En las armas activas solo puede haber armas");
+                } else {
+                    Equipo aux = armas[ranura1];
+                    armas[ranura1] = (Arma) inventario[ranura2];
+                    inventario[ranura2] = aux;
+                    acciones--;
+                    partida.getInterfazPrincipal().panelMenuJugador.actualizarLabels();
+                }                
+            } else {
+                partida.getInterfazPrincipal().mostrarMensaje("Debes tener al menos 1 arma activa");
+            }
+        } else if(tipo == 4){ // Mover objeto de arma a arma
+            Equipo aux = armas[ranura1];
+            armas[ranura1] = armas[ranura2];
+            armas[ranura2] = (Arma) aux;
+            acciones--;
+            partida.getInterfazPrincipal().panelMenuJugador.actualizarLabels();
         }
     }
 
-    public void elegirArma(int a, int b){
-        if(inventario[a] instanceof Arma){
-            Equipo equipoSeleccionado = inventario[a];
-            armas[b] = (Arma) equipoSeleccionado;
-        } else {
-            inventario[a] = null;
+    public void usarObjeto(int ranura){
+        if(inventario[ranura] instanceof Provision){
+            Provision provision = elegirProvision(ranura);
+            System.out.println("Voy a usar la provision: " + provision.getNombre() + " numero de mordeduras: " + mordeduras);
             lessMordeduras();
+            System.out.println("Ya he usado la provision: " + provision.getNombre() + " numero de mordeduras despues de usarla: " + mordeduras);
+            inventario[ranura] = null; // Quitamos la provision
+            partida.getInterfazPrincipal().panelMenuJugador.actualizarLabels();
+            acciones--;
+            partida.getInterfazPrincipal().panelMenuJugador.actualizarLabels();
+        } else {
+            partida.getInterfazPrincipal().mostrarMensaje("Debes seleccionar una provision");
         }
     }
 
     public Provision elegirProvision(int a){
-        if(inventario[a] instanceof Provision){
-            Equipo equipoSeleccionado = inventario[a];
-            Provision provision = (Provision) equipoSeleccionado;
+        Equipo equipoSeleccionado = inventario[a];
+        Provision provision = (Provision) equipoSeleccionado;
+        return provision;
+    }
+
+    public void mover(int x, int y) {
+        super.mover(x,y);
+        for (int i=0; i<=casillaActual.getContadorZombis(); i++){
             acciones--;
-            return provision;
-        } else {
-            throw new IllegalArgumentException("No es una provision");
         }
     }
     

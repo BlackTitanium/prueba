@@ -62,14 +62,14 @@ public class Arma extends Equipo{
                 potencia = 1;
                 dados = 2;
                 alcance = 2;
-                exito= 2;
+                exito= 3;
                 break;
             case 4:
                 nombre = "Francotirador";
                 potencia = 4;
-                dados = 2;
+                dados = 1;
                 alcance = 3;
-                exito = 3;
+                exito = 2;
                 break;
             default:
             System.out.println("Tipo de arma no válida");

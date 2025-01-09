@@ -127,7 +127,7 @@ public class InterfazPrincipal extends JFrame implements Serializable {
                 panelTablero.add(botones[i][j]);
             }
         }
-        activarActionListener(); // Ensure action listeners are reinitialized
+        //activarActionListener(); // Ensure action listeners are reinitialized
     }
     
     public void reiniciarTablero() {
@@ -326,8 +326,10 @@ public class InterfazPrincipal extends JFrame implements Serializable {
                     partida.activarSuperviviente(0, x, y,null);
 
                     tablero.posicionesOcupadas[x][y] = true;
-                    botones[elementoSeleccionado.x][elementoSeleccionado.y].setBackground(Color.LIGHT_GRAY);
-                    botones[elementoSeleccionado.x][elementoSeleccionado.y].setForeground(Color.BLACK);
+                    if(elementoSeleccionado.x != 9 && elementoSeleccionado.y != 9){
+                        botones[elementoSeleccionado.x][elementoSeleccionado.y].setBackground(Color.LIGHT_GRAY);
+                        botones[elementoSeleccionado.x][elementoSeleccionado.y].setForeground(Color.BLACK);
+                    }                    
 
                     // Actualizar casillas
                     int xOrigen = elementoSeleccionado.x;
@@ -413,6 +415,9 @@ public class InterfazPrincipal extends JFrame implements Serializable {
             for (int i = 0; i < casillasAlcance.size(); i++){
                 botones[casillasAlcance.get(i).getX()][casillasAlcance.get(i).getY()].setBackground(Color.LIGHT_GRAY);
                 botones[casillasAlcance.get(i).getX()][casillasAlcance.get(i).getY()].setForeground(Color.BLACK);
+                if(casillasAlcance.get(i).getX() == 9 && casillasAlcance.get(i).getY() == 9){
+                    botones[9][9].setBackground(Color.GREEN);
+                }
             }
         }
     }

@@ -12,6 +12,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class PanelMenuJugador extends JPanel{
@@ -27,7 +28,10 @@ public class PanelMenuJugador extends JPanel{
     public boolean movimientoActivado = false;
     public boolean atacarActivado = false, atacarBotonesActivado = false;
     public boolean buscandoActivado = false;
-    public boolean inventarioActivado1 = false, inventarioActivado2 = false;
+    public boolean inventarioOpcionesActivado = false, inventarioUsarActivado = false, inventarioMoverActivado = false;
+    public int objetoSeleccionadoDeArma = 0, objetoSeleccionadoDeInventario = 0;
+    public boolean primerObjetoDeInventario = false;
+    public int botonSeleccionado1 = -1, botonSeleccionado2 = -1;
     
     private Equipo equipoBuscado;
     private Partida partida;
@@ -220,16 +224,18 @@ public class PanelMenuJugador extends JPanel{
         panelIntercambio.add(panelCancelar,"PanelCancelar");
         
         panelOpcionesInventario = new JPanel();
-        panelOpcionesInventario.setLayout(new FlowLayout(FlowLayout.LEFT, 50, 0));
-        panelOpcionesInventario.setBounds(20, 535, 280, 30);
+        panelOpcionesInventario.setLayout(new FlowLayout(FlowLayout.LEFT, 30, 0));
+        panelOpcionesInventario.setBounds(0, 0, 280, 40);
         
         botonUsar = new JButton("Usar");
+        botonUsar.setBounds(5,0,60,30);
         botonUsar.setBackground(Color.LIGHT_GRAY);
         botonUsar.setFont(new Font("Arial", 1, 14));
         botonUsar.setForeground(Color.BLACK);
         panelOpcionesInventario.add(botonUsar);
         
-        botonMoverObjetos = new JButton("Mover Objetos");
+        botonMoverObjetos = new JButton("Intercambiar");
+        botonMoverObjetos.setBounds(5,90,190,30);
         botonMoverObjetos.setBackground(Color.LIGHT_GRAY);
         botonMoverObjetos.setFont(new Font("Arial", 1, 14));
         botonMoverObjetos.setForeground(Color.BLACK);
@@ -288,9 +294,9 @@ public class PanelMenuJugador extends JPanel{
         botonInventario.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                activacionInventario(true);
-                inventarioActivado1 = true;
+                inventarioOpcionesActivado = true;
                 partida.getSupervivienteActual().setSeleccion(Entidad.accion.INVENTARIO);
+                gestionPanelIntercambio(true,1);
             }
         });
         
@@ -310,42 +316,56 @@ public class PanelMenuJugador extends JPanel{
         botonArma1.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
+                botonArma1.setBackground(Color.DARK_GRAY);
+                botonArma1.setForeground(Color.WHITE);
                 accionBotonesArmas(0);
             }
         });
         botonArma2.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
+                botonArma2.setBackground(Color.DARK_GRAY);
+                botonArma2.setForeground(Color.WHITE);
                 accionBotonesArmas(1);
             }
         });
         botonInv1.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
+                botonInv1.setBackground(Color.DARK_GRAY);
+                botonInv1.setForeground(Color.WHITE);
                 accionBotonesInventario(0);
             }
         });
         botonInv2.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
+                botonInv2.setBackground(Color.DARK_GRAY);
+                botonInv2.setForeground(Color.WHITE);
                 accionBotonesInventario(1);
             }
         });
         botonInv3.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
+                botonInv3.setBackground(Color.DARK_GRAY);
+                botonInv3.setForeground(Color.WHITE);
                 accionBotonesInventario(2);
             }
         });
         botonInv4.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
+                botonInv4.setBackground(Color.DARK_GRAY);
+                botonInv4.setForeground(Color.WHITE);
                 accionBotonesInventario(3);
             }
         });
         botonInv5.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
+                botonInv5.setBackground(Color.DARK_GRAY);
+                botonInv5.setForeground(Color.WHITE);
                 accionBotonesInventario(4);
             }
         });
@@ -360,8 +380,61 @@ public class PanelMenuJugador extends JPanel{
                 gestionPanelIntercambio(false, 0);
             }
         });
+        
+        botonUsar.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(partida.getSupervivienteActual().getNumeroProvisiones() <= 0){
+                    JOptionPane.showMessageDialog(interfazPrincipal,"No provisiones en el inventario");
+                } else if(partida.getSupervivienteActual().getMordeduras() <= 0){
+                    JOptionPane.showMessageDialog(interfazPrincipal,"No tienes mordeduras que curar");
+                }else{
+                    inventarioUsarActivado = true;
+                    activacionInventario(true);
+                    gestionPanelIntercambio(false, 1);
+                } 
+                               
+            }
+        });
+        botonMoverObjetos.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                inventarioMoverActivado = true;
+                botonSeleccionado1 = -1;
+                botonSeleccionado2 = -1;
+                primerObjetoDeInventario = false;
+                objetoSeleccionadoDeArma = 0;
+                objetoSeleccionadoDeInventario = 0;
+                activacionInventario(true);
+                activacionArmas(true);
+                gestionPanelIntercambio(false, 1);
+            }
+        });
     }
-    
+
+    public void reiniciarEsteticaInventarioTodo() {
+        botonInv1.setBackground(Color.LIGHT_GRAY);
+        botonInv1.setForeground(Color.BLACK);
+
+        botonInv2.setBackground(Color.LIGHT_GRAY);
+        botonInv2.setForeground(Color.BLACK);
+
+        botonInv3.setBackground(Color.LIGHT_GRAY);
+        botonInv3.setForeground(Color.BLACK);
+
+        botonInv4.setBackground(Color.LIGHT_GRAY);
+        botonInv4.setForeground(Color.BLACK);
+
+        botonInv5.setBackground(Color.LIGHT_GRAY);
+        botonInv5.setForeground(Color.BLACK);
+
+        botonArma1.setBackground(Color.LIGHT_GRAY);
+        botonArma1.setForeground(Color.BLACK);
+
+        botonArma2.setBackground(Color.LIGHT_GRAY);
+        botonArma2.setForeground(Color.BLACK);
+    }
+                
     public void activacionBotones(boolean enabled) {
         botonMoverse.setEnabled(enabled);
         botonBuscar.setEnabled(enabled);
@@ -375,6 +448,7 @@ public class PanelMenuJugador extends JPanel{
         botonInv3.setEnabled(false);
         botonInv4.setEnabled(false);
         botonInv5.setEnabled(false);
+        reiniciarEsteticaInventarioTodo();
     }
     public void activacionInventario(boolean enabled) {
         botonInv1.setEnabled(enabled);
@@ -464,6 +538,10 @@ public class PanelMenuJugador extends JPanel{
             supervivienteActual.setSeleccion(Entidad.accion.ATACAR);
             interfazPrincipal.autoSeleccionElementoAtacar();
         }
+        if(inventarioMoverActivado){
+            logicaInventario(ranura,false); // fals porque es de armas
+            reiniciarEsteticaInventarioTodo();
+        }
     }
     
     public void accionBotonesInventario(int ranura){
@@ -476,6 +554,121 @@ public class PanelMenuJugador extends JPanel{
             activacionBotones(true);
             partida.accionTerminada();
         }
+        if(inventarioUsarActivado){
+            partida.activarSuperviviente(0, ranura, 0, null);
+            inventarioUsarActivado = false;
+            actualizarLabels();
+            activacionBotones(true);
+            partida.accionTerminada();
+        }
+        if(inventarioMoverActivado){ //partida.activarSuperviviente(usarOmover, ranuraObjetoSeleccionado, ranuraObjetivo, null);
+            logicaInventario(ranura,true); // true porque es de inventario
+            reiniciarEsteticaInventarioTodo();
+        }
+    }
+    public void logicaInventario(int ranura, boolean enable){
+        if(botonSeleccionado1 == -1){
+            botonSeleccionado1 = ranura;
+            if(enable){
+                objetoSeleccionadoDeInventario++;
+            }else{
+                objetoSeleccionadoDeArma++;
+            }            
+            primerObjetoDeInventario = enable;
+            System.out.println("Primer boton: ranura: " + ranura + ", objetoSeleccionadoDeInventario: " + objetoSeleccionadoDeInventario +
+                    ", objetoSeleccionadoDeArma: " + objetoSeleccionadoDeArma + ", primerObjetoDeInventario: " + primerObjetoDeInventario);
+        }else{
+            botonSeleccionado2 = ranura;
+            if(enable){
+                objetoSeleccionadoDeInventario++;
+            }else{
+                objetoSeleccionadoDeArma++;
+            }
+            System.out.println("Segundo boton: ranura: " + ranura + ", objetoSeleccionadoDeInventario: " + objetoSeleccionadoDeInventario +
+                    ", objetoSeleccionadoDeArma: " + objetoSeleccionadoDeArma + ", primerObjetoDeInventario: " + primerObjetoDeInventario);
+            if(botonSeleccionado1 != -1 && botonSeleccionado2 != -1){
+                if(objetoSeleccionadoDeInventario > 0){ // Hay algun objeto de inventario
+                    if(objetoSeleccionadoDeInventario > 1){ // Ambos objetos son de inventario
+                        // LLAMO A INTERCAMBIARLOS (inventario a inventario)
+                        partida.activarSuperviviente(1, botonSeleccionado1, botonSeleccionado2, null);
+                        inventarioMoverActivado = true;
+                        botonSeleccionado1 = -1;
+                        botonSeleccionado2 = -1;
+                        primerObjetoDeInventario = false;
+                        objetoSeleccionadoDeArma = 0;
+                        objetoSeleccionadoDeInventario = 0;
+                        actualizarLabels();
+                        activacionBotones(true);
+                        partida.accionTerminada();
+                    }else if(objetoSeleccionadoDeArma > 0){ // Uno de cada
+                        if(primerObjetoDeInventario){ // El primer objeto es de inventario
+                            // LLAMO A INTERCAMBIARLOS (inventario a arma)
+                            partida.activarSuperviviente(2, botonSeleccionado1, botonSeleccionado2, null);
+                            inventarioMoverActivado = true;
+                            botonSeleccionado1 = -1;
+                            botonSeleccionado2 = -1;
+                            primerObjetoDeInventario = false;
+                            objetoSeleccionadoDeArma = 0;
+                            objetoSeleccionadoDeInventario = 0;
+                            actualizarLabels();
+                            activacionBotones(true);
+                            partida.accionTerminada();
+                        }else{ // El primer objeto es de arma
+                            // LLAMO A INTERCAMBIARLOS (arma a inventario)
+                            partida.activarSuperviviente(3, botonSeleccionado1, botonSeleccionado2, null);
+                            inventarioMoverActivado = true;
+                            botonSeleccionado1 = -1;
+                            botonSeleccionado2 = -1;
+                            primerObjetoDeInventario = false;
+                            objetoSeleccionadoDeArma = 0;
+                            objetoSeleccionadoDeInventario = 0;
+                            actualizarLabels();
+                            activacionBotones(true);
+                            partida.accionTerminada();
+                        }
+                    }
+                }else if(objetoSeleccionadoDeArma > 0){ // Hay algun objeto de arma
+                    if(objetoSeleccionadoDeArma > 1){ // Ambos objetos son de arma
+                        // LLAMO A INTERCAMBIARLOS (arma a arma)
+                        partida.activarSuperviviente(4, botonSeleccionado1, botonSeleccionado2, null);
+                        inventarioMoverActivado = true;
+                        botonSeleccionado1 = -1;
+                        botonSeleccionado2 = -1;
+                        primerObjetoDeInventario = false;
+                        objetoSeleccionadoDeArma = 0;
+                        objetoSeleccionadoDeInventario = 0;
+                        actualizarLabels();
+                        activacionBotones(true);
+                        partida.accionTerminada();
+                    }else if(objetoSeleccionadoDeInventario > 0){ // Uno de cada
+                        if(primerObjetoDeInventario){ // El primer objeto es de inventario
+                            // LLAMO A INTERCAMBIARLOS (inventario a arma) 
+                            partida.activarSuperviviente(2, botonSeleccionado1, botonSeleccionado2, null);
+                            inventarioMoverActivado = true;
+                            botonSeleccionado1 = -1;
+                            botonSeleccionado2 = -1;
+                            primerObjetoDeInventario = false;
+                            objetoSeleccionadoDeArma = 0;
+                            objetoSeleccionadoDeInventario = 0;
+                            actualizarLabels();
+                            activacionBotones(true);
+                            partida.accionTerminada();
+                        }else{ // El primer objeto es de arma
+                            // LLAMO A INTERCAMBIARLOS (arma a inventario)
+                            partida.activarSuperviviente(3, botonSeleccionado1, botonSeleccionado2, null);
+                            inventarioMoverActivado = true;
+                            botonSeleccionado1 = -1;
+                            botonSeleccionado2 = -1;
+                            primerObjetoDeInventario = false;
+                            objetoSeleccionadoDeArma = 0;
+                            objetoSeleccionadoDeInventario = 0;
+                            actualizarLabels();
+                            activacionBotones(true);
+                            partida.accionTerminada();
+                        }
+                    }
+                }
+            }
+        }
     }
 }
-

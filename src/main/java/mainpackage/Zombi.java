@@ -106,9 +106,12 @@ public class Zombi extends Entidad implements Serializable{
     public void activar(){
         System.out.println("INICIO DE ACTIVAR, Zombi " + this.getZombiParaBoton() + ", nº de activaciones: " + activacionesAux);
         for (int i=0; i<activaciones; i++){
+            System.out.println("Activación nº: teórica: " + i + ", real: " + activacionesAux);
             if(casillaActual.getContadorSupervivientes()!=0){
                 System.out.println("Zombi " + this.getZombiParaBoton() + " ataca a " + casillaActual.getSuperviviente(0).getNombre());
-                atacar(casillaActual.getSuperviviente(0));
+                if(casillaActual.getSuperviviente(0).getEstadoActual() != Superviviente.estado.MUERTO){
+                    atacar(casillaActual.getSuperviviente(0));
+                }
             } else {
                 Casilla casillaAlaQueMoverse = partida.getTablero().calcularMovimientoZombi(this.casillaActual);
                 int x = casillaAlaQueMoverse.getX();

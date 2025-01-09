@@ -58,7 +58,6 @@ public class Partida implements Serializable {
             throw new IllegalStateException("No hay supervivientes en la lista.");
         }
         //int turnoSuperviviente = getTurnoSupervivienteActual();
-        System.out.println("En getSupervivienteActual: Turno actual: " + turnoActual);
         return supervivientes.get(turnoActual);
     }
 
@@ -204,7 +203,7 @@ public class Partida implements Serializable {
                                     nExitos--;
                                 }
                                 if(supervivienteActual.getEstadoActual() == Superviviente.estado.MUERTO){ // El superviviente a muerto
-                                    supervivienteMuerto();
+                                    supervivienteMuerto(supervivienteActual);
                                 }
                             } catch (IllegalArgumentException e) {
                                 if ("Alcance".equals(e.getMessage())) { // Si es Berserker
@@ -221,11 +220,15 @@ public class Partida implements Serializable {
                     supervivienteActual.activar(ranura,casillaActual.getX(),casillaActual.getY(), equipo);
                     break;
                 case Entidad.accion.INVENTARIO: //Elegir arma o usar provision
-                    int objetoInventario = ranura;
-                    int ranuraObjetivo = x;
-                    // Input de interfaz para elegir el objeto del inventario, si es un arma tambien la ranura
-                    supervivienteActual.elegirArma(objetoInventario, ranuraObjetivo);
-                    supervivienteActual.setAcciones(supervivienteActual.getAcciones()+1);
+                    int usarOmover = ranura;
+                    int ranuraObjetoSeleccionado = x;
+                    int ranuraObjetivo = y;
+                    System.out.println("En activarSuperviviente Inventario: usarOmover " + usarOmover);
+                    if(usarOmover == 0){ // Usar objeto
+                        supervivienteActual.usarObjeto(ranuraObjetoSeleccionado);
+                    } else { // Mover objeto
+                        supervivienteActual.intercambiarObjetos(ranuraObjetoSeleccionado, ranuraObjetivo, usarOmover);
+                    }
                     break;
                 case Entidad.accion.NADA: //Nada
                     supervivienteActual.activar(ranura,casillaActual.getX(),casillaActual.getY(),equipo);
@@ -239,9 +242,9 @@ public class Partida implements Serializable {
         }
     }
 
-    public void supervivienteMuerto(){
+    public void supervivienteMuerto(Superviviente s){
         // Crear el nombre del superviviente con ☠
-        String nombre = supervivienteActual.getNombre();
+        String nombre = s.getNombre();
         StringBuilder sb = new StringBuilder();
         sb.append("<span style='color:red;'>"); // Color rojo
         sb.append(nombre).append("☠"); // Nombre del superviviente + ☠
@@ -249,16 +252,13 @@ public class Partida implements Serializable {
         // Quitar las acciones del superviviente
         supervivienteActual.setAcciones(0);
         // Quitar el superviviente de la interfaz
-        interfazPrincipal.supervivienteMuerto(supervivienteActual.getCasillaActual(), sb.toString());
+        interfazPrincipal.supervivienteMuerto(s.getCasillaActual(), sb.toString());
         // Quitar el superviviente de la lista
-        supervivientes.remove(supervivienteActual);
-        // Si no quedan supervivientes
-        if(supervivientes.isEmpty()){
-            // Mostrar mensaje de derrota
-            interfazPrincipal.mostrarMensajeDeDerrota();
-            // Marcar la derrota
-            derrota = true;
-        }
+        supervivientes.remove(s);
+        // Mostrar mensaje de derrota
+        interfazPrincipal.mostrarMensajeDeDerrota();
+        // Marcar la derrota
+        derrota = true;
     }
 
     public void faseSuperviviente(){ //eleccion viene del input de la interfaz
@@ -347,6 +347,16 @@ public class Partida implements Serializable {
                 faseZombie(zombis.get(i));
                 System.out.println("En gestorTurnos: Turno del zombi: " + zombis.get(i).getZombiParaBoton() + ", Acciones: " + zombis.get(i).getActivaciones());
                 zombis.get(i).activar();
+                for(int j = 0; j < supervivientes.size(); j++){
+                    if(supervivientes.get(j).getEstadoActual() == Superviviente.estado.MUERTO){
+                        supervivienteMuerto(supervivientes.get(j));
+                        derrota = true;
+                        break;
+                    }
+                }
+                if(derrota){
+                    break;
+                }
             }
             // FASE APAARICION ZOMBI
             faseApariciónZombi();
