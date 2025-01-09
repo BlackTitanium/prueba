@@ -11,7 +11,7 @@ public class Superviviente extends Entidad implements Serializable{
     private Arma armaActiva;
     public enum estado {VIVO, MUERTO};
     private estado estadoActual;
-    private Equipo[] inventario = new Equipo[5]; 
+    private Equipo[] inventario = new Equipo[5];
     private Ataque ultimoAtaque;
     private Partida partida;
     private ArrayList<String> zombisAsesinados;
@@ -78,6 +78,32 @@ public class Superviviente extends Entidad implements Serializable{
         this.inventario[a] = e;
     }
 
+    public int getNumeroProvisiones() {
+        int contador = 0;
+        for (Equipo item : inventario) {
+            if (item instanceof Provision) {
+                contador++;
+            }
+        }
+        return contador;
+    }
+    
+    public int getNumeroArmas() {
+        int contador = 0;
+        for (Equipo item : inventario) {
+            if (item instanceof Arma) {
+                contador++;
+            }
+        }
+        if(armas[0] != null){
+            contador++;
+        }
+        if(armas[1] != null){
+            contador++;
+        }
+        return contador;
+    }
+
     public void setEstado(estado estadoActual) {
         this.estadoActual = estadoActual;
     }
@@ -141,7 +167,6 @@ public class Superviviente extends Entidad implements Serializable{
                 mover(x,y);
             } else if(seleccion==accion.ATACAR){
                 atacar(ranura);
-
             } else if(seleccion==accion.BUSCAR){
                 buscar(ranura, e);
             } else if(seleccion==accion.NADA){
@@ -180,8 +205,8 @@ public class Superviviente extends Entidad implements Serializable{
     }
     
     public void atacar(int a) {
-        acciones--;
         ultimoAtaque = new Ataque(armas[a], partida.getAlmacenDeAtaques());
+        acciones--;
         partida.mostrarUltimoAtaque();
     }
     

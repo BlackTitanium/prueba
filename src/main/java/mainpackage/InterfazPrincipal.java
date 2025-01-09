@@ -38,7 +38,7 @@ public class InterfazPrincipal extends JFrame{
     private Tablero tablero;
     
     public Zombi zombiSeleccionado;
-                
+          
     public InterfazPrincipal(Partida partida){
         this.partida = partida;
         tablero = partida.getTablero();
@@ -91,7 +91,11 @@ public class InterfazPrincipal extends JFrame{
     }
     
     public void mostrarMensajeDeDerrota(){
-        JOptionPane.showMessageDialog(this,"Has perdido");
+        JOptionPane.showMessageDialog(this,"Habeís perdido");
+    }
+    
+    public void mostrarMensajeDeVictoria(){
+        JOptionPane.showMessageDialog(this,"¡Habeís ganado!");
     }
     
     public void mostrarMensaje(String mensaje){

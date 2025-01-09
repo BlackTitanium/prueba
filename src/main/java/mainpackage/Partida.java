@@ -8,8 +8,10 @@ import javax.swing.SwingUtilities;
 
 public class Partida implements Serializable{
     public ArrayList<Superviviente> supervivientes;
+    public int nSupervivientesTotales;
     public ArrayList<Zombi> zombis;
     private int turnoActual = 0;
+    private int turnoMaximo;
 //    private Scanner scanner = new Scanner(System.in);
     private Tablero tablero;
     private Equipo[] inventarioActual;
@@ -33,8 +35,9 @@ public class Partida implements Serializable{
         if (supervivientes == null || supervivientes.isEmpty()) {
             throw new IllegalStateException("No hay supervivientes en la lista.");
         }
-        int turnoSuperviviente = getTurnoSupervivienteActual();
-        return supervivientes.get(turnoSuperviviente);
+        //int turnoSuperviviente = getTurnoSupervivienteActual();
+        System.out.println("En getSupervivienteActual: Turno actual: " + turnoActual);
+        return supervivientes.get(turnoActual);
     }
 
     public int getTurnoSupervivienteActual(){
@@ -93,6 +96,8 @@ public class Partida implements Serializable{
 
     public void colocarElementosIniciales(String[] nombres){
         supervivientes = new ArrayList<Superviviente>(interfazPrincipal.nJugadores);
+        nSupervivientesTotales = interfazPrincipal.nJugadores;
+        turnoMaximo = nSupervivientesTotales;
         zombis = new ArrayList<>();
         Casilla casillaInicial = new Casilla(0,0);
         
@@ -157,36 +162,38 @@ public class Partida implements Serializable{
                     // Mientras haya zombis en la casilla y haya exitos
                     System.out.println("En activarSuperviviente Atacar: Numero de zombis en la casilla: " + casillaObjetivo.getContadorZombis() + 
                                         " Numero de exitos: " + nExitos);
-                    while((intento < casillaObjetivo.getContadorZombis() && nExitos > 0)){
-                        try {
-                            Zombi zombi = casillaObjetivo.getZombi(intento);
-                            System.out.println("En activarSuperviviente Atacar: Zombi(intento): " + zombi.getIdentificador());
-                            // Reaccion del zombi
-                            zombi.reaccion(armaSeleccionada);
-                            if(zombi.getEstadoActual() == Zombi.estado.MUERTO){ // EL zombi a muerto
-                                // Añadir el zombi a la lista de zombis asesinados
-                                supervivienteActual.añadirZombiAsesinado(zombi.infoZombi());
-                                // Quitar el zombi de la lista
-                                zombis.remove(zombi);
-                                // Quitar el zombi de la casilla
-                                casillaObjetivo.removeZombi(zombi);
-                                // Borramos el zombi en la interfaz
-                                interfazPrincipal.matarZombi(casillaObjetivo, zombi.getZombiParaBoton());
-                                // Actualizar el panel de menu de jugador
-                                interfazPrincipal.panelMenuJugador.actualizarLabels();
-                                // Como ha matado a un zombi se resta un exito
-                                nExitos--;
+                    if(nExitos != 0){
+                        while((intento < casillaObjetivo.getContadorZombis() && nExitos > 0)){
+                            try {
+                                Zombi zombi = casillaObjetivo.getZombi(intento);
+                                System.out.println("En activarSuperviviente Atacar: Zombi(intento): " + zombi.getIdentificador());
+                                // Reaccion del zombi
+                                zombi.reaccion(armaSeleccionada);
+                                if(zombi.getEstadoActual() == Zombi.estado.MUERTO){ // EL zombi a muerto
+                                    // Añadir el zombi a la lista de zombis asesinados
+                                    supervivienteActual.añadirZombiAsesinado(zombi.infoZombi());
+                                    // Quitar el zombi de la lista
+                                    zombis.remove(zombi);
+                                    // Quitar el zombi de la casilla
+                                    casillaObjetivo.removeZombi(zombi);
+                                    // Borramos el zombi en la interfaz
+                                    interfazPrincipal.matarZombi(casillaObjetivo, zombi.getZombiParaBoton());
+                                    // Actualizar el panel de menu de jugador
+                                    interfazPrincipal.panelMenuJugador.actualizarLabels();
+                                    // Como ha matado a un zombi se resta un exito
+                                    nExitos--;
+                                }
+                                if(supervivienteActual.getEstadoActual() == Superviviente.estado.MUERTO){ // El superviviente a muerto
+                                    supervivienteMuerto();
+                                }
+                            } catch (IllegalArgumentException e) {
+                                if ("Alcance".equals(e.getMessage())) { // Si es Berserker
+                                    System.out.println("En activarSuperviviente Atacar: Berserker");
+                                    supervivienteActual.addAcciones(); // Recupera la accion perdida en activar
+                                }
                             }
-                            if(supervivienteActual.getEstadoActual() == Superviviente.estado.MUERTO){ // El superviviente a muerto
-                                supervivienteMuerto();
-                            }
-                        } catch (IllegalArgumentException e) {
-                            if ("Alcance".equals(e.getMessage())) { // Si es Berserker
-                                System.out.println("En activarSuperviviente Atacar: Berserker");
-                                supervivienteActual.addAcciones(); // Recupera la accion perdida en activar
-                            }
+                            intento++; // Siguiente zombi
                         }
-                        intento++; // Siguiente zombi
                     }
                     break;
                 case Entidad.accion.BUSCAR: //Buscar
@@ -204,7 +211,11 @@ public class Partida implements Serializable{
                     supervivienteActual.activar(ranura,casillaActual.getX(),casillaActual.getY(),equipo);
                     accionTerminada();
                     break;
+                default:
+                System.out.println("Accion invalida");
+                break;
             }
+            System.out.println("Accion terminada");
         }
     }
 
@@ -277,27 +288,35 @@ public class Partida implements Serializable{
     }
 
     public void gestorTurnos(){
-        setTurnoActual(0);
         while(!victoria && !derrota){
-            faseSuperviviente();
-            Superviviente supervivienteActual = getSupervivienteActual();
-            interfazPrincipal.actualizacionGeneralPanelMenuJugador();
-            interfazPrincipal.panelMenuJugador.activacionBotones(true);
-            while (supervivienteActual.getAcciones() > 0) {
-                synchronized (monitorSupervivientes) {
-                    // Esperar a que el jugador seleccione una acción
-                    while (!interfazPrincipal.accionRealizada) {
-                        try {
-                            monitorSupervivientes.wait();
-                        } catch (InterruptedException e) {
+            // FASE SUPERVIVIENTES
+            setTurnoActual(0);
+            while(turnoActual < turnoMaximo){
+                faseSuperviviente();
+                System.out.println("En gestorTurnos INICIO FS: Turno actual: " + turnoActual + ", Superviviente: " + supervivienteActual.getNombre());
+                Superviviente supervivienteActual = getSupervivienteActual();
+                interfazPrincipal.actualizacionGeneralPanelMenuJugador();
+                interfazPrincipal.panelMenuJugador.activacionBotones(true);
+                while (supervivienteActual.getAcciones() > 0) {
+                    synchronized (monitorSupervivientes) {
+                        // Esperar a que el jugador seleccione una acción
+                        while (!interfazPrincipal.accionRealizada) {
+                            try {
+                                monitorSupervivientes.wait();
+                            } catch (InterruptedException e) {
+                            }
                         }
+                        interfazPrincipal.accionRealizada = false;
                     }
-                    interfazPrincipal.accionRealizada = false;
                 }
+                if(supervivienteActual.getAcciones() < 0){
+                    supervivienteActual.setAcciones(0);
+                }
+                condicionVictoria(); // Se comprueba que no hayan ganado
+                avanzarTurno();
+                System.out.println("En gestorTurnos FINAL FS: Turno actual: " + turnoActual + ", Superviviente: " + supervivienteActual.getNombre());
             }
-            if(supervivienteActual.getAcciones() < 0){
-                supervivienteActual.setAcciones(0);
-            }
+            // FASE ACTIVACION ZOMBI
             interfazPrincipal.faseZombiInterfaz();
             System.out.println("Fase Zombie");
             for (int i = 0; i < zombis.size(); i++){
@@ -305,18 +324,9 @@ public class Partida implements Serializable{
                 System.out.println("En gestorTurnos: Turno del zombi: " + zombis.get(i).getZombiParaBoton() + ", Acciones: " + zombis.get(i).getActivaciones());
                 zombis.get(i).activar();
             }
+            // FASE APAARICION ZOMBI
             faseApariciónZombi();
-            avanzarTurno();
         } 
-    }
-
-    public void accionTerminadaZombi(){
-        System.out.println("En accionTerminadaZombi, accionRealizada: " + interfazPrincipal.accionRealizada);
-        synchronized (monitorZombis) {
-            interfazPrincipal.accionRealizada = true;
-            System.out.println("En accionTerminadaZombi, SE NOTIFICA A TODOS, accionRealizada: " + interfazPrincipal.accionRealizada);
-            monitorZombis.notifyAll();
-        }
     }
 
     public void accionTerminada(){
@@ -324,6 +334,24 @@ public class Partida implements Serializable{
             interfazPrincipal.actualizacionGeneralPanelMenuJugador();
             interfazPrincipal.accionRealizada = true;
             monitorSupervivientes.notifyAll();
+        }
+    }
+
+    public void condicionVictoria(){
+        Casilla meta = tablero.getCasilla(9,9);
+        boolean condicion = false;
+        if(meta.getContadorSupervivientes() == nSupervivientesTotales){
+            for(int i = 0; i < nSupervivientesTotales; i++){
+                if(meta.getSuperviviente(i).getEstadoActual() == Superviviente.estado.VIVO){
+                    if(meta.getSuperviviente(i).getNumeroProvisiones() >= 1){
+                        condicion = true;
+                    }
+                }                
+            }
+        }
+        if(condicion){
+            interfazPrincipal.mostrarMensajeDeVictoria();
+            victoria = true;
         }
     }
 
