@@ -29,6 +29,20 @@ public class Tablero implements Serializable{
         posicionesOcupadas[0][0] = true; // Inicio Jugadores
         posicionesOcupadas[9][9] = true; // Meta
     }
+
+    public void rehacerTablero(Partida partida){
+        this.partida = partida;
+        Tablero tableroPartida = partida.getTablero();
+        mapa = tableroPartida.mapa;
+        for (int i=0; i<10; i++){
+            for(int j=0; j<10; j++){
+                mapa[i][j] = tableroPartida.getCasilla(i, j);
+                posicionesBuscadas[i][j] = false;
+            }
+        }
+        posicionesOcupadas[0][0] = true; // Inicio Jugadores
+        posicionesOcupadas[9][9] = true; // Meta
+    }
     
 //    public void mostrar(){
 //        for(int i = 0; i < 10; i++){

@@ -62,6 +62,11 @@ public class PanelHistoriales extends JPanel{
         botonVolver.setBackground(Color.LIGHT_GRAY);
         botonVolver.setFont(new Font("Arial", 1, 14));
         botonVolver.setForeground(Color.BLACK);
+        add(botonVolver);
+        activarActionListeners();
+    }
+    
+    public void activarActionListeners(){
         botonVolver.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -69,7 +74,6 @@ public class PanelHistoriales extends JPanel{
                 interfazPrincipal.cardLayout.show(interfazPrincipal.panelDerechoPrincipal, "PanelMenuJugador");
             }
         });
-        add(botonVolver);
         
         botonHistorialAtaques.addActionListener(new ActionListener(){
             @Override

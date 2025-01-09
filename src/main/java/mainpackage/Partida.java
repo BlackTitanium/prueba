@@ -151,7 +151,8 @@ public class Partida implements Serializable {
         }
         
         // Cambiar el panel derecho
-        interfazPrincipal.activarActionListener();
+        interfazPrincipal.meta();
+        interfazPrincipal.activarActionListeners();
         interfazPrincipal.inicializarPaneles();
         interfazPrincipal.cardLayout.show(interfazPrincipal.panelDerechoPrincipal, "PanelMenuJugador");
         SwingUtilities.invokeLater(() -> {
@@ -408,6 +409,13 @@ public class Partida implements Serializable {
         this.almacenPartidas = almacenPartidas;
         Thread hiloPrincipal = new Thread(this::iniciarPartida);
         hiloPrincipal.start();
+    }
+
+    public void activarActionListeners(){
+        interfazPrincipal.activarActionListeners();
+        interfazPrincipal.panelInicio.activarActionListeners();
+        interfazPrincipal.panelMenuJugador.activarActionListeners();
+        interfazPrincipal.panelHistoriales.activarActionListeners();
     }
 
     public void reiniciarJuego() {

@@ -141,7 +141,7 @@ public class InterfazPrincipal extends JFrame implements Serializable {
         }
     }
 
-    public void activarActionListener(){
+    public void activarActionListeners(){
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
                 int I = i, J = j;
@@ -153,6 +153,9 @@ public class InterfazPrincipal extends JFrame implements Serializable {
                 });
             }
         }
+    }
+    
+    public void meta(){
         StringBuilder sb = new StringBuilder();
         String aux = botones[9][9].getText();
         aux = aux.replace("</html>", "");

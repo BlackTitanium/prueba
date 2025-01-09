@@ -22,6 +22,7 @@ public class PanelInicio extends JPanel{
     private JButton botonJugar, botonListo;
     private JTextArea textAreaNombreSupervivientes;
     private JScrollPane scrollpane;
+    private JPanel panelNombreSuperviviente;
     
     private String[] nombres;
     
@@ -74,7 +75,7 @@ public class PanelInicio extends JPanel{
         add(botonJugar);
         
         // Panel para la zona donde los nombres
-        JPanel panelNombreSuperviviente = new JPanel();
+        panelNombreSuperviviente = new JPanel();
         panelNombreSuperviviente.setLayout(null);
         panelNombreSuperviviente.setPreferredSize(new Dimension(400, 300));
         panelNombreSuperviviente.setBounds(0,170,400,300);
@@ -109,7 +110,10 @@ public class PanelInicio extends JPanel{
         panelNombreSuperviviente.add(botonListo);
         
         add(panelNombreSuperviviente);
-        
+        activarActionListeners();
+    }
+    
+    public void activarActionListeners(){
         botonJugar.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){

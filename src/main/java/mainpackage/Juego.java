@@ -56,8 +56,10 @@ public class Juego implements Serializable{
             interfazPrincipal = almacenPartidas.getInterfaz(a);
             interfazPrincipal.partida = partida;
             partida.setInterfazPrincipal(interfazPrincipal);
-            partida.setTablero(new Tablero(partida)); // Reinitialize the tablero
+            //partida.setTablero(new Tablero(partida)); // Reinitialize the tablero
+            partida.setTablero(partida.getTablero());
             interfazPrincipal.setVisible(true); // Ensure the interface is visible
+            partida.activarActionListeners();
             partida.reiniciarJuego();
             System.out.println("Partida and Interfaz deserialized successfully.");
         } catch (Exception e) {

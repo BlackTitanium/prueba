@@ -266,235 +266,7 @@ public class PanelMenuJugador extends JPanel{
         
         activacionBotones(true);
         actualizarLabels();
-        
-        botonMoverse.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                movimientoActivado = true;
-                activacionBotones(false);
-                partida.getSupervivienteActual().setSeleccion(Entidad.accion.MOVER);
-                interfazPrincipal.autoSeleccionElementoMoverse();
-                System.out.println("Movimiento activado: " + movimientoActivado);
-            }
-        });
-        
-        botonBuscar.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                equipoBuscado = null;
-                Superviviente supervivienteActual = partida.getSupervivienteActual();
-                supervivienteActual.setSeleccion(Entidad.accion.BUSCAR);
-                equipoBuscado = supervivienteActual.getCasillaActual().buscar(interfazPrincipal);
-                StringBuilder sb = new StringBuilder();
-                sb.append("Has encontrado:").append("\n");
-                sb.append(equipoBuscado.toString()).append("\n");
-                sb.append("¿Quieres quedartelo?").append("\n");
-                boolean resultado = interfazPrincipal.mostrarMensajeSiNo(sb.toString());
-                if(resultado){
-                    buscandoActivado = true;
-                    StringBuilder aux = new StringBuilder();
-                    aux.append("Selecciona la ranura de inventario donde guardarlo").append("\n");
-                    aux.append("(Si la ranura esta ocupada se borrara su contenido)").append("\n");
-                    interfazPrincipal.mostrarMensaje(aux.toString());
-                    System.out.println("El equipo encontrado es: " + equipoBuscado.toString());
-                    activacionBotones(false);
-                    activacionInventario(true);
-                }                
-            }
-        });
-        
-        botonAtacar.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                atacarBotonesActivado = true;
-                activacionBotones(false);
-                activacionArmas(true);
-            }
-        });
-        
-        botonInventario.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                inventarioOpcionesActivado = true;
-                partida.getSupervivienteActual().setSeleccion(Entidad.accion.INVENTARIO);
-                activacionBotones(false);
-                gestionPanelIntercambio(true,1);
-            }
-        });
-        
-        botonNada.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                partida.getSupervivienteActual().setSeleccion(Entidad.accion.NADA);
-                partida.activarSuperviviente(0, 0, 0, null);
-            }
-        });
-        botonAlmacenDeAtaques.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                interfazPrincipal.cardLayout.show(interfazPrincipal.panelDerechoPrincipal,"PanelHistoriales");
-            }
-        });
-        botonArma1.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                accionBotonesArmas(0);
-            }
-        });
-        botonArma2.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                accionBotonesArmas(1);
-            }
-        });
-        botonInv1.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                accionBotonesInventario(0);
-            }
-        });
-        botonInv2.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                accionBotonesInventario(1);
-            }
-        });
-        botonInv3.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                accionBotonesInventario(2);
-            }
-        });
-        botonInv4.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                accionBotonesInventario(3);
-            }
-        });
-        botonInv5.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                accionBotonesInventario(4);
-            }
-        });
-        
-        botonInfo.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Casilla aux = partida.getTablero().getCasilla(0, 0);
-                int idAux = 10000;
-                Zombi normalCa = new Zombi(aux,"NORMAL",partida,idAux,"CAMINANTE");
-                Zombi normalCo = new Zombi(aux,"NORMAL",partida,idAux,"CORREDOR");
-                Zombi normalAb = new Zombi(aux,"NORMAL",partida,idAux,"ABOMINACION");
-                Zombi toxicoCa = new Zombi(aux,"TOXICO",partida,idAux,"CAMINANTE");
-                Zombi berserkCa = new Zombi(aux,"BERSERKER",partida,idAux,"CAMINANTE");
-                
-                StringBuilder sb = new StringBuilder();
-                sb.append("Información:").append("\n");
-                sb.append("Zombis:").append("\n");
-                sb.append("Tipos:").append("\n");
-                sb.append(normalCa.zombiInformativo());
-                sb.append(normalCo.zombiInformativo());
-                sb.append(normalAb.zombiInformativo());
-                sb.append("Subtipos: ").append("\n");
-                sb.append(normalCa.zombiInformativo());
-                sb.append(toxicoCa.zombiInformativo());
-                sb.append(berserkCa.zombiInformativo());
-                
-                JTextArea textArea = new JTextArea();
-                textArea.setText(sb.toString());
-                textArea.setWrapStyleWord(true);
-                textArea.setLineWrap(true);
-                textArea.setCaretPosition(0);
-                textArea.setEditable(false);
-                
-                JScrollPane scrollPane = new JScrollPane(textArea);
-                
-                JOptionPane.showMessageDialog(interfazPrincipal,scrollPane,"Información",JOptionPane.INFORMATION_MESSAGE);
-                
-                normalCa = null;
-                normalCo = null;
-                normalAb = null;
-                toxicoCa = null;
-                berserkCa = null;
-            }
-        });
-        
-        botonCancelar.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(movimientoActivado){
-                    interfazPrincipal.botones[interfazPrincipal.elementoSeleccionado.x][interfazPrincipal.elementoSeleccionado.y].setBackground(Color.LIGHT_GRAY);
-                    interfazPrincipal.botones[interfazPrincipal.elementoSeleccionado.x][interfazPrincipal.elementoSeleccionado.y].setForeground(Color.BLACK);
-                    interfazPrincipal.elementoSeleccionado = null;
-                    movimientoActivado = false;
-                    activacionBotones(true);
-                    gestionPanelIntercambio(false, 0);
-                }
-                if(atacarActivado){
-                    interfazPrincipal.botones[interfazPrincipal.elementoSeleccionado.x][interfazPrincipal.elementoSeleccionado.y].setBackground(Color.LIGHT_GRAY);
-                    interfazPrincipal.botones[interfazPrincipal.elementoSeleccionado.x][interfazPrincipal.elementoSeleccionado.y].setForeground(Color.BLACK);
-                    Superviviente supervivienteActual = partida.getSupervivienteActual();
-                    int xActual = supervivienteActual.getCasillaActual().getX();
-                    int yActual = supervivienteActual.getCasillaActual().getY();
-                    ArrayList<Casilla> casillasAlcance = partida.getTablero().elegirObjetivoSuperviviente(supervivienteActual.getArmaActiva(), xActual, yActual);
-                    for (int i = 0; i < casillasAlcance.size(); i++){
-                        interfazPrincipal.botones[casillasAlcance.get(i).getX()][casillasAlcance.get(i).getY()].setBackground(Color.LIGHT_GRAY);
-                        interfazPrincipal.botones[casillasAlcance.get(i).getX()][casillasAlcance.get(i).getY()].setForeground(Color.BLACK);
-                    }
-                    interfazPrincipal.elementoSeleccionado = null;
-                    atacarActivado = false;
-                    activacionBotones(true);
-                    gestionPanelIntercambio(false, 0);
-                }
-            }
-        });
-        
-        botonSalirInventario.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                inventarioOpcionesActivado = false;
-                activacionBotones(true);
-                gestionPanelIntercambio(true,3);
-            }
-        });
-        
-        botonUsar.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(partida.getSupervivienteActual().getNumeroProvisiones() <= 0){
-                    JOptionPane.showMessageDialog(interfazPrincipal,"No provisiones en el inventario");
-                } else if(partida.getSupervivienteActual().getMordeduras() <= 0){
-                    JOptionPane.showMessageDialog(interfazPrincipal,"No tienes mordeduras que curar");
-                }else{
-                    inventarioUsarActivado = true;
-                    activacionInventario(true);
-                    gestionPanelIntercambio(false, 1);
-                } 
-                               
-            }
-        });
-        botonMoverObjetos.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                inventarioMoverActivado = true;
-                botonSeleccionado1 = -1;
-                botonSeleccionado2 = -1;
-                primerObjetoDeInventario = false;
-                objetoSeleccionadoDeArma = 0;
-                objetoSeleccionadoDeInventario = 0;
-                activacionInventario(true);
-                activacionArmas(true);
-                gestionPanelIntercambio(false, 1);
-            }
-        });
-        botonGuardarSalir.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                interfazPrincipal.guardarPartida();
-                System.exit(0);
-            }
-        });
+        activarActionListeners();
     }
                 
     public void activacionBotones(boolean enabled) {
@@ -733,5 +505,236 @@ public class PanelMenuJugador extends JPanel{
                 }
             }
         }
+    }
+    
+    public void activarActionListeners(){
+        botonMoverse.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                movimientoActivado = true;
+                activacionBotones(false);
+                partida.getSupervivienteActual().setSeleccion(Entidad.accion.MOVER);
+                interfazPrincipal.autoSeleccionElementoMoverse();
+                System.out.println("Movimiento activado: " + movimientoActivado);
+            }
+        });
+        
+        botonBuscar.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                equipoBuscado = null;
+                Superviviente supervivienteActual = partida.getSupervivienteActual();
+                supervivienteActual.setSeleccion(Entidad.accion.BUSCAR);
+                equipoBuscado = supervivienteActual.getCasillaActual().buscar(interfazPrincipal);
+                StringBuilder sb = new StringBuilder();
+                sb.append("Has encontrado:").append("\n");
+                sb.append(equipoBuscado.toString()).append("\n");
+                sb.append("¿Quieres quedartelo?").append("\n");
+                boolean resultado = interfazPrincipal.mostrarMensajeSiNo(sb.toString());
+                if(resultado){
+                    buscandoActivado = true;
+                    StringBuilder aux = new StringBuilder();
+                    aux.append("Selecciona la ranura de inventario donde guardarlo").append("\n");
+                    aux.append("(Si la ranura esta ocupada se borrara su contenido)").append("\n");
+                    interfazPrincipal.mostrarMensaje(aux.toString());
+                    System.out.println("El equipo encontrado es: " + equipoBuscado.toString());
+                    activacionBotones(false);
+                    activacionInventario(true);
+                }                
+            }
+        });
+        
+        botonAtacar.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                atacarBotonesActivado = true;
+                activacionBotones(false);
+                activacionArmas(true);
+            }
+        });
+        
+        botonInventario.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                inventarioOpcionesActivado = true;
+                partida.getSupervivienteActual().setSeleccion(Entidad.accion.INVENTARIO);
+                activacionBotones(false);
+                gestionPanelIntercambio(true,1);
+            }
+        });
+        
+        botonNada.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                partida.getSupervivienteActual().setSeleccion(Entidad.accion.NADA);
+                partida.activarSuperviviente(0, 0, 0, null);
+            }
+        });
+        botonAlmacenDeAtaques.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                interfazPrincipal.cardLayout.show(interfazPrincipal.panelDerechoPrincipal,"PanelHistoriales");
+            }
+        });
+        botonArma1.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                accionBotonesArmas(0);
+            }
+        });
+        botonArma2.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                accionBotonesArmas(1);
+            }
+        });
+        botonInv1.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                accionBotonesInventario(0);
+            }
+        });
+        botonInv2.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                accionBotonesInventario(1);
+            }
+        });
+        botonInv3.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                accionBotonesInventario(2);
+            }
+        });
+        botonInv4.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                accionBotonesInventario(3);
+            }
+        });
+        botonInv5.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                accionBotonesInventario(4);
+            }
+        });
+        
+        botonInfo.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Casilla aux = partida.getTablero().getCasilla(0, 0);
+                int idAux = 10000;
+                Zombi normalCa = new Zombi(aux,"NORMAL",partida,idAux,"CAMINANTE");
+                Zombi normalCo = new Zombi(aux,"NORMAL",partida,idAux,"CORREDOR");
+                Zombi normalAb = new Zombi(aux,"NORMAL",partida,idAux,"ABOMINACION");
+                Zombi toxicoCa = new Zombi(aux,"TOXICO",partida,idAux,"CAMINANTE");
+                Zombi berserkCa = new Zombi(aux,"BERSERKER",partida,idAux,"CAMINANTE");
+                
+                StringBuilder sb = new StringBuilder();
+                sb.append("Información:").append("\n");
+                sb.append("Zombis:").append("\n");
+                sb.append("Tipos:").append("\n");
+                sb.append(normalCa.zombiInformativo());
+                sb.append(normalCo.zombiInformativo());
+                sb.append(normalAb.zombiInformativo());
+                sb.append("Subtipos: ").append("\n");
+                sb.append(normalCa.zombiInformativo());
+                sb.append(toxicoCa.zombiInformativo());
+                sb.append(berserkCa.zombiInformativo());
+                
+                JTextArea textArea = new JTextArea();
+                textArea.setText(sb.toString());
+                textArea.setWrapStyleWord(true);
+                textArea.setLineWrap(true);
+                textArea.setCaretPosition(0);
+                textArea.setEditable(false);
+                
+                JScrollPane scrollPane = new JScrollPane(textArea);
+                
+                JOptionPane.showMessageDialog(interfazPrincipal,scrollPane,"Información",JOptionPane.INFORMATION_MESSAGE);
+                
+                normalCa = null;
+                normalCo = null;
+                normalAb = null;
+                toxicoCa = null;
+                berserkCa = null;
+            }
+        });
+        
+        botonCancelar.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(movimientoActivado){
+                    interfazPrincipal.botones[interfazPrincipal.elementoSeleccionado.x][interfazPrincipal.elementoSeleccionado.y].setBackground(Color.LIGHT_GRAY);
+                    interfazPrincipal.botones[interfazPrincipal.elementoSeleccionado.x][interfazPrincipal.elementoSeleccionado.y].setForeground(Color.BLACK);
+                    interfazPrincipal.elementoSeleccionado = null;
+                    movimientoActivado = false;
+                    activacionBotones(true);
+                    gestionPanelIntercambio(false, 0);
+                }
+                if(atacarActivado){
+                    interfazPrincipal.botones[interfazPrincipal.elementoSeleccionado.x][interfazPrincipal.elementoSeleccionado.y].setBackground(Color.LIGHT_GRAY);
+                    interfazPrincipal.botones[interfazPrincipal.elementoSeleccionado.x][interfazPrincipal.elementoSeleccionado.y].setForeground(Color.BLACK);
+                    Superviviente supervivienteActual = partida.getSupervivienteActual();
+                    int xActual = supervivienteActual.getCasillaActual().getX();
+                    int yActual = supervivienteActual.getCasillaActual().getY();
+                    ArrayList<Casilla> casillasAlcance = partida.getTablero().elegirObjetivoSuperviviente(supervivienteActual.getArmaActiva(), xActual, yActual);
+                    for (int i = 0; i < casillasAlcance.size(); i++){
+                        interfazPrincipal.botones[casillasAlcance.get(i).getX()][casillasAlcance.get(i).getY()].setBackground(Color.LIGHT_GRAY);
+                        interfazPrincipal.botones[casillasAlcance.get(i).getX()][casillasAlcance.get(i).getY()].setForeground(Color.BLACK);
+                    }
+                    interfazPrincipal.elementoSeleccionado = null;
+                    atacarActivado = false;
+                    activacionBotones(true);
+                    gestionPanelIntercambio(false, 0);
+                }
+            }
+        });
+        
+        botonSalirInventario.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                inventarioOpcionesActivado = false;
+                activacionBotones(true);
+                gestionPanelIntercambio(true,3);
+            }
+        });
+        
+        botonUsar.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(partida.getSupervivienteActual().getNumeroProvisiones() <= 0){
+                    JOptionPane.showMessageDialog(interfazPrincipal,"No provisiones en el inventario");
+                } else if(partida.getSupervivienteActual().getMordeduras() <= 0){
+                    JOptionPane.showMessageDialog(interfazPrincipal,"No tienes mordeduras que curar");
+                }else{
+                    inventarioUsarActivado = true;
+                    activacionInventario(true);
+                    gestionPanelIntercambio(false, 1);
+                } 
+                               
+            }
+        });
+        botonMoverObjetos.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                inventarioMoverActivado = true;
+                botonSeleccionado1 = -1;
+                botonSeleccionado2 = -1;
+                primerObjetoDeInventario = false;
+                objetoSeleccionadoDeArma = 0;
+                objetoSeleccionadoDeInventario = 0;
+                activacionInventario(true);
+                activacionArmas(true);
+                gestionPanelIntercambio(false, 1);
+            }
+        });
+        botonGuardarSalir.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                interfazPrincipal.guardarPartida();
+                System.exit(0);
+            }
+        });
     }
 }
