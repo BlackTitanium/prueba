@@ -39,7 +39,7 @@ public class InterfazPrincipal extends JFrame implements Serializable {
     private String[] nombresZombis = {"Z.Ca.N", "Z.Co.N", "Z.Ab.N", "Z.Ca.B", "Z.Co.B", "Z.Ab.B", "Z.Ca.T", "Z.Co.T", "Z.Ab.T"};
     
     public Partida partida;
-    private transient Tablero tablero; // Mark as transient if not serializable
+    private Tablero tablero; // Mark as transient if not serializable
     
     public Zombi zombiSeleccionado;
           
@@ -532,8 +532,14 @@ public class InterfazPrincipal extends JFrame implements Serializable {
     }
 
     public void guardarPartida(){
-        partida.getAlmacenPartidas().addPartida(partida);
-        partida.getAlmacenPartidas().addInterfaz(this);
+        try {
+            partida.getAlmacenPartidas().setPartida(partida.IDPartida, partida);
+            partida.getAlmacenPartidas().setInterfaz(partida.IDPartida, this);
+        } catch (IndexOutOfBoundsException e) {
+            partida.getAlmacenPartidas().addPartida(partida);
+            partida.getAlmacenPartidas().addInterfaz(this);
+        }
+        
         try {
             Serializador.serializarAlmacenPartidas(partida.getAlmacenPartidas(), "bin/almacenpartidas.ser");
             System.out.println("Partida and Interfaz serialized successfully.");

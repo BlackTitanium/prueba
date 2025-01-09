@@ -24,7 +24,7 @@ public class Partida implements Serializable {
     public volatile boolean victoria = false;
     public volatile boolean derrota = false;
     private transient Object monitorSupervivientes = new Object(); // Mark as transient if not serializable
-    private int IDPartida;
+    public int IDPartida;
     private AlmacenPartidas almacenPartidas;
 
     private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
@@ -422,5 +422,22 @@ public class Partida implements Serializable {
         SwingUtilities.invokeLater(() -> {
             new Thread(this::gestorTurnos).start();
         });
+    }
+
+    @Override
+
+    public boolean equals(Object o){
+        if(o == this){
+            return true;
+        }
+        if(!(o instanceof Partida)){
+            return false;
+        }
+        Partida p = (Partida) o;
+        if(p.IDPartida == this.IDPartida){
+            return true;
+        } else {
+            return false;
+        }
     }
 }
