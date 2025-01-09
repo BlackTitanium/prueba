@@ -17,10 +17,9 @@ public class Partida implements Serializable{
     private AlmacenDeAtaques almacen;
     private InterfazPrincipal interfazPrincipal;
     private static int idZombiCont = 1;
-    public boolean victoria = false;
-    public boolean derrota = false;
+    public volatile boolean victoria = false;
+    public volatile boolean derrota = false;
     private final Object monitorSupervivientes = new Object();
-    private final Object monitorZombis = new Object();
 
     public InterfazPrincipal getInterfazPrincipal(){
         return interfazPrincipal;
@@ -135,13 +134,14 @@ public class Partida implements Serializable{
     }
 
     public void activarSuperviviente(int ranura, int x, int y, Equipo equipo){
-        Casilla casillaActual = supervivienteActual.getCasillaActual();
-        switch(supervivienteActual.getSeleccion()){
-            case Entidad.accion.MOVER:
-                //Interfaz dara el input para el movimiento; int casillaObjetivo = [0-8]
-                supervivienteActual.activar(ranura, x, y, equipo);
-                break;
-            case Entidad.accion.ATACAR: //Atacar
+        if(supervivienteActual.getEstadoActual() == Superviviente.estado.VIVO){
+            Casilla casillaActual = supervivienteActual.getCasillaActual();
+            switch(supervivienteActual.getSeleccion()){
+                case Entidad.accion.MOVER:
+                    //Interfaz dara el input para el movimiento; int casillaObjetivo = [0-8]
+                    supervivienteActual.activar(ranura, x, y, equipo);
+                    break;
+                case Entidad.accion.ATACAR: //Atacar
                     //int alcanceTemp = supervivienteActual.getArmas()[ranura].getAlcance();
                     //ArrayList<Casilla> objetivo = supervivienteActual.elegirObjetivo(supervivienteActual.getArmas()[ranura]);
                     // Hacemos las casillas
@@ -204,30 +204,29 @@ public class Partida implements Serializable{
                     supervivienteActual.activar(ranura,casillaActual.getX(),casillaActual.getY(),equipo);
                     accionTerminada();
                     break;
+            }
         }
     }
 
     public void supervivienteMuerto(){
-        // Cambiar el nombre del superviviente a nombre☠
+        // Crear el nombre del superviviente con ☠
         String nombre = supervivienteActual.getNombre();
         StringBuilder sb = new StringBuilder();
-        sb.append("<html>");
         sb.append("<span style='color:red;'>"); // Color rojo
         sb.append(nombre).append("☠"); // Nombre del superviviente + ☠
         sb.append("</span>"); // Cerrar el color
-        sb.append("</html>");
-        supervivienteActual.setNombre(sb.toString());
         // Quitar las acciones del superviviente
         supervivienteActual.setAcciones(0);
         // Quitar el superviviente de la interfaz
-        interfazPrincipal.actualizarCasillas(supervivienteActual.getCasillaActual(), supervivienteActual.getCasillaActual());
+        interfazPrincipal.supervivienteMuerto(supervivienteActual.getCasillaActual(), sb.toString());
         // Quitar el superviviente de la lista
         supervivientes.remove(supervivienteActual);
         // Si no quedan supervivientes
         if(supervivientes.isEmpty()){
-            derrota = true;
             // Mostrar mensaje de derrota
             interfazPrincipal.mostrarMensajeDeDerrota();
+            // Marcar la derrota
+            derrota = true;
         }
     }
 

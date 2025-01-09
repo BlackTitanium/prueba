@@ -89,7 +89,6 @@ public class Superviviente extends Entidad implements Serializable{
         this.contadorZombis = 0;
         this.mordeduras = 0;
         this.estadoActual = estado.VIVO;
-        //this.casillaActual = c;
         this.zombisAsesinados = new ArrayList<>();
     }
 

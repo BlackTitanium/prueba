@@ -182,6 +182,16 @@ public class InterfazPrincipal extends JFrame{
         }
     }
     
+    public void supervivienteMuerto(Casilla casillaActual, String nombreNuevo){
+        int x = casillaActual.getX();
+        int y = casillaActual.getY();
+        
+        Superviviente supervivienteActual = partida.getSupervivienteActual();
+        String textoBoton = botones[x][y].getText();
+        textoBoton = textoBoton.replace(supervivienteActual.getNombre(), nombreNuevo);
+        botones[x][y].setText(textoBoton);     
+    }
+    
     public void faseZombiInterfaz(){
         panelMenuJugador.actualizarLabels();
         panelMenuJugador.activacionBotones(false);
