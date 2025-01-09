@@ -7,7 +7,9 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
+import javax.swing.*;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -20,8 +22,8 @@ public class PanelMenuJugador extends JPanel{
     private JButton botonArma1, botonArma2, botonInv1, botonInv2, botonInv3, botonInv4, botonInv5;
     private JButton botonAlmacenDeAtaques, botonAdmin, botonGuardarSalir;
     private CardLayout cardLayoutMenuJugador;
-    private JPanel panelIntercambio, panelOpcionesInventario, panelCancelar;
-    private JButton botonCancelar, botonUsar, botonMoverObjetos;
+    private JPanel panelIntercambio, panelOpcionesInventario, panelCancelar, panelInfo;
+    private JButton botonCancelar, botonUsar, botonMoverObjetos, botonInfo, botonSalirInventario;
     private JLabel turnoDe, numAcciones, contZombis, mordeduras;
     public JPanel panelInventario;
     
@@ -201,21 +203,31 @@ public class PanelMenuJugador extends JPanel{
         botonGuardarSalir.setFont(new Font("Arial", 1, 14));
         botonGuardarSalir.setForeground(Color.BLACK);
         add(botonGuardarSalir);
-
-        activacionBotones(true);
-        actualizarLabels();
         
         cardLayoutMenuJugador = new CardLayout();
         panelIntercambio = new JPanel(cardLayoutMenuJugador);
         panelIntercambio.setPreferredSize(new Dimension(280,30));
-        panelIntercambio.setBounds(60, 575, 280, 40);
+        panelIntercambio.setBounds(0, 575, 400, 40); // 60, , 280
+        
+        panelInfo = new JPanel();
+        panelInfo.setLayout(null);
+        panelInfo.setBounds(90,80,120,30);
+        
+        botonInfo = new JButton("Informacion");
+        botonInfo.setBounds(50,0,120,30);
+        botonInfo.setBackground(Color.LIGHT_GRAY);
+        botonInfo.setFont(new Font("Arial", 1, 14));
+        botonInfo.setForeground(Color.BLACK);
+        panelInfo.add(botonInfo);
+        
+        panelIntercambio.add(panelInfo,"PanelInfo");
         
         panelCancelar = new JPanel();
         panelCancelar.setLayout(null);
-        panelCancelar.setBounds(5,80,120,30);
+        panelCancelar.setBounds(90,80,120,30);
         
         botonCancelar = new JButton("Cancelar");
-        botonCancelar.setBounds(0,0,120,30);
+        botonCancelar.setBounds(50,0,120,30);
         botonCancelar.setBackground(Color.LIGHT_GRAY);
         botonCancelar.setFont(new Font("Arial", 1, 14));
         botonCancelar.setForeground(Color.BLACK);
@@ -228,23 +240,32 @@ public class PanelMenuJugador extends JPanel{
         panelOpcionesInventario.setBounds(0, 0, 280, 40);
         
         botonUsar = new JButton("Usar");
-        botonUsar.setBounds(5,0,60,30);
+        botonUsar.setBounds(20,5,60,30);
         botonUsar.setBackground(Color.LIGHT_GRAY);
         botonUsar.setFont(new Font("Arial", 1, 14));
         botonUsar.setForeground(Color.BLACK);
         panelOpcionesInventario.add(botonUsar);
         
         botonMoverObjetos = new JButton("Intercambiar");
-        botonMoverObjetos.setBounds(5,90,190,30);
+        botonMoverObjetos.setBounds(100,5,120,30);
         botonMoverObjetos.setBackground(Color.LIGHT_GRAY);
         botonMoverObjetos.setFont(new Font("Arial", 1, 14));
         botonMoverObjetos.setForeground(Color.BLACK);
         panelOpcionesInventario.add(botonMoverObjetos);
         
+        botonSalirInventario = new JButton("Cancelar");
+        botonSalirInventario.setBounds(210,5,120,30);
+        botonSalirInventario.setBackground(Color.LIGHT_GRAY);
+        botonSalirInventario.setFont(new Font("Arial", 1, 14));
+        botonSalirInventario.setForeground(Color.BLACK);
+        panelOpcionesInventario.add(botonSalirInventario);
+        
         panelIntercambio.add(panelOpcionesInventario,"PanelOpcionesInventario");
         
         add(panelIntercambio);
-        gestionPanelIntercambio(false,0);
+        
+        activacionBotones(true);
+        actualizarLabels();
         
         botonMoverse.addActionListener(new ActionListener(){
             @Override
@@ -296,6 +317,7 @@ public class PanelMenuJugador extends JPanel{
             public void actionPerformed(ActionEvent e) {
                 inventarioOpcionesActivado = true;
                 partida.getSupervivienteActual().setSeleccion(Entidad.accion.INVENTARIO);
+                activacionBotones(false);
                 gestionPanelIntercambio(true,1);
             }
         });
@@ -316,68 +338,124 @@ public class PanelMenuJugador extends JPanel{
         botonArma1.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                botonArma1.setBackground(Color.DARK_GRAY);
-                botonArma1.setForeground(Color.WHITE);
                 accionBotonesArmas(0);
             }
         });
         botonArma2.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                botonArma2.setBackground(Color.DARK_GRAY);
-                botonArma2.setForeground(Color.WHITE);
                 accionBotonesArmas(1);
             }
         });
         botonInv1.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                botonInv1.setBackground(Color.DARK_GRAY);
-                botonInv1.setForeground(Color.WHITE);
                 accionBotonesInventario(0);
             }
         });
         botonInv2.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                botonInv2.setBackground(Color.DARK_GRAY);
-                botonInv2.setForeground(Color.WHITE);
                 accionBotonesInventario(1);
             }
         });
         botonInv3.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                botonInv3.setBackground(Color.DARK_GRAY);
-                botonInv3.setForeground(Color.WHITE);
                 accionBotonesInventario(2);
             }
         });
         botonInv4.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                botonInv4.setBackground(Color.DARK_GRAY);
-                botonInv4.setForeground(Color.WHITE);
                 accionBotonesInventario(3);
             }
         });
         botonInv5.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                botonInv5.setBackground(Color.DARK_GRAY);
-                botonInv5.setForeground(Color.WHITE);
                 accionBotonesInventario(4);
             }
         });
+        
+        botonInfo.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Casilla aux = partida.getTablero().getCasilla(0, 0);
+                int idAux = 10000;
+                Zombi normalCa = new Zombi(aux,"NORMAL",partida,idAux,"CAMINANTE");
+                Zombi normalCo = new Zombi(aux,"NORMAL",partida,idAux,"CORREDOR");
+                Zombi normalAb = new Zombi(aux,"NORMAL",partida,idAux,"ABOMINACION");
+                Zombi toxicoCa = new Zombi(aux,"TOXICO",partida,idAux,"CAMINANTE");
+                Zombi berserkCa = new Zombi(aux,"BERSERKER",partida,idAux,"CAMINANTE");
+                
+                StringBuilder sb = new StringBuilder();
+                sb.append("Información:").append("\n");
+                sb.append("Zombis:").append("\n");
+                sb.append("Tipos:").append("\n");
+                sb.append(normalCa.zombiInformativo());
+                sb.append(normalCo.zombiInformativo());
+                sb.append(normalAb.zombiInformativo());
+                sb.append("Subtipos: ").append("\n");
+                sb.append(normalCa.zombiInformativo());
+                sb.append(toxicoCa.zombiInformativo());
+                sb.append(berserkCa.zombiInformativo());
+                
+                JTextArea textArea = new JTextArea();
+                textArea.setText(sb.toString());
+                textArea.setWrapStyleWord(true);
+                textArea.setLineWrap(true);
+                textArea.setCaretPosition(0);
+                textArea.setEditable(false);
+                
+                JScrollPane scrollPane = new JScrollPane(textArea);
+                
+                JOptionPane.showMessageDialog(interfazPrincipal,scrollPane,"Información",JOptionPane.INFORMATION_MESSAGE);
+                
+                normalCa = null;
+                normalCo = null;
+                normalAb = null;
+                toxicoCa = null;
+                berserkCa = null;
+            }
+        });
+        
         botonCancelar.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                interfazPrincipal.botones[interfazPrincipal.elementoSeleccionado.x][interfazPrincipal.elementoSeleccionado.y].setBackground(Color.LIGHT_GRAY);
-                interfazPrincipal.botones[interfazPrincipal.elementoSeleccionado.x][interfazPrincipal.elementoSeleccionado.y].setForeground(Color.BLACK);
-                interfazPrincipal.elementoSeleccionado = null;
-                movimientoActivado = false;
+                if(movimientoActivado){
+                    interfazPrincipal.botones[interfazPrincipal.elementoSeleccionado.x][interfazPrincipal.elementoSeleccionado.y].setBackground(Color.LIGHT_GRAY);
+                    interfazPrincipal.botones[interfazPrincipal.elementoSeleccionado.x][interfazPrincipal.elementoSeleccionado.y].setForeground(Color.BLACK);
+                    interfazPrincipal.elementoSeleccionado = null;
+                    movimientoActivado = false;
+                    activacionBotones(true);
+                    gestionPanelIntercambio(false, 0);
+                }
+                if(atacarActivado){
+                    interfazPrincipal.botones[interfazPrincipal.elementoSeleccionado.x][interfazPrincipal.elementoSeleccionado.y].setBackground(Color.LIGHT_GRAY);
+                    interfazPrincipal.botones[interfazPrincipal.elementoSeleccionado.x][interfazPrincipal.elementoSeleccionado.y].setForeground(Color.BLACK);
+                    Superviviente supervivienteActual = partida.getSupervivienteActual();
+                    int xActual = supervivienteActual.getCasillaActual().getX();
+                    int yActual = supervivienteActual.getCasillaActual().getY();
+                    ArrayList<Casilla> casillasAlcance = partida.getTablero().elegirObjetivoSuperviviente(supervivienteActual.getArmaActiva(), xActual, yActual);
+                    for (int i = 0; i < casillasAlcance.size(); i++){
+                        interfazPrincipal.botones[casillasAlcance.get(i).getX()][casillasAlcance.get(i).getY()].setBackground(Color.LIGHT_GRAY);
+                        interfazPrincipal.botones[casillasAlcance.get(i).getX()][casillasAlcance.get(i).getY()].setForeground(Color.BLACK);
+                    }
+                    interfazPrincipal.elementoSeleccionado = null;
+                    atacarActivado = false;
+                    activacionBotones(true);
+                    gestionPanelIntercambio(false, 0);
+                }
+            }
+        });
+        
+        botonSalirInventario.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                inventarioOpcionesActivado = false;
                 activacionBotones(true);
-                gestionPanelIntercambio(false, 0);
+                gestionPanelIntercambio(true,3);
             }
         });
         
@@ -411,29 +489,6 @@ public class PanelMenuJugador extends JPanel{
             }
         });
     }
-
-    public void reiniciarEsteticaInventarioTodo() {
-        botonInv1.setBackground(Color.LIGHT_GRAY);
-        botonInv1.setForeground(Color.BLACK);
-
-        botonInv2.setBackground(Color.LIGHT_GRAY);
-        botonInv2.setForeground(Color.BLACK);
-
-        botonInv3.setBackground(Color.LIGHT_GRAY);
-        botonInv3.setForeground(Color.BLACK);
-
-        botonInv4.setBackground(Color.LIGHT_GRAY);
-        botonInv4.setForeground(Color.BLACK);
-
-        botonInv5.setBackground(Color.LIGHT_GRAY);
-        botonInv5.setForeground(Color.BLACK);
-
-        botonArma1.setBackground(Color.LIGHT_GRAY);
-        botonArma1.setForeground(Color.BLACK);
-
-        botonArma2.setBackground(Color.LIGHT_GRAY);
-        botonArma2.setForeground(Color.BLACK);
-    }
                 
     public void activacionBotones(boolean enabled) {
         botonMoverse.setEnabled(enabled);
@@ -448,7 +503,7 @@ public class PanelMenuJugador extends JPanel{
         botonInv3.setEnabled(false);
         botonInv4.setEnabled(false);
         botonInv5.setEnabled(false);
-        reiniciarEsteticaInventarioTodo();
+        gestionPanelIntercambio(true,2);
     }
     public void activacionInventario(boolean enabled) {
         botonInv1.setEnabled(enabled);
@@ -526,6 +581,9 @@ public class PanelMenuJugador extends JPanel{
         if(n == 1){
             cardLayoutMenuJugador.show(panelIntercambio,"PanelOpcionesInventario");
         }
+        if(n == 2){
+            cardLayoutMenuJugador.show(panelIntercambio,"PanelInfo");
+        }
         panelIntercambio.setVisible(enable);
     }
     
@@ -540,7 +598,6 @@ public class PanelMenuJugador extends JPanel{
         }
         if(inventarioMoverActivado){
             logicaInventario(ranura,false); // fals porque es de armas
-            reiniciarEsteticaInventarioTodo();
         }
     }
     
@@ -563,7 +620,6 @@ public class PanelMenuJugador extends JPanel{
         }
         if(inventarioMoverActivado){ //partida.activarSuperviviente(usarOmover, ranuraObjetoSeleccionado, ranuraObjetivo, null);
             logicaInventario(ranura,true); // true porque es de inventario
-            reiniciarEsteticaInventarioTodo();
         }
     }
     public void logicaInventario(int ranura, boolean enable){

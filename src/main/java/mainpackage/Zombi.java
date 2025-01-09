@@ -213,6 +213,31 @@ public class Zombi extends Entidad implements Serializable{
         return sb.toString();
     }
 
+    public String zombiInformativo(){
+        StringBuilder sb = new StringBuilder();
+        String zombiBoton = getZombiParaBoton();
+        zombiBoton = zombiBoton.replace("<html>", "");
+        zombiBoton = zombiBoton.replace("<br>", "");
+        zombiBoton = zombiBoton.replace("</html>", "");
+        sb.append("En el tablero: ").append(zombiBoton).append("\n");
+        sb.append("Corresponde a: ").append("\n");
+        sb.append("Zombi: ").append(tipo).append(" ").append(subtipo).append("\n");
+        sb.append("Aguante: ").append(aguante).append("\n");
+        sb.append("Activaciones: ").append(activaciones).append("\n");
+        sb.append("Características:\n");
+        if(subtipo.contains("NORMAL")){
+            sb.append("Se elimina con un ataque de potencia igual a su aguante.\n");
+        } else if(subtipo.contains("TOXICO")){
+            sb.append("Al morir en la misma casilla que un Superviviente\n");
+            sb.append("causa una herida al atacante debido a su sangre tóxica.\n");
+        } else if(subtipo.contains("BERSERKER")){
+            sb.append("Inmune a ataques a distancia\n");
+            sb.append("(desde casillas diferentes a las que se encuentre el zombi)\n");
+        }
+        sb.append("\n");
+        return sb.toString();
+    }
+
     public void añadirSupervivienteAtacado(String infoSupervivienteAtacado){
         supervivientesAtacados.add(infoSupervivienteAtacado);
     }

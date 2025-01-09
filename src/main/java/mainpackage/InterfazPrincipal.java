@@ -420,6 +420,7 @@ public class InterfazPrincipal extends JFrame implements Serializable {
                 }
             }
         }
+        panelMenuJugador.gestionPanelIntercambio(true,0);
     }
     
     public void atacar(JButton boton, int x, int y){
