@@ -1,8 +1,8 @@
 package mainpackage;
 
-import java.awt.*;
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -192,7 +192,7 @@ public class PanelMenuJugador extends JPanel{
         add(botonAdmin);
 
         botonGuardarSalir = new JButton("Guardar y Salir");
-        botonGuardarSalir.setBounds(20,700,155,30);
+        botonGuardarSalir.setBounds(20,600,155,30);
         botonGuardarSalir.setBackground(Color.LIGHT_GRAY);
         botonGuardarSalir.setFont(new Font("Arial", 1, 14));
         botonGuardarSalir.setForeground(Color.BLACK);
@@ -358,6 +358,13 @@ public class PanelMenuJugador extends JPanel{
                 movimientoActivado = false;
                 activacionBotones(true);
                 gestionPanelIntercambio(false, 0);
+            }
+        });
+        botonGuardarSalir.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                interfazPrincipal.guardarPartida();
+                System.exit(0);
             }
         });
     }
