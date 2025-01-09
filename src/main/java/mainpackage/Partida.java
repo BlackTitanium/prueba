@@ -299,23 +299,23 @@ public class Partida implements Serializable{
                 supervivienteActual.setAcciones(0);
             }
             interfazPrincipal.faseZombiInterfaz();
-//            System.out.println("Fase Zombie");
-//            for (int i = 0; i < zombis.size(); i++){
-//                faseZombie(zombis.get(i));
-//                while(zombis.get(i).getActivaciones() > 0){
-//                    synchronized (monitor) {
-//                        // Esperar a que el jugador seleccione una acción
-//                        while (!interfazPrincipal.accionRealizada) {
-//                            try {
-//                                zombis.get(i).activar();
-//                                monitor.wait();
-//                            } catch (InterruptedException e) {
-//                            }
-//                        }
-//                        interfazPrincipal.accionRealizada = false;
-//                    }
-//                }
-//            }
+            System.out.println("Fase Zombie");
+            for (int i = 0; i < zombis.size(); i++){
+                faseZombie(zombis.get(i));
+                while(zombis.get(i).getActivaciones() > 0){
+                    synchronized (monitor) {
+                        // Esperar a que el jugador seleccione una acción
+                        while (!interfazPrincipal.accionRealizada) {
+                            try {
+                                zombis.get(i).activar();
+                                monitor.wait();
+                            } catch (InterruptedException e) {
+                            }
+                        }
+                        interfazPrincipal.accionRealizada = false;
+                    }
+                }
+            }
             faseApariciónZombi();
             avanzarTurno();
         } 

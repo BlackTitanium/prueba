@@ -267,17 +267,27 @@ public class InterfazPrincipal extends JFrame{
         return resultado.toString();
     }
     
+    public void autoSeleccionElementoMoverse(){
+        Superviviente supervivienteActual = partida.getSupervivienteActual();
+        Casilla casillaActual = supervivienteActual.getCasillaActual();
+        int xActual = casillaActual.getX();
+        int yActual = casillaActual.getY();
+        elementoSeleccionado = new Point(xActual, yActual);
+        botones[xActual][yActual].setBackground(Color.DARK_GRAY);
+        botones[xActual][yActual].setForeground(Color.WHITE);
+    }
 
     // Acción al hacer clic en una casilla del tablero
     public void moverElemento(JButton boton, int x, int y){
         if(panelMenuJugador.movimientoActivado){
             Superviviente supervivienteActual = partida.getSupervivienteActual();
-            if (elementoSeleccionado == null && boton.getText().contains(supervivienteActual.getNombre())) {
-                // Selecciona un elemento para mover
-                elementoSeleccionado = new Point(x, y);
-                boton.setBackground(Color.DARK_GRAY);  // Resaltar elemento
-                boton.setForeground(Color.WHITE);
-            } else if (elementoSeleccionado != null) {
+//            if (elementoSeleccionado == null && boton.getText().contains(supervivienteActual.getNombre())) {
+//                // Selecciona un elemento para mover
+//                elementoSeleccionado = new Point(x, y);
+//                boton.setBackground(Color.DARK_GRAY);  // Resaltar elemento
+//                boton.setForeground(Color.WHITE);
+//            } else if (elementoSeleccionado != null) {
+            if(elementoSeleccionado != null){
                 if(x == supervivienteActual.getCasillaActual().getX() && y == supervivienteActual.getCasillaActual().getY()){
                     JOptionPane.showMessageDialog(this,"No puede moverse a la misma casilla");   
                     return;

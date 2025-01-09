@@ -109,17 +109,19 @@ public class Zombi extends Entidad implements Serializable{
                 atacar(casillaActual.getSuperviviente(0));
 
             } else {
-                if(Math.abs(casillaActual.getX()-tableroActual.objetivoZombi(casillaActual).getX())>Math.abs(casillaActual.getY()-tableroActual.objetivoZombi(casillaActual).getY())){
-                    System.out.println("Zombi " + this.getZombiParaBoton() +" se mueve a la casilla " + casillaActual.getX() + ", " + (casillaActual.getY()+1));
-                    Casilla destino = partida.getTablero().getCasilla(casillaActual.getX()+1,casillaActual.getY());
-                    partida.getInterfazPrincipal().moverZombi(casillaActual, destino, this.getZombiParaBoton());
-                    mover(casillaActual.getX()+1,casillaActual.getY());
-                } else{
-                    System.out.println("Zombi " + this.getZombiParaBoton() + " se mueve a la casilla " + casillaActual.getX() + ", " + (casillaActual.getY()+1));
-                    Casilla destino = partida.getTablero().getCasilla(casillaActual.getX(),casillaActual.getY()+1);
-                    partida.getInterfazPrincipal().moverZombi(casillaActual, destino, this.getZombiParaBoton());
-                    mover(casillaActual.getX(),casillaActual.getY()+1);
-                }
+//                if(Math.abs(casillaActual.getX()-tableroActual.objetivoZombi(casillaActual).getX())>Math.abs(casillaActual.getY()-tableroActual.objetivoZombi(casillaActual).getY())){
+//                    System.out.println("Zombi " + this.getZombiParaBoton() +" se mueve a la casilla " + casillaActual.getX() + ", " + (casillaActual.getY()+1));
+//                    Casilla destino = partida.getTablero().getCasilla(casillaActual.getX()+1,casillaActual.getY());
+//                    partida.getInterfazPrincipal().moverZombi(casillaActual, destino, this.getZombiParaBoton());
+//                    mover(casillaActual.getX()+1,casillaActual.getY());
+//                } else{
+//                    System.out.println("Zombi " + this.getZombiParaBoton() + " se mueve a la casilla " + casillaActual.getX() + ", " + (casillaActual.getY()+1));
+//                    Casilla destino = partida.getTablero().getCasilla(casillaActual.getX(),casillaActual.getY()+1);
+//                    partida.getInterfazPrincipal().moverZombi(casillaActual, destino, this.getZombiParaBoton());
+//                    mover(casillaActual.getX(),casillaActual.getY()+1);
+//                }
+                Casilla casillaAlaQueMoverse = partida.getTablero().calcularMovimientoZombi(casillaActual);
+                mover(casillaAlaQueMoverse.getX(), casillaAlaQueMoverse.getY());
             }
             activacionesAux--;
         }

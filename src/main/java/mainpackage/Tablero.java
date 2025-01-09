@@ -75,6 +75,38 @@ public class Tablero implements Serializable{
         return objetivo;
     }
 
+    public Casilla calcularMovimientoZombi(Casilla casillaActualZombi) {
+        Casilla objetivo = objetivoZombi(casillaActualZombi);
+        if (objetivo == null) {
+            return casillaActualZombi; // No hay supervivientes en el mapa
+        }
+    
+        Casilla mejorCasilla = null;
+        double distanciaMinima = Double.MAX_VALUE;
+    
+        // Posibles movimientos: arriba, abajo, izquierda, derecha, y diagonales
+        int[] deltaX = {-1, -1, -1, 0, 0, 1, 1, 1};
+        int[] deltaY = {-1, 0, 1, -1, 1, -1, 0, 1};
+    
+        for (int i = 0; i < deltaX.length; i++) {
+            int nuevaX = casillaActualZombi.getX() + deltaX[i];
+            int nuevaY = casillaActualZombi.getY() + deltaY[i];
+    
+            // Verificar que la nueva posición esté dentro del mapa
+            if (nuevaX >= 0 && nuevaX < 10 && nuevaY >= 0 && nuevaY < 10) {
+                Casilla casillaAdyacente = mapa[nuevaX][nuevaY];
+                double distancia = Math.sqrt(Math.pow((casillaAdyacente.getX() - objetivo.getX()), 2) + Math.pow((casillaAdyacente.getY() - objetivo.getY()), 2));
+    
+                if (distancia < distanciaMinima) {
+                    distanciaMinima = distancia;
+                    mejorCasilla = casillaAdyacente;
+                }
+            }
+        }
+    
+        return mejorCasilla != null ? mejorCasilla : casillaActualZombi;
+    }    
+
     public ArrayList<Casilla> elegirObjetivoSuperviviente(Arma arma, int xCentro, int yCentro){
         Casilla temp = null;
         int alcance = arma.getAlcance();
