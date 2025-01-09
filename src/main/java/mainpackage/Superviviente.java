@@ -139,7 +139,6 @@ public class Superviviente extends Entidad implements Serializable{
         }  else {
             if(seleccion==accion.MOVER){
                 mover(x,y);
-
             } else if(seleccion==accion.ATACAR){
                 atacar(ranura);
 

@@ -10,7 +10,7 @@ public class PanelHistoriales extends JPanel{
     private JScrollPane scrollPane;
     private JButton botonHistorialAtaques, botonHistorialSuperviviente, botonHistorialZombi, botonVolver;
     
-    public boolean seleccionarZombi = false;
+    public boolean seleccionarZombi = false, seleccionarSuperviviente = false;
     
     private AlmacenDeAtaques almacen;
     private InterfazPrincipal interfazPrincipal;
@@ -89,7 +89,8 @@ public class PanelHistoriales extends JPanel{
         botonHistorialSuperviviente.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                textArea.setText(partida.getSupervivienteActual().mostrarHistorialZombisAsesinados());
+                JOptionPane.showMessageDialog(interfazPrincipal,"Selecciona la casilla del superviviente del que quieres saber el historial");
+                seleccionarSuperviviente = true;
             }
         });
     }

@@ -180,6 +180,9 @@ public class InterfazPrincipal extends JFrame{
         if(panelHistoriales.seleccionarZombi){
             elegirZombiInterfazPrincipal(boton, x, y);
         }
+        if(panelHistoriales.seleccionarSuperviviente){
+            elegirSupervivienteInterfazPrincipal(boton, x, y);
+        }
     }
     
     public void supervivienteMuerto(Casilla casillaActual, String nombreNuevo){
@@ -474,6 +477,40 @@ public class InterfazPrincipal extends JFrame{
                 panelHistoriales.seleccionarZombi = false;
             }else{
                 JOptionPane.showMessageDialog(this,"No hay zombis en esta casilla");
+                boton.setBackground(Color.LIGHT_GRAY);
+                boton.setForeground(Color.BLACK);
+            }
+        }
+    }
+    
+    public void elegirSupervivienteInterfazPrincipal(JButton boton, int x, int y){
+        if(elementoSeleccionado == null){
+            elementoSeleccionado = new Point(x,y);
+            boton.setBackground(Color.DARK_GRAY);
+            boton.setForeground(Color.WHITE);
+            int xOrigen = elementoSeleccionado.x;
+            int yOrigen = elementoSeleccionado.y;
+            Casilla origen = tablero.getCasilla(xOrigen, yOrigen);
+            if(origen.getContadorSupervivientes() != 0){
+                for(int i = 0; i < origen.getContadorSupervivientes(); i++){
+                    StringBuilder sb = new StringBuilder();
+                    sb.append("¿Quieres acceder al historial de ");
+                    Superviviente superviviente = origen.getSuperviviente(i);
+                    String txtNombreSuperviviente = superviviente.getNombre();
+                    sb.append(txtNombreSuperviviente);
+                    sb.append(" ?");
+                    boolean respuesta = mostrarMensajeSiNo(sb.toString());
+                    if(respuesta){
+                        panelHistoriales.textArea.setText(superviviente.mostrarHistorialZombisAsesinados());
+                        break;
+                    }
+                }
+                boton.setBackground(Color.LIGHT_GRAY);
+                boton.setForeground(Color.BLACK);
+                elementoSeleccionado = null;
+                panelHistoriales.seleccionarSuperviviente = false;
+            }else{
+                JOptionPane.showMessageDialog(this,"No hay supervivientes en esta casilla");
                 boton.setBackground(Color.LIGHT_GRAY);
                 boton.setForeground(Color.BLACK);
             }
