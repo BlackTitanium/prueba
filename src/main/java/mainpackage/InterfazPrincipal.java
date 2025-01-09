@@ -2,11 +2,11 @@ package mainpackage;
 
 import java.io.IOException;
 import java.awt.BorderLayout;
-import java.awt.CardLayout; // Porque estamos haciendo una interfaz gráfica
-import java.awt.Color; // Cuando usamos CheckBox
-import java.awt.Dimension; // Porque vamos a trabajar con colores
-import java.awt.Font; // Porque vamos a trabajar con eventos: botones, combox, ...
-import java.awt.GridLayout; // Para usar Casilla
+import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -308,6 +308,7 @@ public class InterfazPrincipal extends JFrame implements Serializable {
         elementoSeleccionado = new Point(xActual, yActual);
         botones[xActual][yActual].setBackground(Color.DARK_GRAY);
         botones[xActual][yActual].setForeground(Color.WHITE);
+        panelMenuJugador.gestionPanelIntercambio(true,0);
     }
 
     // Acción al hacer clic en una casilla del tablero
@@ -327,7 +328,7 @@ public class InterfazPrincipal extends JFrame implements Serializable {
                     tablero.posicionesOcupadas[x][y] = true;
                     botones[elementoSeleccionado.x][elementoSeleccionado.y].setBackground(Color.LIGHT_GRAY);
                     botones[elementoSeleccionado.x][elementoSeleccionado.y].setForeground(Color.BLACK);
-                    
+
                     // Actualizar casillas
                     int xOrigen = elementoSeleccionado.x;
                     int yOrigen = elementoSeleccionado.y;
@@ -335,7 +336,7 @@ public class InterfazPrincipal extends JFrame implements Serializable {
                     int xDestino = x;
                     int yDestino = y;
                     Casilla destino = tablero.getCasilla(xDestino, yDestino);
-                    
+
                     StringBuilder sb = new StringBuilder();
                     String textoBotonDestino = botones[x][y].getText();
                     textoBotonDestino = textoBotonDestino.replace("</html>", ""); // Quitamos el cierre de HTML
@@ -365,12 +366,13 @@ public class InterfazPrincipal extends JFrame implements Serializable {
                     if(origen.getContadorZombis() == 0 && origen.getContadorSupervivientes() == 0){
                         tablero.posicionesOcupadas[elementoSeleccionado.x][elementoSeleccionado.y] = false;
                     }
-                    
+
                     partida.accionTerminada();
                     elementoSeleccionado = null;
                     panelMenuJugador.movimientoActivado = false;
                     panelMenuJugador.activacionBotones(true);
-                }
+                    panelMenuJugador.gestionPanelIntercambio(false, 0);
+                }            
             }
         } else{
             JOptionPane.showMessageDialog(this,"No puede moverse en este momento");
