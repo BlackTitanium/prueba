@@ -31,4 +31,16 @@ public class Serializador implements Serializable {
             return (InterfazPrincipal) ois.readObject();
         }
     }
+
+    public static void serializarAlmacenPartidas(AlmacenPartidas almacenPartidas, String filePath) throws IOException {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("bin/almacenPartidas.ser"))) {
+            oos.writeObject(almacenPartidas);
+        }
+    }
+
+    public static AlmacenPartidas deserializarAlmacenPartidas(String filePath) throws IOException, ClassNotFoundException {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filePath))) {
+            return (AlmacenPartidas) ois.readObject();
+        }
+    }
 }
