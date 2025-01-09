@@ -1,5 +1,7 @@
 package mainpackage;
 
+import java.awt.*;
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -17,12 +19,16 @@ public class PanelMenuJugador extends JPanel{
     public JButton botonMoverse, botonBuscar, botonAtacar, botonInventario, botonNada;
     private JButton botonArma1, botonArma2, botonInv1, botonInv2, botonInv3, botonInv4, botonInv5;
     private JButton botonAlmacenDeAtaques, botonAdmin;
+    private CardLayout cardLayoutMenuJugador;
+    private JPanel panelIntercambio, panelOpcionesInventario, panelCancelar;
+    private JButton botonCancelar, botonUsar, botonMoverObjetos;
     private JLabel turnoDe, numAcciones, contZombis, mordeduras;
     public JPanel panelInventario;
     
     public boolean movimientoActivado = false;
     public boolean atacarActivado = false, atacarBotonesActivado = false;
     public boolean buscandoActivado = false;
+    public boolean inventarioActivado1 = false, inventarioActivado2 = false;
     
     private Equipo equipoBuscado;
     private Partida partida;
@@ -118,7 +124,7 @@ public class PanelMenuJugador extends JPanel{
         add(botonNada);
         
         panelInventario = new JPanel();
-        panelInventario.setBounds(70, 355, 280, 220);
+        panelInventario.setBounds(70, 355, 280, 200); // 220
         panelInventario.setLayout(null);
 
         botonArma1 = new JButton("Arma 1");
@@ -136,35 +142,35 @@ public class PanelMenuJugador extends JPanel{
         panelInventario.add(botonArma2);
 
         botonInv1 = new JButton("Inventario 1");
-        botonInv1.setBounds(0,60,120,30);
+        botonInv1.setBounds(0,50,120,30); // 60
         botonInv1.setBackground(Color.LIGHT_GRAY);
         botonInv1.setFont(new Font("Arial", 1, 14));
         botonInv1.setForeground(Color.BLACK);
         panelInventario.add(botonInv1);
 
         botonInv2 = new JButton("Inventario 2");
-        botonInv2.setBounds(160,60,120,30);
+        botonInv2.setBounds(160,50,120,30); // 60
         botonInv2.setBackground(Color.LIGHT_GRAY);
         botonInv2.setFont(new Font("Arial", 1, 14));
         botonInv2.setForeground(Color.BLACK);
         panelInventario.add(botonInv2);
 
         botonInv3 = new JButton("Inventario 3");
-        botonInv3.setBounds(0,120,120,30);
+        botonInv3.setBounds(0,100,120,30); // 120
         botonInv3.setBackground(Color.LIGHT_GRAY);
         botonInv3.setFont(new Font("Arial", 1, 14));
         botonInv3.setForeground(Color.BLACK);
         panelInventario.add(botonInv3);
 
         botonInv4 = new JButton("Inventario 4");
-        botonInv4.setBounds(160,120,120,30);
+        botonInv4.setBounds(160,100,120,30); // 120
         botonInv4.setBackground(Color.LIGHT_GRAY);
         botonInv4.setFont(new Font("Arial", 1, 14));
         botonInv4.setForeground(Color.BLACK);
         panelInventario.add(botonInv4);
 
         botonInv5 = new JButton("Inventario 5");
-        botonInv5.setBounds(80,180,120,30);
+        botonInv5.setBounds(80,170,120,30); // 180
         botonInv5.setBackground(Color.LIGHT_GRAY);
         botonInv5.setFont(new Font("Arial", 1, 14));
         botonInv5.setForeground(Color.BLACK);
@@ -188,6 +194,45 @@ public class PanelMenuJugador extends JPanel{
 
         activacionBotones(true);
         actualizarLabels();
+        
+        cardLayoutMenuJugador = new CardLayout();
+        panelIntercambio = new JPanel(cardLayoutMenuJugador);
+        panelIntercambio.setPreferredSize(new Dimension(280,30));
+        panelIntercambio.setBounds(60, 575, 280, 40);
+        
+        panelCancelar = new JPanel();
+        panelCancelar.setLayout(null);
+        panelCancelar.setBounds(5,80,120,30);
+        
+        botonCancelar = new JButton("Cancelar");
+        botonCancelar.setBounds(0,0,120,30);
+        botonCancelar.setBackground(Color.LIGHT_GRAY);
+        botonCancelar.setFont(new Font("Arial", 1, 14));
+        botonCancelar.setForeground(Color.BLACK);
+        panelCancelar.add(botonCancelar);
+        
+        panelIntercambio.add(panelCancelar,"PanelCancelar");
+        
+        panelOpcionesInventario = new JPanel();
+        panelOpcionesInventario.setLayout(new FlowLayout(FlowLayout.LEFT, 50, 0));
+        panelOpcionesInventario.setBounds(20, 535, 280, 30);
+        
+        botonUsar = new JButton("Usar");
+        botonUsar.setBackground(Color.LIGHT_GRAY);
+        botonUsar.setFont(new Font("Arial", 1, 14));
+        botonUsar.setForeground(Color.BLACK);
+        panelOpcionesInventario.add(botonUsar);
+        
+        botonMoverObjetos = new JButton("Mover Objetos");
+        botonMoverObjetos.setBackground(Color.LIGHT_GRAY);
+        botonMoverObjetos.setFont(new Font("Arial", 1, 14));
+        botonMoverObjetos.setForeground(Color.BLACK);
+        panelOpcionesInventario.add(botonMoverObjetos);
+        
+        panelIntercambio.add(panelOpcionesInventario,"PanelOpcionesInventario");
+        
+        add(panelIntercambio);
+        gestionPanelIntercambio(false,0);
         
         botonMoverse.addActionListener(new ActionListener(){
             @Override
@@ -238,6 +283,7 @@ public class PanelMenuJugador extends JPanel{
             @Override
             public void actionPerformed(ActionEvent e) {
                 activacionInventario(true);
+                inventarioActivado1 = true;
                 partida.getSupervivienteActual().setSeleccion(Entidad.accion.INVENTARIO);
             }
         });
@@ -295,6 +341,18 @@ public class PanelMenuJugador extends JPanel{
             @Override
             public void actionPerformed(ActionEvent e) {
                 accionBotonesInventario(4);
+            }
+        });
+        
+        botonCancelar.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                interfazPrincipal.botones[interfazPrincipal.elementoSeleccionado.x][interfazPrincipal.elementoSeleccionado.y].setBackground(Color.LIGHT_GRAY);
+                interfazPrincipal.botones[interfazPrincipal.elementoSeleccionado.x][interfazPrincipal.elementoSeleccionado.y].setForeground(Color.BLACK);
+                interfazPrincipal.elementoSeleccionado = null;
+                movimientoActivado = false;
+                activacionBotones(true);
+                gestionPanelIntercambio(false, 0);
             }
         });
     }
@@ -380,6 +438,16 @@ public class PanelMenuJugador extends JPanel{
             botonInv5.setText("Inventario 5: Vacío");
             botonInv5.setToolTipText("");
         }
+    }
+    
+    public void gestionPanelIntercambio(boolean enable, int n){
+        if(n == 0){
+            cardLayoutMenuJugador.show(panelIntercambio,"PanelCancelar");
+        }
+        if(n == 1){
+            cardLayoutMenuJugador.show(panelIntercambio,"PanelOpcionesInventario");
+        }
+        panelIntercambio.setVisible(enable);
     }
     
     public void accionBotonesArmas(int ranura){
