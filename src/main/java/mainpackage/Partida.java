@@ -169,8 +169,6 @@ public class Partida implements Serializable {
                     supervivienteActual.activar(ranura, x, y, equipo);
                     break;
                 case Entidad.accion.ATACAR: //Atacar
-                    //int alcanceTemp = supervivienteActual.getArmas()[ranura].getAlcance();
-                    //ArrayList<Casilla> objetivo = supervivienteActual.elegirObjetivo(supervivienteActual.getArmas()[ranura]);
                     // Hacemos las casillas
                     Casilla casillaObjetivo = tablero.getCasilla(x, y);
                     // Activamos el superviviente y recogemos el ataque y su numero de exitos
@@ -312,7 +310,7 @@ public class Partida implements Serializable {
     public void gestorTurnos(){
         while(!victoria && !derrota){
             // FASE SUPERVIVIENTES
-            setTurnoActual(0);
+            setTurnoActual(turnoActual);
             while(turnoActual < turnoMaximo){
                 faseSuperviviente();
                 System.out.println("En gestorTurnos INICIO FS: Turno actual: " + turnoActual + ", Superviviente: " + supervivienteActual.getNombre());
@@ -352,6 +350,10 @@ public class Partida implements Serializable {
             }
             // FASE APAARICION ZOMBI
             faseApariciónZombi();
+            // REINICIO DE TURNOS
+            if(turnoActual == turnoMaximo-1){
+                setTurnoActual(0);
+            }
         } 
     }
 

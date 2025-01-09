@@ -349,6 +349,17 @@ public class PanelMenuJugador extends JPanel{
                 accionBotonesInventario(4);
             }
         });
+        botonCancelar.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                interfazPrincipal.botones[interfazPrincipal.elementoSeleccionado.x][interfazPrincipal.elementoSeleccionado.y].setBackground(Color.LIGHT_GRAY);
+                interfazPrincipal.botones[interfazPrincipal.elementoSeleccionado.x][interfazPrincipal.elementoSeleccionado.y].setForeground(Color.BLACK);
+                interfazPrincipal.elementoSeleccionado = null;
+                movimientoActivado = false;
+                activacionBotones(true);
+                gestionPanelIntercambio(false, 0);
+            }
+        });
     }
     
     public void activacionBotones(boolean enabled) {
