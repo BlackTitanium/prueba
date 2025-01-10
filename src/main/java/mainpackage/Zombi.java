@@ -253,4 +253,42 @@ public class Zombi extends Entidad implements Serializable{
             return sb.toString();
         }        
     }
+
+    public void cambiarTipo(String tipo){
+        this.tipo = tipo;
+        switch(tipo){
+            case "CAMINANTE":
+                activaciones = 1;
+                activacionesAux = 1;
+                aguante = 1;
+                break;
+            case "CORREDOR":
+                activaciones = 2;
+                activacionesAux = 2;
+                aguante = 1;
+                break;
+            case "ABOMINACION":
+                activaciones = 1;
+                activacionesAux = 1;
+                aguante = 3;
+                break;
+        }
+    }
+
+    public void cambiarSubtipo(String subtipo){
+        this.subtipo = subtipo;
+        Zombi zombiTemp = null;
+        switch(subtipo){
+            case "NORMAL":
+                zombiTemp = new Zombi(casillaActual, subtipo, partida, identificador, tipo);
+            case "TOXICO":
+                zombiTemp = new Toxico(casillaActual, subtipo, partida, identificador, tipo);
+            case "BERSERKER":
+                zombiTemp = new Berserker(casillaActual, subtipo, partida, identificador, tipo);
+        }
+        casillaActual.addEntidad(zombiTemp);
+        casillaActual.removeEntidad(this); 
+        partida.zombis.add(zombiTemp);
+        partida.zombis.remove(this);
+    }
 }

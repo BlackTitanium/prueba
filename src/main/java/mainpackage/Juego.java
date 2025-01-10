@@ -66,4 +66,27 @@ public class Juego implements Serializable{
             System.err.println("Error loading game: " + e.getMessage());
         }
     }
+
+    public void simulacionAtaque() {
+        // Configure characters and zombies
+        configurarPersonajes();
+        
+        // Simulate the attack
+        realizarAtaque();
+    }
+
+    public void configurarPersonajes() {
+        System.out.println("Configurando personajes y zombis...");
+    }
+
+    public void realizarAtaque() {
+        // Example attack logic
+        System.out.println("Simulando ataque...");
+        // Add your attack simulation logic here
+        // Provide detailed information about the process
+    }
+
+    public void simulacionZombi(){
+
+    }
 }

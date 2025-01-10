@@ -26,6 +26,7 @@ public class Partida implements Serializable {
     private transient Object monitorSupervivientes = new Object(); // Mark as transient if not serializable
     public int IDPartida;
     private AlmacenPartidas almacenPartidas;
+    public boolean simulacion;
 
     private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
         ois.defaultReadObject();
@@ -401,7 +402,12 @@ public class Partida implements Serializable {
             almacenPartidas = new AlmacenPartidas();
         }
         IDPartida = almacenPartidas.getContadorPartidas();
+        simulacion = false;
         // LLamamos a la InterfazPrincipal
+        interfazPrincipal = new InterfazPrincipal(this);
+    }
+
+    public void iniciarSimulacion(){
         interfazPrincipal = new InterfazPrincipal(this);
     }
 
@@ -409,6 +415,13 @@ public class Partida implements Serializable {
         this.almacenPartidas = almacenPartidas;
         Thread hiloPrincipal = new Thread(this::iniciarPartida);
         hiloPrincipal.start();
+    }
+
+    public Partida() {
+        tablero = new Tablero(this);
+        almacen =  new AlmacenDeAtaques();
+        simulacion = true;
+        interfazPrincipal = new InterfazPrincipal(this);
     }
 
     public void activarActionListeners(){
