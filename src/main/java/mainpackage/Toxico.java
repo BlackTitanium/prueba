@@ -5,8 +5,8 @@ public class Toxico extends Zombi {
         super(c, subtipoZ,partida,id);
     }
 
-    public Toxico(Casilla c, String subtipoZ, Partida partida, int id, String tipo) {
-        super(c, subtipoZ,partida,id,tipo);
+    public Toxico(Casilla c, String tipo, String subtipoZ, Partida partida, int id) {
+        super(c, tipo, subtipoZ,partida,id);
     }
 
 //    @Override
