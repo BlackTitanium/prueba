@@ -53,7 +53,7 @@ public class PanelInicio extends JPanel{
         panelCombo.add(nSupervivientesLabel);
         
         nSupervivientes = new JComboBox();
-        nSupervivientesLabel.setMinimumSize(new Dimension(10, 10));
+        nSupervivientes.setMinimumSize(new Dimension(10, 10));
         nSupervivientes.setBackground(Color.LIGHT_GRAY);
         nSupervivientes.setFont(new Font("Arial", 0, 12));
         nSupervivientes.setForeground(Color.BLACK);        

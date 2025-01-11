@@ -34,8 +34,9 @@ public class InterfazPrincipal extends JFrame implements Serializable {
     PanelInicio panelInicio;
     PanelMenuJugador panelMenuJugador;
     PanelHistoriales panelHistoriales;
+    PanelSimulacion panelSimulacion;
     
-    public int nJugadores = 0;
+    public int nJugadores = 0, nZombis = 0;
     private String[] nombresZombis = {"Z.Ca.N", "Z.Co.N", "Z.Ab.N", "Z.Ca.B", "Z.Co.B", "Z.Ab.B", "Z.Ca.T", "Z.Co.T", "Z.Ab.T"};
     
     public Partida partida;
@@ -86,6 +87,11 @@ public class InterfazPrincipal extends JFrame implements Serializable {
         
         panelHistoriales = new PanelHistoriales(partida.getAlmacenDeAtaques(),this, partida);
         panelDerechoPrincipal.add(panelHistoriales,"PanelHistoriales");
+        panelDerechoPrincipal.revalidate();
+        panelDerechoPrincipal.repaint();
+        
+        panelSimulacion = new PanelSimulacion(partida,this);
+        panelDerechoPrincipal.add(panelSimulacion,"PanelSimulacion");
         panelDerechoPrincipal.revalidate();
         panelDerechoPrincipal.repaint();
     }
@@ -195,6 +201,9 @@ public class InterfazPrincipal extends JFrame implements Serializable {
         if(panelHistoriales.seleccionarSuperviviente){
             elegirSupervivienteInterfazPrincipal(boton, x, y);
         }
+        if(panelSimulacion.colocarZombi){
+            colocarZombi(boton, x, y);
+        }
     }
     
     public void supervivienteMuerto(Casilla casillaActual, String nombreNuevo){
@@ -265,9 +274,10 @@ public class InterfazPrincipal extends JFrame implements Serializable {
                 }
             if(casillas[i].getContadorZombis() != 0){
                 for (int k = 0; k < casillas[i].getContadorZombis(); k++){
-                    String zombiTemp = casillas[i].getZombi(k).getZombiParaBoton(); 
-                    sb2.append(zombiTemp);      
-                    sb2.append("<br>");
+                    String zombiTemp = casillas[i].getZombi(k).getZombiParaBoton();
+                    zombiTemp = zombiTemp.replace("<html>", "");
+                    zombiTemp = zombiTemp.replace("</html>", "");
+                    sb2.append(zombiTemp);
                 }
 
             }
@@ -534,7 +544,30 @@ public class InterfazPrincipal extends JFrame implements Serializable {
             }
         }
     }
-
+    
+    public void colocarZombi(JButton boton, int x, int y){
+        for(int i=0; i<nZombis;i++){
+            // Le añadimos la casilla al zombi
+            panelSimulacion.zombiTemp.setCasillaActual(tablero.getCasilla(x, y));
+            // Añadimos el zombi a la casilla
+            tablero.getCasilla(x, y).addZombi(panelSimulacion.zombiTemp);
+            // Añadimos el zombi a la partida
+            partida.añadirZombi(panelSimulacion.zombiTemp);
+            // Añadimos el zombi a la interfaz
+            StringBuilder sb = new StringBuilder();
+            String aux = boton.getText();
+            aux = aux.replace("</html>","");
+            sb.append(aux);
+            String textoZombi = panelSimulacion.zombiTemp.getZombiParaBoton();
+            textoZombi = textoZombi.replace("<html>","");
+            textoZombi = textoZombi.replace("</html>","");
+            sb.append(textoZombi);
+            botones[x][y].setText(sb.toString());
+        }
+        panelSimulacion.colocarZombi = false;
+        panelSimulacion.zombiTemp = null;
+    }
+    
     public void guardarPartida(){
         try {
             partida.getAlmacenPartidas().setPartida(partida.IDPartida, partida);
@@ -551,10 +584,5 @@ public class InterfazPrincipal extends JFrame implements Serializable {
             System.err.println("Error saving game: " + e.getMessage());
         }
         System.exit(0);
-    }
-    
-    public static void main(String args[]){ 
-        Juego juego = new Juego();
-        juego.iniciarPartida();
     }
 }

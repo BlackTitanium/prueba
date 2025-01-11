@@ -97,6 +97,12 @@ public class Partida implements Serializable {
         turnoActual++;
     }
 
+    public void añadirZombi(Zombi z){
+        zombis.add(z);
+        z.setIdentificador(idZombiCont);
+        idZombiCont++;
+    }
+
     public void introducirSupervivientes(String[] nombres){
         for (String nombre : nombres) {
             supervivientes.add(new Superviviente(nombre, null, this));
@@ -145,17 +151,24 @@ public class Partida implements Serializable {
 
         interfazPrincipal.botones[0][0].setText(textoBotonSupervivientes);
         tablero.posicionesOcupadas[0][0] = true; // Marcar la [0][0] como ocupada
-        
-        // Crear los 3 zombis
-        for(int i=0;i<3;i++){
-            faseApariciónZombi();
-        }
+
+        if(!simulacion){
+            // Crear los 3 zombis
+            for(int i=0;i<3;i++){
+                faseApariciónZombi();
+            }
+        }        
         
         // Cambiar el panel derecho
         interfazPrincipal.meta();
         interfazPrincipal.activarActionListeners();
         interfazPrincipal.inicializarPaneles();
-        interfazPrincipal.cardLayout.show(interfazPrincipal.panelDerechoPrincipal, "PanelMenuJugador");
+        if(!simulacion){
+            interfazPrincipal.cardLayout.show(interfazPrincipal.panelDerechoPrincipal, "PanelMenuJugador");
+        }else{
+            interfazPrincipal.cardLayout.show(interfazPrincipal.panelDerechoPrincipal, "PanelSimulacion");
+        }
+        
         SwingUtilities.invokeLater(() -> {
             new Thread(() -> {gestorTurnos();}).start();
         });
@@ -407,21 +420,22 @@ public class Partida implements Serializable {
         interfazPrincipal = new InterfazPrincipal(this);
     }
 
-    public void iniciarSimulacion(){
-        interfazPrincipal = new InterfazPrincipal(this);
-    }
-
     public Partida(AlmacenPartidas almacenPartidas){
         this.almacenPartidas = almacenPartidas;
         Thread hiloPrincipal = new Thread(this::iniciarPartida);
         hiloPrincipal.start();
     }
 
-    public Partida() {
+    public void iniciarSimulacion(){
         tablero = new Tablero(this);
         almacen =  new AlmacenDeAtaques();
         simulacion = true;
         interfazPrincipal = new InterfazPrincipal(this);
+    }
+
+    public Partida() {
+        Thread hiloPrincipal = new Thread(this::iniciarSimulacion);
+        hiloPrincipal.start();
     }
 
     public void activarActionListeners(){

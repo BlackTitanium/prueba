@@ -40,10 +40,10 @@ public class Zombi extends Entidad implements Serializable{
         this.supervivientesAtacados = new ArrayList<>();
     }
 
-    public Zombi(Casilla c, String subtipoZ, Partida partida, int id, String tipos){
+    public Zombi(Casilla c, String tipos, String subtipoZ, Partida partida, int id){
         super(partida, c);
-        this.identificador = id;
         this.estadoActual = estado.VIVO;
+        this.identificador = id;
         this.partida = partida;
         this.tipo = tipos;
         switch(tipo){
@@ -86,9 +86,13 @@ public class Zombi extends Entidad implements Serializable{
         }
         return tipos;
     }
-
+    
     public estado getEstadoActual() {
         return estadoActual;
+    }
+
+    public void setIdentificador(int id){
+        this.identificador = id;
     }
 
     public int getIdentificador(){

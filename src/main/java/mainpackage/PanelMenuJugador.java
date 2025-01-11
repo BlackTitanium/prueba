@@ -20,7 +20,7 @@ import javax.swing.JPanel;
 public class PanelMenuJugador extends JPanel{
     public JButton botonMoverse, botonBuscar, botonAtacar, botonInventario, botonNada;
     private JButton botonArma1, botonArma2, botonInv1, botonInv2, botonInv3, botonInv4, botonInv5;
-    private JButton botonAlmacenDeAtaques, botonAdmin, botonGuardarSalir;
+    private JButton botonAlmacenDeAtaques, botonSimulacion, botonGuardarSalir;
     private CardLayout cardLayoutMenuJugador;
     private JPanel panelIntercambio, panelOpcionesInventario, panelCancelar, panelInfo;
     private JButton botonCancelar, botonUsar, botonMoverObjetos, botonInfo, botonSalirInventario;
@@ -194,12 +194,13 @@ public class PanelMenuJugador extends JPanel{
         botonAlmacenDeAtaques.setForeground(Color.BLACK);
         add(botonAlmacenDeAtaques);
         
-        botonAdmin = new JButton("Modo Administrador");
-        botonAdmin.setBounds(200,650,180,30);
-        botonAdmin.setBackground(Color.LIGHT_GRAY);
-        botonAdmin.setFont(new Font("Arial", 1, 14));
-        botonAdmin.setForeground(Color.BLACK);
-        add(botonAdmin);
+        botonSimulacion = new JButton("Modo Simulación");
+        botonSimulacion.setBounds(200,650,180,30);
+        botonSimulacion.setBackground(Color.LIGHT_GRAY);
+        botonSimulacion.setFont(new Font("Arial", 1, 14));
+        botonSimulacion.setForeground(Color.BLACK);
+        add(botonSimulacion);
+        botonSimulacion.setVisible(partida.simulacion);
         
         cardLayoutMenuJugador = new CardLayout();
         panelIntercambio = new JPanel(cardLayoutMenuJugador);
@@ -217,7 +218,11 @@ public class PanelMenuJugador extends JPanel{
         botonInfo.setForeground(Color.BLACK);
         panelInfo.add(botonInfo);
         
-        botonGuardarSalir = new JButton("Guardar y Salir");
+        if(!partida.simulacion){
+            botonGuardarSalir = new JButton("Guardar y Salir");
+        }else{
+            botonGuardarSalir = new JButton("Salir");
+        }
         botonGuardarSalir.setBounds(210,0,155,30);
         botonGuardarSalir.setBackground(Color.LIGHT_GRAY);
         botonGuardarSalir.setFont(new Font("Arial", 1, 14));
@@ -613,11 +618,11 @@ public class PanelMenuJugador extends JPanel{
             public void actionPerformed(ActionEvent e) {
                 Casilla aux = partida.getTablero().getCasilla(0, 0);
                 int idAux = 10000;
-                Zombi normalCa = new Zombi(aux,"NORMAL",partida,idAux,"CAMINANTE");
-                Zombi normalCo = new Zombi(aux,"NORMAL",partida,idAux,"CORREDOR");
-                Zombi normalAb = new Zombi(aux,"NORMAL",partida,idAux,"ABOMINACION");
-                Zombi toxicoCa = new Zombi(aux,"TOXICO",partida,idAux,"CAMINANTE");
-                Zombi berserkCa = new Zombi(aux,"BERSERKER",partida,idAux,"CAMINANTE");
+                Zombi normalCa = new Zombi(aux,"CAMINANTE","NORMAL",partida,idAux);
+                Zombi normalCo = new Zombi(aux,"CORREDOR","NORMAL",partida,idAux);
+                Zombi normalAb = new Zombi(aux,"ABOMINACION","NORMAL",partida,idAux);
+                Zombi toxicoCa = new Zombi(aux,"CAMINANTE","TOXICO",partida,idAux);
+                Zombi berserkCa = new Zombi(aux,"CAMINANTE","BERSERKER",partida,idAux);
                 
                 StringBuilder sb = new StringBuilder();
                 sb.append("Información:").append("\n");
@@ -730,8 +735,18 @@ public class PanelMenuJugador extends JPanel{
         botonGuardarSalir.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                interfazPrincipal.guardarPartida();
-                System.exit(0);
+                if(!partida.simulacion){
+                    interfazPrincipal.guardarPartida();
+                    System.exit(0);
+                }else{
+                    System.exit(0);
+                }                
+            }
+        });
+        botonSimulacion.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                interfazPrincipal.cardLayout.show(interfazPrincipal.panelDerechoPrincipal, "PanelSimulacion");
             }
         });
     }

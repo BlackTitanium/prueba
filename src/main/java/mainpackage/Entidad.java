@@ -13,7 +13,9 @@ public abstract class Entidad implements Serializable{
         partida = p;
         tableroActual = partida.getTablero();
         casillaActual = c;
-        setPosicion(c.getX(), c.getY());
+        if(c != null){
+            setPosicion(c.getX(), c.getY());
+        }        
     }
 
     public void setCasillaActual(Casilla c){

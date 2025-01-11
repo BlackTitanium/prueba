@@ -33,6 +33,7 @@ public class Juego implements Serializable{
                 break;
             case 3:
                 // Simulaciones
+                iniciarSimulacion();
                 break;
             case 4:
                 System.exit(0);
@@ -66,7 +67,11 @@ public class Juego implements Serializable{
             System.err.println("Error loading game: " + e.getMessage());
         }
     }
-
+    
+    public void iniciarSimulacion(){
+        partida = new Partida();
+    }
+    
     public void simulacionAtaque() {
         // Configure characters and zombies
         configurarPersonajes();
