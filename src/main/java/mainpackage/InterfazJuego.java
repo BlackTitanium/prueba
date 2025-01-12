@@ -59,7 +59,6 @@ public class InterfazJuego {
         // Acción para el botón de iniciar partida
         iniciarPartida.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-//                juego.eleccion = 1;
                 juego.iniciarPartida();
                 frame.dispose();
             }
@@ -91,8 +90,6 @@ public class InterfazJuego {
                 confirmar.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
                         int id = Integer.parseInt(numeroPartida.getText());
-//                        juego.eleccion = 2;
-//                        juego.idPartida = id;
                         juego.cargarPartida(id);
                         dialog.dispose();
                         frame.dispose();
@@ -106,7 +103,6 @@ public class InterfazJuego {
         // Acción para el botón de simulaciones
         simulaciones.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-//                juego.eleccion = 3;
                 juego.iniciarSimulacion();
                 frame.dispose();
             }
@@ -115,17 +111,10 @@ public class InterfazJuego {
         // Acción para el botón de salir
         salir.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-//                juego.eleccion = 4;
                 System.exit(0);
             }
         });
 
         frame.setVisible(true);
     }
-
-//    public static void main(String[] args) {
-//        Juego juego = new Juego();
-//        InterfazJuego interfaz = new InterfazJuego(juego);
-//        interfaz.iniciar();
-//    }
 }

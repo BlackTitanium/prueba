@@ -4,6 +4,7 @@ mainpackage\Zombi$estado.class
 mainpackage\Arma.class
 mainpackage\Serializador.class
 mainpackage\Entidad.class
+mainpackage\InterfazJuego$3.class
 mainpackage\PanelSimulacion$1.class
 mainpackage\InterfazPrincipal$1.class
 mainpackage\PanelMenuJugador$1.class
@@ -15,6 +16,7 @@ mainpackage\PanelMenuJugador$14.class
 mainpackage\AlmacenPartidas.class
 mainpackage\Toxico.class
 mainpackage\PanelMenuJugador$5.class
+mainpackage\InterfazJuego$2.class
 mainpackage\PanelHistoriales$4.class
 mainpackage\PanelMenuJugador$16.class
 mainpackage\PanelMenuJugador$8.class
@@ -31,15 +33,18 @@ mainpackage\PanelHistoriales$1.class
 mainpackage\PanelSimulacion$3.class
 mainpackage\PanelHistoriales.class
 mainpackage\PanelMenuJugador$12.class
+mainpackage\InterfazJuego.class
 mainpackage\PanelInicio$1.class
 mainpackage\PanelMenuJugador$19.class
 mainpackage\Superviviente$estado.class
+mainpackage\InterfazJuego$2$1.class
 mainpackage\Provision.class
 mainpackage\PanelMenuJugador$6.class
 mainpackage\Equipo.class
 mainpackage\PanelHistoriales$2.class
 mainpackage\Superviviente.class
 mainpackage\Partida.class
+mainpackage\InterfazJuego$4.class
 mainpackage\PanelMenuJugador$3.class
 mainpackage\PanelMenuJugador.class
 mainpackage\Partida$1.class
@@ -55,4 +60,5 @@ mainpackage\Ataque.class
 mainpackage\PanelMenuJugador$7.class
 mainpackage\PanelInicio$2.class
 mainpackage\PanelMenuJugador$20.class
+mainpackage\InterfazJuego$1.class
 mainpackage\PanelMenuJugador$18.class
