@@ -8,7 +8,9 @@ public class Juego implements Serializable{
     private InterfazPrincipal interfazPrincipal;
     private Serializador serializador = new Serializador();
     private AlmacenPartidas almacenPartidas;
-
+    
+//    public int eleccion, idPartida;
+    
     public static void main(String[] args) {
         Juego juego = new Juego();
         juego.mostrarMenu();
@@ -19,29 +21,30 @@ public class Juego implements Serializable{
         } catch (Exception e) {
             almacenPartidas = new AlmacenPartidas();
         }
-        System.out.println("Bienvenido a APOOcalipsis Zombi");
-        System.out.println("Elige una opción:\n1. Iniciar partida\n2. Cargar partida\n3. Simulaciones\n4. Salir");
-        int eleccion = scanner.nextInt();
-        switch(eleccion){
-            case 1:
-                iniciarPartida();
-                break;
-            case 2:
-                System.out.println("Introduce el ID de partida a cargar: ");
-                int a = scanner.nextInt();
-                cargarPartida(a);
-                break;
-            case 3:
-                // Simulaciones
-                iniciarSimulacion();
-                break;
-            case 4:
-                System.exit(0);
-                break;
-            default:
-                System.out.println("Opción no válida");
-                break;
-        }
+//        System.out.println("Bienvenido a APOOcalipsis Zombi");
+//        System.out.println("Elige una opción:\n1. Iniciar partida\n2. Cargar partida\n3. Simulaciones\n4. Salir");
+//        eleccion = scanner.nextInt();
+        InterfazJuego interfazJuego = new InterfazJuego(this);
+//        switch(eleccion){
+//            case 1:
+//                iniciarPartida();
+//                break;
+//            case 2:
+//                System.out.println("Introduce el ID de partida a cargar: ");
+//                idPartida = scanner.nextInt();
+//                cargarPartida(idPartida);
+//                break;
+//            case 3:
+//                // Simulaciones
+//                iniciarSimulacion();
+//                break;
+//            case 4:
+//                System.exit(0);
+//                break;
+//            default:
+//                System.out.println("Opción no válida");
+//                break;
+//        }
         main(new String[]{"0"});
     }
     public void iniciarPartida(){
