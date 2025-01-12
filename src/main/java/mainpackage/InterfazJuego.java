@@ -61,6 +61,7 @@ public class InterfazJuego {
             public void actionPerformed(ActionEvent e) {
 //                juego.eleccion = 1;
                 juego.iniciarPartida();
+                frame.dispose();
             }
         });
 
@@ -94,6 +95,7 @@ public class InterfazJuego {
 //                        juego.idPartida = id;
                         juego.cargarPartida(id);
                         dialog.dispose();
+                        frame.dispose();
                     }
                 });
 
@@ -106,6 +108,7 @@ public class InterfazJuego {
             public void actionPerformed(ActionEvent e) {
 //                juego.eleccion = 3;
                 juego.iniciarSimulacion();
+                frame.dispose();
             }
         });
 
