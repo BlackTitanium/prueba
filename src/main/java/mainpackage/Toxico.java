@@ -9,16 +9,6 @@ public class Toxico extends Zombi {
         super(c, tipo, subtipoZ,partida,id);
     }
 
-//    @Override
-//    public void reaccion(Arma arma, int a){
-//        super.reaccion(arma, a);
-//        if(aguante == 0){
-//            if(casillaActual.getContadorSupervivientes()!=0){
-//                casillaActual.getSuperviviente(0).addMordeduras();
-//            }
-//        }
-//    }
-
     @Override
     public void reaccion(Arma arma){
         if(arma.getPotencia() >= aguante){

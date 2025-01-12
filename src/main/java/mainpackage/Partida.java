@@ -72,7 +72,15 @@ public class Partida implements Serializable {
         }
         return null;
     }
+
+    public int getNumeroSupervivientes(){
+        return supervivientes.size();
+    }
     
+    public Superviviente getSuperviviente(int n) {
+        return supervivientes.get(n);
+    }
+
     public ArrayList<Superviviente> getSupervivientes() {
         return supervivientes;
     }

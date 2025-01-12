@@ -77,6 +77,7 @@ public class Provision extends Equipo implements Serializable{
     public String toString() {
        return ("Nombre: " + nombre + ", Valor energético: " + valorEnergetico + ", kCal" +  ", Caducidad: " + caducidad) ;
     }
+    
     private String generarFecha(){
         int dia=(int)(Math.random()*31)+1;
          int mes=(int)(Math.random()*12)+1;

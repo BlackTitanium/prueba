@@ -10,18 +10,6 @@ public class Berserker extends Zombi{
         super(c, tipo, subtipoZ,partida,id);
     }
 
-//    @Override
-//    public void reaccion(Arma arma, int a){
-//        super.reaccion(arma, a);
-//        if(arma.getAlcance()>0){
-//            for (int i=0; i<a; i++){
-//                aguante++;
-//            }
-//            casillaActual.addZombi(this);
-//            throw new IllegalArgumentException("Alcance");
-//        }
-//    }
-
     @Override
     public void reaccion(Arma arma){
         if(arma.getAlcance()>0){

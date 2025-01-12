@@ -141,16 +141,6 @@ public class Zombi extends Entidad implements Serializable{
         System.out.println("EN MOVER DESPUES: Zombi " + this.getZombiParaBoton() + " se mueve a la casilla " + x + ", " + y);
     }
 
-//    public void reaccion(Arma arma, int a){
-//        for (int i=0; i<a; i++){
-//            aguante--;
-//            if( aguante == 0){
-//                casillaActual.removeEntidad(this);
-//                break;
-//            }
-//        } 
-//    }
-
     public void reaccion(Arma arma){
         if(arma.getPotencia() >= aguante){
             this.estadoActual = estado.MUERTO; // Ha muerto
@@ -284,11 +274,11 @@ public class Zombi extends Entidad implements Serializable{
         Zombi zombiTemp = null;
         switch(subtipo){
             case "NORMAL":
-                zombiTemp = new Zombi(casillaActual, subtipo, partida, identificador, tipo);
+                zombiTemp = new Zombi(casillaActual, tipo, subtipo, partida, identificador);
             case "TOXICO":
-                zombiTemp = new Toxico(casillaActual, subtipo, partida, identificador, tipo);
+                zombiTemp = new Toxico(casillaActual, tipo, subtipo, partida, identificador);
             case "BERSERKER":
-                zombiTemp = new Berserker(casillaActual, subtipo, partida, identificador, tipo);
+                zombiTemp = new Berserker(casillaActual, tipo, subtipo, partida, identificador);
         }
         casillaActual.addEntidad(zombiTemp);
         casillaActual.removeEntidad(this); 

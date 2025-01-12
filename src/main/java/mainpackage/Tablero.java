@@ -43,15 +43,6 @@ public class Tablero implements Serializable{
         posicionesOcupadas[0][0] = true; // Inicio Jugadores
         posicionesOcupadas[9][9] = true; // Meta
     }
-    
-//    public void mostrar(){
-//        for(int i = 0; i < 10; i++){
-//            for(int j = 0; j < 10; j++){
-//                System.out.print("[" + mapa[i][j].getContenido() + "]");
-//            }
-//            System.out.println();
-//        }
-//    }
 
     public Casilla getCasilla(int a, int b){
         return mapa[a][b];

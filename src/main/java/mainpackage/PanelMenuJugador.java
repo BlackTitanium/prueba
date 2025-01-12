@@ -34,12 +34,13 @@ public class PanelMenuJugador extends JPanel{
     public int objetoSeleccionadoDeArma = 0, objetoSeleccionadoDeInventario = 0;
     public boolean primerObjetoDeInventario = false;
     public int botonSeleccionado1 = -1, botonSeleccionado2 = -1;
+    public boolean añadirInventario = false;
     
     private Equipo equipoBuscado;
     private Partida partida;
     private InterfazPrincipal interfazPrincipal;    
 
-    public int ranuraElegida, armaElegida;
+    public int armaElegida;
     
     // TAMAÑO 400 * 745 (Ancho, Alto)
     public PanelMenuJugador(Partida Partida, InterfazPrincipal interfazprincipal){
@@ -392,10 +393,19 @@ public class PanelMenuJugador extends JPanel{
             atacarBotonesActivado = false;
             logicaInventario(ranura,false); // fals porque es de armas
         }
+        if(añadirInventario){
+            Arma armaNueva = (Arma) interfazPrincipal.panelSimulacion.equipoTemp;
+            partida.getSupervivienteActual().setArma(armaNueva, ranura);
+            labelsSimulacion();
+            interfazPrincipal.panelSimulacion.equipoTemp = null;
+            activacionBotones(true);
+            interfazPrincipal.cardLayout.show(interfazPrincipal.panelDerechoPrincipal, "PanelSimulacion");
+            actualizarLabels();
+            añadirInventario = false;
+        }
     }
     
     public void accionBotonesInventario(int ranura){
-        ranuraElegida = ranura;
         if(buscandoActivado){
             partida.activarSuperviviente(ranura, 0, 0, equipoBuscado);
             equipoBuscado = null;
@@ -414,6 +424,15 @@ public class PanelMenuJugador extends JPanel{
         if(inventarioMoverActivado){ //partida.activarSuperviviente(usarOmover, ranuraObjetoSeleccionado, ranuraObjetivo, null);
             atacarBotonesActivado = false;
             logicaInventario(ranura,true); // true porque es de inventario
+        }
+        if(añadirInventario){
+            partida.getSupervivienteActual().setInventario(interfazPrincipal.panelSimulacion.equipoTemp, ranura);
+            labelsSimulacion();
+            interfazPrincipal.panelSimulacion.equipoTemp = null;
+            activacionBotones(true);
+            interfazPrincipal.cardLayout.show(interfazPrincipal.panelDerechoPrincipal, "PanelSimulacion");
+            actualizarLabels();
+            añadirInventario = false;
         }
     }
     public void logicaInventario(int ranura, boolean enable){
@@ -749,5 +768,61 @@ public class PanelMenuJugador extends JPanel{
                 interfazPrincipal.cardLayout.show(interfazPrincipal.panelDerechoPrincipal, "PanelSimulacion");
             }
         });
+    }
+    
+    public void labelsSimulacion(){
+        turnoDe.setText("Turno de: " + interfazPrincipal.supervivienteSeleccionado.getNombre());
+        numAcciones.setText("Acciones: " + interfazPrincipal.supervivienteSeleccionado.getAcciones());
+        contZombis.setText("Numero de zombis asesinados: " + interfazPrincipal.supervivienteSeleccionado.getContadorZombis());
+        mordeduras.setText("Mordeduras : " + interfazPrincipal.supervivienteSeleccionado.getMordeduras() + "/2");
+        try {
+            botonArma1.setText(interfazPrincipal.supervivienteSeleccionado.getArmas(0).getNombre());
+            botonArma1.setToolTipText(interfazPrincipal.supervivienteSeleccionado.getArmas(0).toString());
+        } catch (NullPointerException e) {
+            botonArma1.setText("Arma 1: Vacío");
+            botonArma1.setToolTipText("");
+        }
+        try {
+            botonArma2.setText(interfazPrincipal.supervivienteSeleccionado.getArmas(1).getNombre());
+            botonArma2.setToolTipText(interfazPrincipal.supervivienteSeleccionado.getArmas(1).toString());
+        } catch (NullPointerException e) {
+            botonArma2.setText("Arma 2: Vacío");
+            botonArma2.setToolTipText("");
+        }
+        try {
+            botonInv1.setText(interfazPrincipal.supervivienteSeleccionado.getInventario(0).getNombre());
+            botonInv1.setToolTipText(interfazPrincipal.supervivienteSeleccionado.getInventario(0).toString());
+        } catch (NullPointerException e) {
+            botonInv1.setText("Inventario 1: Vacío");
+            botonInv1.setToolTipText("");
+        }
+        try {
+            botonInv2.setText(interfazPrincipal.supervivienteSeleccionado.getInventario(1).getNombre());
+            botonInv2.setToolTipText(interfazPrincipal.supervivienteSeleccionado.getInventario(1).toString());
+        } catch (NullPointerException e) {
+            botonInv2.setText("Inventario 2: Vacío");
+            botonInv2.setToolTipText("");
+        }
+        try {
+            botonInv3.setText(interfazPrincipal.supervivienteSeleccionado.getInventario(2).getNombre());
+            botonInv3.setToolTipText(interfazPrincipal.supervivienteSeleccionado.getInventario(2).toString());
+        } catch (NullPointerException e) {
+            botonInv3.setText("Inventario 3: Vacío");
+            botonInv3.setToolTipText("");
+        }
+        try {
+            botonInv4.setText(interfazPrincipal.supervivienteSeleccionado.getInventario(3).getNombre());
+            botonInv4.setToolTipText(interfazPrincipal.supervivienteSeleccionado.getInventario(3).toString());
+        } catch (NullPointerException e) {
+            botonInv4.setText("Inventario 4: Vacío");
+            botonInv4.setToolTipText("");
+        }
+        try {
+            botonInv5.setText(interfazPrincipal.supervivienteSeleccionado.getInventario(4).getNombre());
+            botonInv5.setToolTipText(interfazPrincipal.supervivienteSeleccionado.getInventario(4).toString());
+        } catch (NullPointerException e) {
+            botonInv5.setText("Inventario 5: Vacío");
+            botonInv5.setToolTipText("");
+        }
     }
 }

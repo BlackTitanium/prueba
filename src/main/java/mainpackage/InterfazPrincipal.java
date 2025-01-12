@@ -43,6 +43,7 @@ public class InterfazPrincipal extends JFrame implements Serializable {
     private Tablero tablero; // Mark as transient if not serializable
     
     public Zombi zombiSeleccionado;
+    public Superviviente supervivienteSeleccionado;
           
     public InterfazPrincipal(Partida partida) {
         this.partida = partida;
@@ -203,6 +204,9 @@ public class InterfazPrincipal extends JFrame implements Serializable {
         }
         if(panelSimulacion.colocarZombi){
             colocarZombi(boton, x, y);
+        }
+        if(panelSimulacion.moverSimulacion){
+            moverElementoSimulacion(boton,x,y);
         }
     }
     
@@ -566,6 +570,91 @@ public class InterfazPrincipal extends JFrame implements Serializable {
         }
         panelSimulacion.colocarZombi = false;
         panelSimulacion.zombiTemp = null;
+    }
+    
+    public void seleccionarSuperivienteSimulacion(String mensaje){
+        Superviviente supervivienteAux = null;
+        boolean respuesta = false;
+        for(int i = 0; i < partida.getNumeroSupervivientes(); i++){
+            StringBuilder sb = new StringBuilder();
+            sb.append(mensaje);
+            Superviviente superviviente = partida.getSuperviviente(i);
+            String txtNombreSuperviviente = superviviente.getNombre();
+            sb.append(txtNombreSuperviviente);
+            sb.append(" ?");
+            respuesta = mostrarMensajeSiNo(sb.toString());
+            if(respuesta){
+                supervivienteAux = partida.getSuperviviente(i);
+                break;
+            }
+        }
+        supervivienteSeleccionado = supervivienteAux;
+    }
+    
+    // Acción al hacer clic en una casilla del tablero
+    public void moverElementoSimulacion(JButton boton, int x, int y){
+        if(panelSimulacion.moverSimulacion){
+            Casilla casillaSuperviviente = supervivienteSeleccionado.getCasillaActual();
+            elementoSeleccionado = new Point(casillaSuperviviente.getX(), casillaSuperviviente.getY());
+                
+            if(elementoSeleccionado != null && supervivienteSeleccionado != null){
+                if(x == supervivienteSeleccionado.getCasillaActual().getX() && y == supervivienteSeleccionado.getCasillaActual().getY()){
+                    JOptionPane.showMessageDialog(this,"No puede moverse a la misma casilla");   
+                    return;
+                }                
+                // Mover el superviviente a la nueva casilla y marcarla como ocupada
+                supervivienteSeleccionado.mover(x, y);
+                supervivienteSeleccionado.addAcciones();
+
+                tablero.posicionesOcupadas[x][y] = true;
+                if(elementoSeleccionado.x != 9 && elementoSeleccionado.y != 9){
+                    botones[elementoSeleccionado.x][elementoSeleccionado.y].setBackground(Color.LIGHT_GRAY);
+                    botones[elementoSeleccionado.x][elementoSeleccionado.y].setForeground(Color.BLACK);
+                }                    
+
+                // Actualizar casillas
+                int xOrigen = elementoSeleccionado.x;
+                int yOrigen = elementoSeleccionado.y;
+                Casilla origen = tablero.getCasilla(xOrigen, yOrigen);
+                int xDestino = x;
+                int yDestino = y;
+                Casilla destino = tablero.getCasilla(xDestino, yDestino);
+
+                StringBuilder sb = new StringBuilder();
+                String textoBotonDestino = botones[x][y].getText();
+                textoBotonDestino = textoBotonDestino.replace("</html>", ""); // Quitamos el cierre de HTML
+                sb.append(textoBotonDestino); // Le añado el texto ya existente en el boton destino al sb
+                sb.append(supervivienteSeleccionado.getNombre()); // Le añado al boton destino el jugador
+                sb.append("<br>");
+                String textoBotonOrigen = botones[elementoSeleccionado.x][elementoSeleccionado.y].getText();
+                StringBuilder aux = new StringBuilder();
+                aux.append(supervivienteSeleccionado.getNombre()).append("<br>");
+                String nombre = aux.toString();
+                String textoBotonOrigenFinal = textoBotonOrigen.replace(nombre,""); // Le quito el nombre del jugador
+                if(origen.getContadorZombis() > 0){ // Si hay zombis
+                    for(int i = 0; i<origen.getContadorZombis();i++){
+                        Zombi zombi = origen.getZombi(i);
+                        String txtBotonDeLosZombis = zombi.getZombiParaBoton();
+                        txtBotonDeLosZombis = txtBotonDeLosZombis.replace("<html>", ""); // Le quito lo del html
+                        txtBotonDeLosZombis = txtBotonDeLosZombis.replace("</html>", "");
+                        sb.append(txtBotonDeLosZombis); // Lo añado al sb (Ya va con <br>)
+                        textoBotonOrigenFinal = textoBotonOrigenFinal.replace(txtBotonDeLosZombis,""); // Le quito el zombi al boton origen junto al <br>
+                        zombi.mover(x, y); // Mueve al zombi
+                    }
+                }
+                sb.append("</html>"); // Ponemos el cierre de nuevo
+                botones[x][y].setText(sb.toString()); // Añado el texto al boton destino
+                botones[elementoSeleccionado.x][elementoSeleccionado.y].setText(textoBotonOrigenFinal);
+                if(origen.getContadorZombis() == 0 && origen.getContadorSupervivientes() == 0){
+                    tablero.posicionesOcupadas[elementoSeleccionado.x][elementoSeleccionado.y] = false;
+                }
+                panelSimulacion.moverSimulacion = false;
+                elementoSeleccionado = null;
+                supervivienteSeleccionado = null;
+            }
+        }else{
+            JOptionPane.showMessageDialog(this,"No puede moverse en este momento");
+        }
     }
     
     public void guardarPartida(){

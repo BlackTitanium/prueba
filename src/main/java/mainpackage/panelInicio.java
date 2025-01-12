@@ -1,6 +1,5 @@
 package mainpackage;
 
-import java.awt.*;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -8,14 +7,13 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.*;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-
-import java.util.*;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
 public class PanelInicio extends JPanel{
     private JComboBox nSupervivientes;
@@ -123,7 +121,6 @@ public class PanelInicio extends JPanel{
                         JOptionPane.showMessageDialog(null,"Debes poner el número de supervivientes.");
                     } else {
                         interfazPrincipal.nJugadores = Integer.parseInt(nSup); // Convertir a entero el número de jugadores
-//                        partida.inicializarSupervivientes(interfazPrincipal.nJugadores);
                         panelNombreSuperviviente.setVisible(true);
                     }
                 }

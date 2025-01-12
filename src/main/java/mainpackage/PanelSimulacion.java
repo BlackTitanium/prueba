@@ -1,29 +1,37 @@
 package mainpackage;
 
+import java.awt.*;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
 
+import javax.swing.*;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class PanelSimulacion extends JPanel{
-    private JButton botonListo, botonVolver;    
-    private JPanel panelZombis, panelNumeroZombis, panelZombisTipo, panelZombisSubTipo;
+    private JButton botonListo, botonVolver, botonAñadir, botonMoverSimulacion;    
+    private JPanel panelZombis, panelNumeroZombis, panelZombisTipo, panelZombisSubTipo, panelInventarioAñadir;
     private JComboBox nZombis, tipoZombis, subTipoZombis;
+    private DefaultListModel<String> modeloInventario;
+    private JList<String> listaInventario;
+    private JScrollPane scrollInventario;
+    private Map<String, String> tooltips;
     
     public Zombi zombiTemp;
     public boolean colocarZombi = false;
+    public boolean moverSimulacion = false;
+    
+    public Equipo equipoTemp;
     
     private Partida partida;
     private InterfazPrincipal interfazPrincipal;
@@ -36,14 +44,14 @@ public class PanelSimulacion extends JPanel{
         setSize(400,745);
         setLayout(null);
         
-        JLabel titulo = new JLabel("Simular");
+        JLabel titulo = new JLabel("Simulación");
         titulo.setFont(new Font("Arial", 1, 20));
-        titulo.setBounds(150,20,100,30);
+        titulo.setBounds(150,20,150,30);
         add(titulo);
         
         panelZombis = new JPanel();
         panelZombis.setLayout(null);
-        panelZombis.setBounds(50,70,350,300);
+        panelZombis.setBounds(50,70,350,160);
         
         panelNumeroZombis = new JPanel();
         panelNumeroZombis.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 0)); 
@@ -103,11 +111,11 @@ public class PanelSimulacion extends JPanel{
         
         subTipoZombis.addItem("");
         subTipoZombis.addItem("NORMAL");
-        subTipoZombis.addItem("TÓXICO");
+        subTipoZombis.addItem("TOXICO");
         subTipoZombis.addItem("BERSERKER");
         
         botonListo = new JButton("Listo");
-        botonListo.setBounds(95,120,100,30);
+        botonListo.setBounds(95,130,100,30);
         botonListo.setBackground(Color.LIGHT_GRAY);
         botonListo.setFont(new Font("Arial", 1, 14));
         botonListo.setForeground(Color.BLACK);
@@ -119,7 +127,88 @@ public class PanelSimulacion extends JPanel{
         
         add(panelZombis);
         
+        panelInventarioAñadir = new JPanel();
+        panelInventarioAñadir.setBounds(0,250,400,200);
+        panelInventarioAñadir.setLayout(null);
+        
+        JLabel labelInventario = new JLabel("Selecciona y añade el equipo que quieras.");
+        labelInventario.setFont(new Font("Arial", 0, 12));
+        labelInventario.setBounds(50,10,250,12);
+        panelInventarioAñadir.add(labelInventario);
+        
+        // Inventario
+        modeloInventario = new DefaultListModel<>();
+        listaInventario = new JList<>(modeloInventario);
+        listaInventario.setCellRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> lista, Object descripcion, int indice, boolean isSelected, boolean cellHasFocus) {
+                Component c = super.getListCellRendererComponent(lista, descripcion, indice, isSelected, cellHasFocus);
+                if (c instanceof JComponent) {
+                    JComponent jc = (JComponent) c;
+                    jc.setToolTipText(tooltips.get(descripcion));
+                }
+                return c;
+            }
+        });
+
+        scrollInventario = new JScrollPane(listaInventario);
+        scrollInventario.setBounds(50, 40, 150, 160);
+        panelInventarioAñadir.add(scrollInventario);
+
+        // Botón para transferir al inventario
+        botonAñadir = new JButton("Añadir");
+        botonAñadir.setBounds(220, 105, 100, 30);
+        panelInventarioAñadir.add(botonAñadir);
+        
+        add(panelInventarioAñadir);
+        
+        botonMoverSimulacion = new JButton("Mover Superviviente");
+        botonMoverSimulacion.setBounds(100,480,200,30);
+        botonMoverSimulacion.setBackground(Color.LIGHT_GRAY);
+        botonMoverSimulacion.setFont(new Font("Arial", 1, 14));
+        botonMoverSimulacion.setForeground(Color.BLACK);
+        add(botonMoverSimulacion);     
+        
+        botonVolver = new JButton("Volver");
+        botonVolver.setBounds(270,620,100,30);
+        botonVolver.setBackground(Color.LIGHT_GRAY);
+        botonVolver.setFont(new Font("Arial", 1, 14));
+        botonVolver.setForeground(Color.BLACK);
+        add(botonVolver);        
+        
+        // Inicializar los tooltips y el inventario de prueba
+        inicializarDescripciones();
+        inicializarInventario();
+        
         activarActionListeners();
+    }
+    
+    private void inicializarDescripciones() {
+        tooltips = new HashMap<>();
+        Arma armaEspada = new Arma(1);
+        Arma armaEscopeta = new Arma(2);
+        Arma armaPistola = new Arma(3);
+        Arma armaFrancotirador = new Arma(4);
+        tooltips.put("Espada", armaEspada.toString());
+        tooltips.put("Escopeta", armaEscopeta.toString());
+        tooltips.put("Pistola", armaPistola.toString());
+        tooltips.put("Francotirador", armaFrancotirador.toString());
+        Provision provisionComida = new Provision(1);
+        Provision provisionBebida = new Provision(2);
+        Provision provisionMedicina = new Provision(3);
+        tooltips.put("Comida", provisionComida.toString());
+        tooltips.put("Bebida", provisionBebida.toString());
+        tooltips.put("Medicina", provisionMedicina.toString());
+    }
+    
+    private void inicializarInventario() {
+        modeloInventario.addElement("Espada");
+        modeloInventario.addElement("Escopeta");
+        modeloInventario.addElement("Pistola");
+        modeloInventario.addElement("Francotirador");
+        modeloInventario.addElement("Comida");
+        modeloInventario.addElement("Bebida");
+        modeloInventario.addElement("Medicinas");
     }
     
     public void activarActionListeners(){
@@ -134,19 +223,93 @@ public class PanelSimulacion extends JPanel{
                         JOptionPane.showMessageDialog(null,"Debes rellenar los campos.");
                     } else {
                         interfazPrincipal.nZombis = Integer.parseInt(nZombi); // Convertir a entero el número de jugadores
-                        //panelConfigZombis.setVisible(true);
                         interfazPrincipal.mostrarMensaje("Selecciona donde quieteres poner al zombi.");
                         colocarZombi = true;
                         int idAux = 10000;
                         zombiTemp = new Zombi(null,tipoZombi,subTipoZombi,partida,idAux);
-                    }                    
+                        nZombis.setSelectedItem("");
+                        tipoZombis.setSelectedItem("");
+                        subTipoZombis.setSelectedItem("");
+                    }
                 }
             }
         });
+        
+        botonAñadir.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                String seleccion = listaInventario.getSelectedValue();
+                if (seleccion != null) {
+                    switch(seleccion){
+                        case "Espada":
+                            interfazPrincipal.panelMenuJugador.añadirInventario = true;
+                            equipoTemp = new Arma(1);
+                            interfazPrincipal.panelMenuJugador.activacionInventario(true);
+                            interfazPrincipal.panelMenuJugador.activacionArmas(true);
+                            break;
+                        case "Escopeta":
+                            interfazPrincipal.panelMenuJugador.añadirInventario = true;
+                            equipoTemp = new Arma(2);
+                            interfazPrincipal.panelMenuJugador.activacionInventario(true);
+                            interfazPrincipal.panelMenuJugador.activacionArmas(true);
+                            break;
+                        case "Pistola":
+                            interfazPrincipal.panelMenuJugador.añadirInventario = true;
+                            equipoTemp = new Arma(3);
+                            interfazPrincipal.panelMenuJugador.activacionInventario(true);
+                            interfazPrincipal.panelMenuJugador.activacionArmas(true);
+                            break;
+                        case "Francotirador":
+                            interfazPrincipal.panelMenuJugador.añadirInventario = true;
+                            equipoTemp = new Arma(4);
+                            interfazPrincipal.panelMenuJugador.activacionInventario(true);
+                            interfazPrincipal.panelMenuJugador.activacionArmas(true);
+                            break;
+                        case "Comida":
+                            interfazPrincipal.panelMenuJugador.añadirInventario = true;
+                            equipoTemp = new Provision(1);
+                            interfazPrincipal.panelMenuJugador.activacionInventario(true);
+                            interfazPrincipal.panelMenuJugador.activacionArmas(false);
+                            break;
+                        case "Bebida":
+                            interfazPrincipal.panelMenuJugador.añadirInventario = true;
+                            equipoTemp = new Provision(2);
+                            interfazPrincipal.panelMenuJugador.activacionInventario(true);
+                            interfazPrincipal.panelMenuJugador.activacionArmas(false);
+                            break;
+                        case "Medicinas":
+                            interfazPrincipal.panelMenuJugador.añadirInventario = true;
+                            equipoTemp = new Provision(3);
+                            interfazPrincipal.panelMenuJugador.activacionInventario(true);
+                            interfazPrincipal.panelMenuJugador.activacionArmas(false);
+                            break;
+                    }
+                    interfazPrincipal.seleccionarSuperivienteSimulacion("¿Quieres añadir el equipo a ");
+                    interfazPrincipal.panelMenuJugador.labelsSimulacion();
+                    interfazPrincipal.cardLayout.show(interfazPrincipal.panelDerechoPrincipal, "PanelMenuJugador");
+                    listaInventario.clearSelection();
+                }else{
+                    JOptionPane.showMessageDialog(interfazPrincipal, "Selecciona un objeto para añadir.");
+                }
+            }
+        });
+        
         botonVolver.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
                 interfazPrincipal.cardLayout.show(interfazPrincipal.panelDerechoPrincipal, "PanelMenuJugador");
+            }
+        });
+        
+        botonMoverSimulacion.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                interfazPrincipal.seleccionarSuperivienteSimulacion("¿Quieres mover a ");
+                interfazPrincipal.mostrarMensaje("Selecciona la casilla a donde quieres moverlo.");
+                Casilla casillaSuperviviente = interfazPrincipal.supervivienteSeleccionado.getCasillaActual();
+                interfazPrincipal.botones[casillaSuperviviente.getX()][casillaSuperviviente.getY()].setBackground(Color.DARK_GRAY);
+                interfazPrincipal.botones[casillaSuperviviente.getX()][casillaSuperviviente.getY()].setForeground(Color.WHITE);
+                moverSimulacion = true;
             }
         });
     }
