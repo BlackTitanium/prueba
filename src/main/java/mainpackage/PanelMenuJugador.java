@@ -180,7 +180,7 @@ public class PanelMenuJugador extends JPanel{
         panelInventario.add(botonInv4);
 
         botonInv5 = new JButton("Inventario 5");
-        botonInv5.setBounds(80,170,120,30); // 180
+        botonInv5.setBounds(80,150,120,30); // 180
         botonInv5.setBackground(Color.LIGHT_GRAY);
         botonInv5.setFont(new Font("Arial", 1, 14));
         botonInv5.setForeground(Color.BLACK);

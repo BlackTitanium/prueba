@@ -12,7 +12,7 @@ public class Berserker extends Zombi{
 
     @Override
     public void reaccion(Arma arma){
-        if(arma.getAlcance()>0){
+        if(arma.getAlcance()>0 && partida.getSupervivienteActual().getCasillaActual() != casillaActual){
             throw new IllegalArgumentException("Alcance");
         } else{
             super.reaccion(arma);
